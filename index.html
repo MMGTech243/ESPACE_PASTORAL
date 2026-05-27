@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="IFCM">
+<meta name="theme-color" content="#4A2878">
+<title>IFCM — Espace Pastoral</title>
+<style>
+:root{
+  --orange:#E8650A; --orange-d:#B84D06; --orange-l:rgba(232,101,10,0.13);
+  --violet:#6B3FA0; --violet-d:#4A2878; --violet-l:rgba(107,63,160,0.13);
+  --blue:#1A5FA8;   --blue-d:#0E3D73;   --blue-l:rgba(26,95,168,0.13);
+  --gold:#C9A84C;   --gold-l:rgba(201,168,76,0.13);
+  --green:#25a244;
+  --bg:#0D0D12; --card:#17171F; --card2:#1F1F2A;
+  --text:#F0EEFF; --muted:#8888AA; --border:rgba(140,120,200,0.15);
+  --grad:linear-gradient(135deg,#4A2878,#6B3FA0 40%,#1A5FA8 75%,#E8650A);
+  --r:16px; --rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV TOP */
+.topbar{background:var(--grad);padding:14px 16px 12px;display:flex;align-items:center;
+  gap:10px;position:sticky;top:0;z-index:100;
+  padding-top:max(14px,env(safe-area-inset-top));}
+.topbar svg{flex-shrink:0;}
+.topbar-info{flex:1;}
+.topbar-title{font-size:15px;font-weight:700;color:#fff;}
+.topbar-sub{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px;}
+
+/* TABS NAV */
+.tabnav{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--border);
+  position:sticky;top:54px;z-index:99;-webkit-overflow-scrolling:touch;}
+.tabnav::-webkit-scrollbar{display:none;}
+.tabnav-item{flex-shrink:0;padding:11px 14px;font-size:12px;font-weight:700;
+  color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;
+  white-space:nowrap;transition:color .2s;}
+.tabnav-item.active{color:var(--violet);border-bottom-color:var(--violet);}
+
+/* PAGES */
+.page{display:none;padding:16px 16px 80px;}
+.page.active{display:block;}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:1rem;margin-bottom:1rem;}
+.card-title{font-size:12px;font-weight:700;color:#fff;padding:5px 12px;
+  border-radius:20px;margin-bottom:.9rem;display:inline-block;}
+.cv{background:var(--violet);} .co{background:var(--orange);}
+.cb{background:var(--blue);} .cg{background:var(--gold);}
+
+/* FORM */
+.flabel{font-size:11px;font-weight:700;color:var(--muted);display:block;
+  margin:10px 0 4px;text-transform:uppercase;letter-spacing:.4px;}
+input,select,textarea{width:100%;font-size:14px;padding:10px 12px;
+  border:1.5px solid var(--border);border-radius:var(--rs);
+  background:var(--card2);color:var(--text);outline:none;
+  font-family:inherit;transition:border-color .2s;
+  -webkit-appearance:none;appearance:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--violet);}
+textarea{resize:vertical;min-height:90px;line-height:1.6;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* NUM */
+.ng{background:var(--card2);border:1.5px solid var(--border);border-radius:var(--rs);
+  padding:10px 8px;text-align:center;}
+.nl{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px;
+  text-transform:uppercase;line-height:1.3;}
+.ni{font-size:24px;font-weight:700;width:100%;text-align:center;
+  border:none;background:transparent;color:var(--violet);padding:0;font-family:inherit;}
+.nu{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* CHAR COUNTER */
+.twrap{position:relative;}
+.twrap textarea{padding-bottom:22px;}
+.ccount{position:absolute;bottom:7px;right:10px;font-size:10px;
+  font-weight:700;color:var(--muted);pointer-events:none;}
+.ccount.warn{color:var(--orange);} .ccount.over{color:#ff5555;}
+
+/* BUTTONS */
+.btn{width:100%;padding:13px;border-radius:var(--rs);font-size:14px;
+  font-weight:700;border:none;cursor:pointer;color:#fff;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:inherit;-webkit-appearance:none;}
+.btn:active{opacity:.85;}
+.b-violet{background:linear-gradient(135deg,var(--violet-d),var(--violet));}
+.b-orange{background:linear-gradient(135deg,var(--orange-d),var(--orange));}
+.b-blue{background:linear-gradient(135deg,var(--blue-d),var(--blue));}
+.b-green{background:linear-gradient(135deg,#1a7a34,var(--green));}
+.b-gold{background:linear-gradient(135deg,#8a6020,var(--gold));}
+.b-red{background:linear-gradient(135deg,#8B0000,#c0392b);}
+.btn-lbl{font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.5px;margin-top:1rem;margin-bottom:2px;}
+.notice{font-size:11px;color:#FFD97D;background:rgba(255,193,7,.1);
+  border-radius:var(--rs);padding:8px 11px;margin-top:8px;
+  border-left:3px solid #ffc107;line-height:1.5;}
+
+/* HOME CARDS */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
+.hcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px 12px;cursor:pointer;position:relative;overflow:hidden;text-align:left;}
+.hcard:active{opacity:.8;}
+.hcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.hcard.vc::before{background:var(--violet);}
+.hcard.oc::before{background:var(--orange);}
+.hcard.bc::before{background:var(--blue);}
+.hcard.gc::before{background:var(--gold);}
+.hcard-icon{font-size:28px;margin-bottom:8px;display:block;}
+.hcard-name{font-size:13px;font-weight:700;color:var(--text);}
+.hcard-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+.hcard.wide{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:14px 16px;}
+.hcard.wide .hcard-icon{font-size:24px;margin-bottom:0;}
+.section-lbl{font-size:11px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.6px;margin:1rem 0 .6rem;}
+
+/* HERO */
+.hero{background:var(--grad);border-radius:var(--r);padding:20px;
+  text-align:center;margin-bottom:1rem;}
+.hero-cross{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:6px;}
+.hero h1{font-size:16px;font-weight:700;color:#fff;line-height:1.3;}
+.hero-branch{font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;}
+.hero-date{display:inline-block;margin-top:10px;font-size:11px;font-weight:600;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);
+  border-radius:20px;padding:4px 12px;color:#fff;}
+
+/* ARCHIVE ITEMS */
+.ai{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);
+  padding:10px 12px;margin-bottom:8px;border-left:4px solid var(--orange);}
+.ai.vl{border-left-color:var(--violet);}
+.ai.bl{border-left-color:var(--blue);}
+.ai.gl{border-left-color:var(--gold);}
+.ai-num{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;}
+.ai-num.v{color:var(--violet);} .ai-num.b{color:var(--blue);} .ai-num.g{color:var(--gold);}
+.ai-name{font-size:14px;font-weight:700;color:var(--text);margin:2px 0;}
+.ai-date{font-size:11px;color:var(--muted);}
+.ai-stats{font-size:11px;color:var(--muted);margin-top:3px;}
+.ai-actions{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;}
+.ab{font-size:11px;background:none;border:1px solid var(--border);
+  border-radius:6px;cursor:pointer;padding:4px 10px;
+  font-weight:700;font-family:inherit;color:var(--muted);}
+.ab.bv{color:var(--violet);border-color:rgba(107,63,160,.4);}
+.ab.br{color:#ff5555;border-color:rgba(255,85,85,.3);}
+.empty{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:13px;}
+
+/* MEMBER */
+.mcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.mavatar{width:44px;height:44px;border-radius:50%;background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;color:#fff;flex-shrink:0;}
+.minfo{flex:1;}
+.mname{font-size:14px;font-weight:700;color:var(--text);}
+.mmeta{font-size:11px;color:var(--muted);margin-top:2px;}
+.mbadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
+.mb-a{background:rgba(37,162,68,.2);color:#4ecc72;}
+.mb-n{background:var(--violet-l);color:var(--violet);}
+.mb-ab{background:rgba(232,101,10,.2);color:var(--orange);}
+
+/* PRESENCE */
+.pitem{display:flex;align-items:center;gap:10px;padding:9px 12px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--rs);margin-bottom:6px;}
+.pname{flex:1;font-size:13px;font-weight:600;color:var(--text);}
+.ptoggle{width:44px;height:24px;border-radius:12px;
+  background:rgba(255,255,255,.15);border:none;cursor:pointer;
+  position:relative;transition:background .2s;flex-shrink:0;}
+.ptoggle.on{background:var(--violet);}
+.ptoggle::after{content:'';position:absolute;top:2px;left:2px;
+  width:20px;height:20px;border-radius:50%;background:#fff;
+  transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.ptoggle.on::after{transform:translateX(20px);}
+
+/* FINANCE */
+.ftotal{background:var(--grad);border-radius:var(--r);padding:18px;
+  text-align:center;margin-bottom:1rem;}
+.ftotal-lbl{font-size:12px;color:rgba(255,255,255,.75);margin-bottom:4px;}
+.ftotal-amt{font-size:30px;font-weight:700;color:#fff;}
+.ftotal-cur{font-size:13px;color:rgba(255,255,255,.7);margin-left:4px;}
+.fdevise{display:flex;justify-content:center;margin-top:10px;}
+.fdevise-inner{background:rgba(255,255,255,.15);border-radius:20px;
+  padding:3px;display:inline-flex;gap:3px;}
+.fbtn{padding:5px 16px;border-radius:16px;border:none;font-size:12px;
+  font-weight:700;cursor:pointer;background:transparent;
+  color:rgba(255,255,255,.7);font-family:inherit;transition:all .2s;}
+.fbtn.active{background:#fff;color:var(--violet);}
+.fmini-row{display:flex;gap:8px;margin-bottom:1rem;}
+.fmini{flex:1;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--rs);padding:10px;text-align:center;}
+.fmini-lbl{font-size:10px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;margin-bottom:4px;}
+.fmini-val{font-size:17px;font-weight:700;}
+.fg{color:#4ecc72;} .fr{color:#ff5555;} .fv{color:var(--violet);}
+
+/* STABS */
+.stabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;}
+.stabs::-webkit-scrollbar{display:none;}
+.stab{flex-shrink:0;padding:7px 14px;font-size:12px;font-weight:700;
+  border-radius:20px;cursor:pointer;border:1.5px solid var(--border);
+  color:var(--muted);background:var(--card);white-space:nowrap;}
+.stab.active{background:var(--violet);color:#fff;border-color:var(--violet);}
+
+/* SEARCH */
+.searchbar{display:flex;align-items:center;gap:8px;background:var(--card);
+  border:1.5px solid var(--border);border-radius:var(--rs);
+  padding:10px 12px;margin-bottom:12px;}
+.searchbar input{flex:1;border:none;background:transparent;font-size:14px;
+  color:var(--text);outline:none;font-family:inherit;}
+
+/* MODAL */
+.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(10,10,20,.8);z-index:200;
+  align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.modal{background:var(--card);border-radius:var(--r) var(--r) 0 0;
+  padding:1.4rem 1.2rem 2rem;width:100%;max-height:85vh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;}
+.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.modal-title{font-size:15px;font-weight:700;color:var(--text);}
+.modal-close{background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:5px 12px;font-size:12px;cursor:pointer;
+  color:var(--muted);font-family:inherit;font-weight:600;}
+.modal-body{font-size:12px;color:var(--muted);white-space:pre-wrap;
+  line-height:1.8;background:var(--card2);border-radius:var(--rs);padding:12px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--violet);color:#fff;padding:10px 20px;border-radius:24px;
+  font-size:13px;font-weight:700;z-index:300;opacity:0;pointer-events:none;
+  white-space:nowrap;box-shadow:0 4px 20px rgba(107,63,160,.5);
+  transition:opacity .3s;}
+.toast.show{opacity:1;}
+
+/* CONFIG NOTE */
+.cnote{font-size:12px;color:#C4A8FF;background:var(--violet-l);
+  border-radius:var(--rs);padding:9px 12px;margin-bottom:10px;
+  border-left:3px solid var(--violet);font-weight:600;line-height:1.5;}
+
+/* PREVIEW */
+#preview-wrap{display:none;padding:16px 16px 100px;background:#fff;min-height:100vh;}
+#preview-wrap.active{display:block;}
+.preview-bar{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;
+  padding-bottom:max(12px,env(safe-area-inset-bottom));
+  background:rgba(10,10,20,.95);display:flex;gap:10px;z-index:200;}
+.preview-bar button{flex:1;padding:12px;border-radius:10px;border:none;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.pb-back{background:rgba(255,255,255,.12);color:#fff;}
+.pb-print{background:var(--grad);color:#fff;}
+
+/* INSTALL GUIDE */
+.install-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.install-num{width:26px;height:26px;border-radius:50%;font-size:12px;
+  font-weight:700;display:flex;align-items:center;justify-content:center;
+  color:#fff;flex-shrink:0;}
+.install-text{font-size:13px;color:var(--text);line-height:1.5;flex:1;}
+.install-text strong{color:#fff;}
+.os-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;
+  display:inline-block;margin-bottom:8px;}
+.divider{height:1px;background:var(--border);margin:14px 0;}
+
+/* PRINT */
+@media print{
+  .topbar,.tabnav,.preview-bar{display:none!important;}
+  body{background:#fff!important;}
+  #preview-wrap{display:block!important;padding:0!important;}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  @page{size:A4;margin:12mm 14mm;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <svg width="32" height="28" viewBox="0 0 80 60">
+    <polygon points="10,20 14,20 12,14" fill="#FFD750"/>
+    <polygon points="22,20 26,20 24,14" fill="#FFD750"/>
+    <polygon points="34,20 38,20 36,14" fill="#FFD750"/>
+    <polygon points="40,20 44,20 42,14" fill="#FFD750"/>
+    <polygon points="46,20 50,20 48,14" fill="#FFD750"/>
+    <polygon points="58,20 62,20 60,14" fill="#FFD750"/>
+    <polygon points="70,20 74,20 72,14" fill="#FFD750"/>
+    <line x1="42" y1="20" x2="42" y2="50" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <line x1="42" y1="28" x2="12" y2="28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="12" y1="28" x2="12" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="42" y1="31" x2="24" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="24" y1="31" x2="24" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="42" y1="34" x2="36" y2="34" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="36" y1="34" x2="36" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="42" y1="34" x2="48" y2="34" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="48" y1="34" x2="48" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="42" y1="31" x2="60" y2="31" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="60" y1="31" x2="60" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="42" y1="28" x2="72" y2="28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="72" y1="28" x2="72" y2="20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="28" y1="50" x2="56" y2="50" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <line x1="32" y1="46" x2="52" y2="46" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  </svg>
+  <div class="topbar-info">
+    <div class="topbar-title" id="tb-title">IFCM Kinshasa</div>
+    <div class="topbar-sub">Impact for Christ Ministries</div>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <div class="tabnav-item active" onclick="showPage('home')">🏠 Accueil</div>
+  <div class="tabnav-item" onclick="showPage('rapport')">📋 Rapport</div>
+  <div class="tabnav-item" onclick="showPage('reunion')">📣 Réunion</div>
+  <div class="tabnav-item" onclick="showPage('presence')">✅ Présence</div>
+  <div class="tabnav-item" onclick="showPage('membres')">👥 Membres</div>
+  <div class="tabnav-item" onclick="showPage('caisse')">🤝 Caisse</div>
+  <div class="tabnav-item" onclick="showPage('archives')">🗂️ Archives</div>
+  <div class="tabnav-item" onclick="showPage('config')">⚙️ Paramètres</div>
+</div>
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-cross">✝ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+    <h1>Impact for Christ Ministries</h1>
+    <div class="hero-branch">Branche de Kinshasa — IFCM</div>
+    <div class="hero-date" id="hero-date"></div>
+  </div>
+  <div class="section-lbl">Rapports & Suivi</div>
+  <div class="home-grid">
+    <div class="hcard vc" onclick="showPage('rapport')">
+      <span class="hcard-icon">📋</span>
+      <div class="hcard-name">Rapport Hebdo</div>
+      <div class="hcard-desc">Rapport pastoral de la semaine</div>
+    </div>
+    <div class="hcard oc" onclick="showPage('reunion')">
+      <span class="hcard-icon">📣</span>
+      <div class="hcard-name">Réunion</div>
+      <div class="hcard-desc">Compte-rendu famille / dép.</div>
+    </div>
+    <div class="hcard bc" onclick="showPage('presence')">
+      <span class="hcard-icon">✅</span>
+      <div class="hcard-name">Présences</div>
+      <div class="hcard-desc">Feuille de présence culte</div>
+    </div>
+    <div class="hcard vc" onclick="showPage('membres')">
+      <span class="hcard-icon">👥</span>
+      <div class="hcard-name">Membres</div>
+      <div class="hcard-desc">Annuaire & suivi</div>
+    </div>
+  </div>
+  <div class="section-lbl">Finances & Archives</div>
+  <div class="home-grid">
+    <div class="hcard gc wide" onclick="showPage('caisse')">
+      <span class="hcard-icon">🤝</span>
+      <div><div class="hcard-name">Caisse Solidarité</div>
+      <div class="hcard-desc">Contributions & dépenses de la famille</div></div>
+    </div>
+    <div class="hcard bc wide" onclick="showPage('archives')">
+      <span class="hcard-icon">🗂️</span>
+      <div><div class="hcard-name">Archives</div>
+      <div class="hcard-desc">Historique de tous les rapports</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RAPPORT ═══ -->
+<div class="page" id="page-rapport">
+  <div class="card">
+    <span class="card-title cv">👤 Identité du Pasteur</span>
+    <label class="flabel">Nom du Pasteur Responsable</label>
+    <input type="text" id="r-pastor" placeholder="Ex : Pasteur Jean Kimbu" maxlength="60">
+    <label class="flabel">Nom de la Famille du Pasteur</label>
+    <input type="text" id="r-famille" placeholder="Ex : Famille Kimbu" maxlength="60">
+    <div class="row2" style="margin-top:8px;">
+      <div><label class="flabel">Semaine du</label><input type="date" id="r-du"></div>
+      <div><label class="flabel">Au</label><input type="date" id="r-au"></div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="card-title co">📞 1. Contacts Effectués</span>
+    <div class="row2">
+      <div class="ng"><div class="nl">Visites domicile</div><input class="ni" type="number" id="r-visites" min="0" value="0"><div class="nu">membres visités</div></div>
+      <div class="ng"><div class="nl">Appels téléphone</div><input class="ni" type="number" id="r-appels" min="0" value="0"><div class="nu">membres appelés</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="card-title cb">👥 2. Évolution du Groupe</span>
+    <div class="row2">
+      <div class="ng"><div class="nl">Nouveaux / Recommençants</div><input class="ni" type="number" id="r-nouveaux" min="0" value="0"><div class="nu">intégrés</div></div>
+      <div class="ng"><div class="nl">Absences prolongées</div><input class="ni" type="number" id="r-absences" min="0" value="0"><div class="nu">à recontacter</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="card-title cv">🙏 3. Cas Urgents & Intercession</span>
+    <label class="flabel">Maladie, deuil, détresse... <span style="color:var(--orange)">(max 400)</span></label>
+    <div class="twrap">
+      <textarea id="r-cas" maxlength="400" rows="4" placeholder="Cas urgents et demandes d'intercession..." oninput="cc('r-cas','cc-r1',400)"></textarea>
+      <span class="ccount" id="cc-r1">0/400</span>
+    </div>
+  </div>
+  <div class="card">
+    <span class="card-title co">📝 4. Observations & Besoins</span>
+    <label class="flabel">Remarques, besoins... <span style="color:var(--orange)">(max 400)</span></label>
+    <div class="twrap">
+      <textarea id="r-obs" maxlength="400" rows="4" placeholder="Observations générales, besoins..." oninput="cc('r-obs','cc-r2',400)"></textarea>
+      <span class="ccount" id="cc-r2">0/400</span>
+    </div>
+  </div>
+  <div class="btn-lbl">Aperçu & Impression PDF</div>
+  <button class="btn b-red" onclick="previewRapport()">👁 Voir & Imprimer le Rapport</button>
+  <div class="btn-lbl">Envoyer directement</div>
+  <button class="btn b-violet" onclick="emailRapport()">✉️ Envoyer par Email</button>
+  <button class="btn b-green" onclick="waRapport()">💬 Envoyer sur WhatsApp</button>
+  <div class="btn-lbl">Archiver</div>
+  <button class="btn b-blue" onclick="sauvegarderRapport()">🗂️ Sauvegarder dans les archives</button>
+</div>
+
+<!-- ═══ RÉUNION ═══ -->
+<div class="page" id="page-reunion">
+  <div class="card">
+    <span class="card-title cv">📋 Informations de la Réunion</span>
+    <label class="flabel">Type de réunion</label>
+    <select id="reu-type">
+      <option value="Réunion de Famille">Réunion de Famille</option>
+      <option value="Réunion de Département">Réunion de Département</option>
+      <option value="Réunion de Prière">Réunion de Prière</option>
+      <option value="Réunion de Discipline">Réunion de Discipline</option>
+      <option value="Autre Réunion">Autre</option>
+    </select>
+    <label class="flabel">Animateur / Responsable</label>
+    <input type="text" id="reu-animateur" placeholder="Ex : Pasteur Jean Kimbu">
+    <label class="flabel">Famille / Département</label>
+    <input type="text" id="reu-groupe" placeholder="Ex : Famille Kimbu — Zone Gombe">
+    <div class="row2" style="margin-top:8px;">
+      <div><label class="flabel">Date</label><input type="date" id="reu-date"></div>
+      <div><label class="flabel">Lieu</label><input type="text" id="reu-lieu" placeholder="Domicile, Église..."></div>
+    </div>
+  </div>
+  <div class="card">
+    <span class="card-title co">👥 Participation</span>
+    <div class="row2">
+      <div class="ng"><div class="nl">Présents</div><input class="ni" type="number" id="reu-presents" min="0" value="0"><div class="nu">personnes</div></div>
+      <div class="ng"><div class="nl">Absents</div><input class="ni" type="number" id="reu-absents" min="0" value="0"><div class="nu">personnes</div></div>
+    </div>
+    <label class="flabel" style="margin-top:10px;">Noms des absents</label>
+    <input type="text" id="reu-noms-absents" placeholder="Ex : Frère Paul, Sœur Marie...">
+  </div>
+  <div class="card">
+    <span class="card-title cb">📖 Contenu</span>
+    <label class="flabel">Thème / Sujet principal</label>
+    <input type="text" id="reu-theme" placeholder="Ex : La marche chrétienne...">
+    <label class="flabel">Résumé des discussions <span style="color:var(--orange)">(max 400)</span></label>
+    <div class="twrap">
+      <textarea id="reu-resume" maxlength="400" rows="4" placeholder="Points discutés..." oninput="cc('reu-resume','cc-reu1',400)"></textarea>
+      <span class="ccount" id="cc-reu1">0/400</span>
+    </div>
+    <label class="flabel">Décisions prises <span style="color:var(--orange)">(max 300)</span></label>
+    <div class="twrap">
+      <textarea id="reu-decisions" maxlength="300" rows="3" placeholder="Décisions, engagements..." oninput="cc('reu-decisions','cc-reu2',300)"></textarea>
+      <span class="ccount" id="cc-reu2">0/300</span>
+    </div>
+  </div>
+  <div class="card">
+    <span class="card-title cv">🙏 Points Spirituels</span>
+    <label class="flabel">Cas de prière / Intercession <span style="color:var(--orange)">(max 300)</span></label>
+    <div class="twrap">
+      <textarea id="reu-priere" maxlength="300" rows="3" placeholder="Sujets de prière..." oninput="cc('reu-priere','cc-reu3',300)"></textarea>
+      <span class="ccount" id="cc-reu3">0/300</span>
+    </div>
+    <label class="flabel">Prochaine réunion prévue</label>
+    <input type="date" id="reu-prochaine">
+  </div>
+  <div class="btn-lbl">Aperçu & Impression PDF</div>
+  <button class="btn b-red" onclick="previewReunion()">👁 Voir & Imprimer le Compte-rendu</button>
+  <div class="btn-lbl">Envoyer directement</div>
+  <button class="btn b-violet" onclick="emailReunion()">✉️ Envoyer par Email</button>
+  <button class="btn b-green" onclick="waReunion()">💬 Envoyer sur WhatsApp</button>
+  <div class="btn-lbl">Archiver</div>
+  <button class="btn b-blue" onclick="sauvegarderReunion()">🗂️ Sauvegarder dans les archives</button>
+</div>
+
+<!-- ═══ PRÉSENCE ═══ -->
+<div class="page" id="page-presence">
+  <div class="card">
+    <span class="card-title co">📅 Détails du Culte</span>
+    <label class="flabel">Date du culte</label><input type="date" id="p-date">
+    <label class="flabel">Thème / Message</label><input type="text" id="p-theme" placeholder="Ex : La puissance de la prière">
+    <label class="flabel">Prédicateur</label><input type="text" id="p-predicateur" placeholder="Ex : Pasteur Jean Kimbu">
+  </div>
+  <div class="card">
+    <span class="card-title cv">✅ Liste de Présence</span>
+    <div class="searchbar"><span>🔍</span><input type="text" id="p-search" placeholder="Rechercher..." oninput="filterPresence()"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <span style="font-size:12px;color:var(--muted);">Membres</span>
+      <span style="font-size:13px;font-weight:700;color:var(--violet);" id="p-count">0 présents</span>
+    </div>
+    <div id="p-list"></div>
+  </div>
+  <button class="btn b-red" onclick="previewPresence()">👁 Voir & Imprimer la Feuille</button>
+  <button class="btn b-blue" onclick="sauvegarderPresence()">🗂️ Sauvegarder la présence</button>
+</div>
+
+<!-- ═══ MEMBRES ═══ -->
+<div class="page" id="page-membres">
+  <!-- ONGLETS DISCIPLES / MEMBRES -->
+  <div class="stabs">
+    <div class="stab active" id="mtab-disciples" onclick="switchMembreTab('disciples')">👤 Disciples (${0})</div>
+    <div class="stab" id="mtab-membres" onclick="switchMembreTab('membres')">👥 Membres</div>
+  </div>
+
+  <!-- VUE DISCIPLES -->
+  <div id="mv-disciples">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <span id="d-count" style="font-size:12px;font-weight:700;color:var(--muted);">— disciples</span>
+      <button class="btn b-violet" style="width:auto;padding:8px 16px;margin-top:0;font-size:12px;" onclick="ouvrirFormDisciple()">+ Ajouter disciple</button>
+    </div>
+    <div id="d-list"></div>
+  </div>
+
+  <!-- VUE MEMBRES -->
+  <div id="mv-membres" style="display:none;">
+    <div class="searchbar"><span>🔍</span><input type="text" id="m-search" placeholder="Rechercher un membre..." oninput="filterMembres()"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+      <span id="m-count" style="font-size:12px;font-weight:700;color:var(--muted);">— membres</span>
+      <div style="display:flex;gap:6px;">
+        <select id="m-filtre-disciple" style="width:auto;font-size:12px;padding:6px 10px;" onchange="filterMembres()">
+          <option value="">Tous les disciples</option>
+        </select>
+        <button class="btn b-violet" style="width:auto;padding:8px 14px;margin-top:0;font-size:12px;" onclick="ouvrirFormMembre()">+ Ajouter</button>
+      </div>
+    </div>
+    <div id="m-list"></div>
+  </div>
+</div>
+
+<!-- ═══ CAISSE ═══ -->
+<div class="page" id="page-caisse">
+  <div class="ftotal">
+    <div class="ftotal-lbl">Solde de la Caisse</div>
+    <div><span class="ftotal-amt" id="f-solde">0</span><span class="ftotal-cur" id="f-cur">CDF</span></div>
+    <div class="fdevise">
+      <div class="fdevise-inner">
+        <button class="fbtn active" id="fbtn-cdf" onclick="setDevise('CDF')">CDF</button>
+        <button class="fbtn" id="fbtn-usd" onclick="setDevise('USD')">USD $</button>
+      </div>
+    </div>
+  </div>
+  <div class="fmini-row">
+    <div class="fmini"><div class="fmini-lbl">Contributions</div><div class="fmini-val fg" id="f-in">0</div></div>
+    <div class="fmini"><div class="fmini-lbl">Dépenses</div><div class="fmini-val fr" id="f-out">0</div></div>
+    <div class="fmini"><div class="fmini-lbl">Opérations</div><div class="fmini-val fv" id="f-nb">0</div></div>
+  </div>
+  <div class="card">
+    <span class="card-title cg">🤝 Nouvelle Opération</span>
+    <div class="row2">
+      <div>
+        <label class="flabel">Type</label>
+        <select id="f-type">
+          <option value="entree">Contribution d'un membre</option>
+          <option value="depense">Dépense de la famille</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">Montant (<span id="f-devise-lbl">CDF</span>)</label>
+        <input type="number" id="f-montant" placeholder="0" min="0">
+      </div>
+    </div>
+    <label class="flabel">Nom du membre / Bénéficiaire</label>
+    <input type="text" id="f-membre" placeholder="Ex : Frère Mbala Jean">
+    <label class="flabel">Motif / Description</label>
+    <input type="text" id="f-desc" placeholder="Ex : Aide médicale, contribution semaine...">
+    <label class="flabel">Date</label>
+    <input type="date" id="f-date">
+    <button class="btn b-gold" onclick="ajouterTransaction()">+ Enregistrer l'opération</button>
+  </div>
+  <div class="card">
+    <span class="card-title cg">📊 Historique</span>
+    <div id="f-history"><div class="empty">Aucune opération enregistrée.</div></div>
+  </div>
+</div>
+
+<!-- ═══ ARCHIVES ═══ -->
+<div class="page" id="page-archives">
+  <div class="stabs">
+    <div class="stab active" onclick="switchArch('rapports')">📋 Rapports</div>
+    <div class="stab" onclick="switchArch('reunions')">📣 Réunions</div>
+    <div class="stab" onclick="switchArch('presences')">✅ Présences</div>
+    <div class="stab" onclick="switchArch('caisse')">🤝 Caisse</div>
+  </div>
+  <div id="arch-rapports"></div>
+  <div id="arch-reunions" style="display:none;"></div>
+  <div id="arch-presences" style="display:none;"></div>
+  <div id="arch-caisse" style="display:none;"></div>
+</div>
+
+<!-- ═══ CONFIG ═══ -->
+<div class="page" id="page-config">
+  <div class="card">
+    <span class="card-title co">⚙️ Envoi des Rapports</span>
+    <div class="cnote">Configurer une seule fois. Sauvegardé sur votre appareil.</div>
+    <label class="flabel">Adresse email de l'église</label>
+    <input type="email" id="c-email" placeholder="responsable@ifcm-kinshasa.org">
+    <label class="flabel">Numéro WhatsApp (avec indicatif)</label>
+    <input type="text" id="c-whatsapp" placeholder="+243812345678">
+    <label class="flabel">Nom du responsable destinataire</label>
+    <input type="text" id="c-responsable" placeholder="Ex : Évêque Samuel">
+    <button class="btn b-orange" style="margin-top:14px;" onclick="saveConfig()">💾 Sauvegarder</button>
+  </div>
+
+  <div class="card">
+    <span class="card-title cb">🏛️ Informations de l'Église</span>
+    <label class="flabel">Cellule / Groupe pastoral</label>
+    <input type="text" id="c-cellule" placeholder="Ex : Cellule Est — Zone Gombe">
+    <label class="flabel">Pasteur Superviseur</label>
+    <input type="text" id="c-superviseur" placeholder="Ex : Pasteur Samuel">
+    <button class="btn b-blue" style="margin-top:14px;" onclick="saveConfig()">💾 Sauvegarder</button>
+  </div>
+
+  <!-- SAUVEGARDE -->
+  <div class="card">
+    <span class="card-title cv">🔒 Sécurité & Sauvegarde des Données</span>
+    <div class="cnote">⚠️ Si vous perdez votre téléphone ou effacez le navigateur, toutes vos données disparaissent. Sauvegardez régulièrement !</div>
+
+    <!-- EXPORT -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">📥 Export manuel</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;">Télécharge toutes tes données (membres, rapports, réunions, caisse...) dans un fichier de sauvegarde.</div>
+      <button class="btn b-violet" style="margin-top:0;" onclick="exporterDonnees()">📥 Télécharger ma sauvegarde</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- IMPORT -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">📤 Restaurer une sauvegarde</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;">Si tu as perdu tes données, charge ici ton fichier de sauvegarde pour tout récupérer.</div>
+      <label style="display:block;width:100%;padding:13px;border-radius:var(--rs);font-size:14px;font-weight:700;
+        background:linear-gradient(135deg,var(--blue-d),var(--blue));color:#fff;text-align:center;cursor:pointer;margin-top:0;">
+        📤 Charger une sauvegarde
+        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importerDonnees(this)">
+      </label>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- GOOGLE DRIVE -->
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">
+        <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" 
+          style="width:16px;height:16px;vertical-align:middle;margin-right:4px;">
+        Sauvegarde sur Google Drive
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;">
+        Envoie automatiquement ta sauvegarde sur le Google Drive de l'église. Le responsable peut accéder à toutes les sauvegardes.
+      </div>
+      <label class="flabel">Email Google Drive de l'église</label>
+      <input type="email" id="c-drive-email" placeholder="ifcm.kinshasa@gmail.com">
+      <button class="btn b-green" style="margin-top:8px;background:linear-gradient(135deg,#1a7a34,#25a244);" onclick="sauvegarderDrive()">
+        <img src="https://www.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png" 
+          style="width:16px;height:16px;vertical-align:middle;">
+        Envoyer sur Google Drive
+      </button>
+      <div class="notice" style="margin-top:8px;">📌 La sauvegarde sera envoyée par email à l'adresse Google Drive configurée. Le responsable la reçoit directement dans sa boîte Gmail et peut l'ouvrir sur Drive.</div>
+    </div>
+  </div>
+
+  <!-- DERNIÈRE SAUVEGARDE -->
+  <div class="card" id="card-last-backup" style="display:none;">
+    <span class="card-title cv">✅ Dernière sauvegarde</span>
+    <div id="last-backup-info" style="font-size:13px;color:var(--muted);line-height:1.6;"></div>
+  </div>
+
+  <div class="card">
+    <span class="card-title cv">📲 Installer sur votre téléphone</span>
+    <div class="cnote">Installez IFCM comme une vraie app sur votre écran d'accueil !</div>
+    <div class="os-badge" style="background:#3DDC84;color:#000;">ANDROID</div>
+    <div class="install-step"><div class="install-num" style="background:var(--violet);">1</div><div class="install-text">Ouvrez dans <strong>Chrome</strong></div></div>
+    <div class="install-step"><div class="install-num" style="background:var(--violet);">2</div><div class="install-text">Appuyez sur <strong>⋮ (3 points)</strong> en haut à droite</div></div>
+    <div class="install-step"><div class="install-num" style="background:var(--violet);">3</div><div class="install-text">Appuyez sur <strong>« Ajouter à l'écran d'accueil »</strong></div></div>
+    <div class="divider"></div>
+    <div class="os-badge" style="background:#000;color:#fff;">iPhone / iPad</div>
+    <div class="install-step"><div class="install-num" style="background:var(--orange);">1</div><div class="install-text">Ouvrez dans <strong>Safari</strong></div></div>
+    <div class="install-step"><div class="install-num" style="background:var(--orange);">2</div><div class="install-text">Appuyez sur <strong>Partager ↑</strong> en bas</div></div>
+    <div class="install-step"><div class="install-num" style="background:var(--orange);">3</div><div class="install-text">Appuyez sur <strong>« Sur l'écran d'accueil »</strong></div></div>
+    <div class="install-step"><div class="install-num" style="background:var(--orange);">4</div><div class="install-text">Appuyez sur <strong>« Ajouter »</strong> en haut à droite</div></div>
+  </div>
+</div>
+
+<!-- APERÇU IMPRESSION -->
+<div id="preview-wrap">
+  <div id="preview-content"></div>
+  <div class="preview-bar">
+    <button class="pb-back" onclick="closePreview()">← Retour</button>
+    <button class="pb-print" onclick="window.print()">🖨️ Imprimer / PDF</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal" onclick="if(event.target.id==='modal')closeModal()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="closeModal()">Fermer ✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div id="modal-actions" style="margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- MODAL DISCIPLE -->
+<div class="overlay" id="modal-disciple" onclick="if(event.target.id==='modal-disciple')closeDisciple()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title" id="md-title">Nouveau Disciple</div>
+      <button class="modal-close" onclick="closeDisciple()">✕</button>
+    </div>
+    <label class="flabel">Nom du disciple</label>
+    <input type="text" id="md-nom" placeholder="Ex : Jean Kimbu">
+    <label class="flabel">Téléphone</label>
+    <input type="tel" id="md-tel" placeholder="+243...">
+    <label class="flabel">Adresse / Quartier</label>
+    <input type="text" id="md-adresse" placeholder="Ex : Gombe, Avenue...">
+    <label class="flabel">Statut spirituel</label>
+    <select id="md-statut">
+      <option value="Actif">Actif</option>
+      <option value="En formation">En formation</option>
+      <option value="Nouveau disciple">Nouveau disciple</option>
+      <option value="Absent prolongé">Absent prolongé</option>
+    </select>
+    <button class="btn b-violet" style="margin-top:14px;" onclick="saveDisciple()">✅ Enregistrer</button>
+  </div>
+</div>
+
+<!-- MODAL MEMBRE -->
+<div class="overlay" id="modal-membre" onclick="if(event.target.id==='modal-membre')closeMembre()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title" id="mm-title">Nouveau Membre</div>
+      <button class="modal-close" onclick="closeMembre()">✕</button>
+    </div>
+    <label class="flabel">Nom et Prénom</label>
+    <input type="text" id="mm-nom" placeholder="Nom complet">
+    <label class="flabel">Disciple responsable</label>
+    <select id="mm-disciple"></select>
+    <label class="flabel">Téléphone</label>
+    <input type="tel" id="mm-tel" placeholder="+243...">
+    <label class="flabel">Adresse / Quartier</label>
+    <input type="text" id="mm-adresse" placeholder="Ex : Gombe, Avenue...">
+    <label class="flabel">Statut spirituel</label>
+    <select id="mm-statut">
+      <option value="Actif">Actif</option>
+      <option value="Nouveau croyant">Nouveau croyant</option>
+      <option value="En croissance">En croissance</option>
+      <option value="Recommençant">Recommençant</option>
+      <option value="Absent prolongé">Absent prolongé</option>
+      <option value="À recontacter">À recontacter</option>
+    </select>
+    <label class="flabel">Date d'intégration</label>
+    <input type="date" id="mm-date">
+    <button class="btn b-violet" style="margin-top:14px;" onclick="saveMembre()">✅ Enregistrer</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════
+const K={r:'ifcm_rapports',c:'ifcm_config',m:'ifcm_membres',d:'ifcm_disciples',p:'ifcm_presences',f:'ifcm_finances',reu:'ifcm_reunions'};
+const load=k=>{try{return JSON.parse(localStorage.getItem(K[k])||'[]');}catch{return[];}};
+const loadObj=k=>{try{return JSON.parse(localStorage.getItem(K[k])||'{}');}catch{return{};}};
+const save=(k,v)=>localStorage.setItem(K[k],JSON.stringify(v));
+
+// ══════════════════════════════════════
+// NAVIGATION — SIMPLE ET FIABLE
+// ══════════════════════════════════════
+let curPage='home';
+const titles={home:'IFCM Kinshasa',rapport:'Rapport Hebdomadaire',reunion:'Rapport de Réunion',
+  presence:'Feuille de Présence',membres:'Annuaire Membres',caisse:'Caisse Solidarité',
+  archives:'Archives',config:'Paramètres'};
+
+function showPage(name){
+  // Masquer toutes les pages
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tabnav-item').forEach(t=>t.classList.remove('active'));
+  // Afficher la bonne
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.tabnav-item').forEach((t,i)=>{
+    if(t.textContent.toLowerCase().includes(name)||
+      (name==='caisse'&&t.textContent.includes('Caisse'))||
+      (name==='home'&&t.textContent.includes('Accueil'))||
+      (name==='reunion'&&t.textContent.includes('union'))||
+      (name==='presence'&&t.textContent.includes('ésence'))||
+      (name==='membres'&&t.textContent.includes('embre'))||
+      (name==='archives'&&t.textContent.includes('rchive'))||
+      (name==='config'&&t.textContent.includes('aram'))
+    ) t.classList.add('active');
+  });
+  document.getElementById('tb-title').textContent=titles[name]||'IFCM';
+  curPage=name;
+  window.scrollTo(0,0);
+  // Init
+  if(name==='membres'){ membreTab='disciples'; switchMembreTab('disciples'); }
+  if(name==='caisse') renderCaisse();
+  if(name==='presence') renderPresence();
+  if(name==='archives'){renderArch('rapports');switchArch('rapports');}
+  if(name==='config') loadConfig();
+}
+
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
+function showToast(msg,col){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=col||'var(--violet)';
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
+}
+function fmtDate(s){
+  if(!s)return'—';
+  return new Date(s+'T12:00:00').toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+}
+function cc(fid,cid,max){
+  const l=document.getElementById(fid).value.length;
+  const el=document.getElementById(cid);
+  el.textContent=l+'/'+max;
+  el.className='ccount'+(l>=max?' over':l>=max*.85?' warn':'');
+}
+function openModal(title,body,actions){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').textContent=body;
+  document.getElementById('modal-actions').innerHTML=actions||'';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ══════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════
+function loadConfig(){
+  const c=loadObj('c');
+  ['email','whatsapp','responsable','cellule','superviseur'].forEach(k=>{
+    const el=document.getElementById('c-'+k);
+    if(el&&c[k])el.value=c[k];
+  });
+  const savedDrive=localStorage.getItem('ifcm_last_backup_drive');
+  const elDrive=document.getElementById('c-drive-email');
+  if(elDrive&&savedDrive)elDrive.value=savedDrive;
+  majDerniereSauvegarde();
+}
+function saveConfig(){
+  const c={};
+  ['email','whatsapp','responsable','cellule','superviseur'].forEach(k=>{
+    const el=document.getElementById('c-'+k);
+    if(el)c[k]=el.value.trim();
+  });
+  save('c',c);showToast('✅ Configuration sauvegardée !');
+}
+
+// ══════════════════════════════════════
+// APERÇU / IMPRESSION
+// ══════════════════════════════════════
+let previewFrom='home';
+function openPreview(html){
+  previewFrom=curPage;
+  document.getElementById('preview-content').innerHTML=html;
+  // Masquer app, afficher preview
+  document.querySelector('.topbar').style.display='none';
+  document.querySelector('.tabnav').style.display='none';
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('preview-wrap').classList.add('active');
+  window.scrollTo(0,0);
+}
+function closePreview(){
+  document.querySelector('.topbar').style.display='';
+  document.querySelector('.tabnav').style.display='';
+  document.getElementById('preview-wrap').classList.remove('active');
+  showPage(previewFrom);
+}
+
+// HTML RAPPORT
+function htmlRapport(data){
+  return`<style>
+    body{font-family:Arial,sans-serif;background:#fff;color:#1A1A2E;}
+    .hdr{background:linear-gradient(135deg,#4A2878,#6B3FA0,#1A5FA8,#E8650A);
+      padding:16px;text-align:center;color:#fff;border-radius:8px;margin-bottom:12px;}
+    .hdr h1{font-size:16px;font-weight:700;}
+    .hdr .sub{font-size:10px;opacity:.8;margin-top:3px;}
+    .hdr .badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;
+      border:1px solid rgba(255,255,255,.5);border-radius:20px;padding:3px 12px;}
+    .hdr .meta{font-size:9px;opacity:.7;margin-top:5px;}
+    .sec{margin-bottom:10px;}
+    .bar{color:#fff;font-size:10px;font-weight:700;padding:5px 10px;
+      border-radius:5px;margin-bottom:6px;}
+    .bv{background:#6B3FA0;}.bo{background:#E8650A;}.bb{background:#1A5FA8;}
+    .row{display:flex;margin-bottom:3px;}
+    .lbl{background:#F0EBF9;color:#4A2878;font-weight:700;font-size:10px;
+      padding:5px 8px;min-width:110px;border-radius:4px 0 0 4px;flex-shrink:0;}
+    .val{background:#FAF8FF;color:#1A1A2E;font-size:11px;padding:5px 8px;flex:1;
+      border-radius:0 4px 4px 0;border:1px solid #E0D8F0;border-left:none;word-break:break-word;}
+    .stats{display:flex;gap:8px;margin-bottom:4px;}
+    .stat{flex:1;background:#F5F0FF;border:1px solid #D0C0F0;border-radius:6px;
+      text-align:center;padding:10px 4px;}
+    .stat-l{font-size:8px;color:#6B3FA0;font-weight:600;margin-bottom:4px;}
+    .stat-n{font-size:26px;font-weight:700;color:#4A2878;line-height:1;}
+    .stat-u{font-size:8px;color:#888;margin-top:2px;}
+    .tl{font-size:9px;font-weight:700;color:#6B3FA0;text-transform:uppercase;margin-bottom:3px;}
+    .tb{background:#FAF8FF;border:1px solid #E0D8F0;border-radius:5px;
+      padding:7px 9px;font-size:11px;line-height:1.7;color:#1A1A2E;
+      white-space:pre-wrap;word-break:break-word;}
+    .ftr{margin-top:12px;background:#4A2878;color:#fff;text-align:center;
+      padding:7px;border-radius:6px;font-size:9px;}
+    @media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}@page{size:A4;margin:12mm 14mm;}}
+  </style>
+  <div class="hdr">
+    <div style="font-size:12px;margin-bottom:4px;">✝ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+    <h1>IMPACT FOR CHRIST MINISTRIES</h1>
+    <div class="sub">Branche de Kinshasa — IFCM</div>
+    <div class="badge">RAPPORT HEBDOMADAIRE PASTORAL</div>
+    <div class="meta">Rapport N° ${data._num}  •  Émis le ${data.date_envoi}</div>
+  </div>
+  <div class="sec">
+    <div class="bar bv">IDENTITÉ DU PASTEUR</div>
+    <div class="row"><div class="lbl">Pasteur</div><div class="val">${esc(data.pastor)||'—'}</div></div>
+    <div class="row"><div class="lbl">Famille</div><div class="val">${esc(data.famille)||'—'}</div></div>
+    <div class="row"><div class="lbl">Période</div><div class="val">Du ${fmtDate(data.du)} au ${fmtDate(data.au)}</div></div>
+  </div>
+  <div class="sec">
+    <div class="bar bo">1. CONTACTS EFFECTUÉS</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-l">Visites à domicile</div><div class="stat-n">${data.visites}</div><div class="stat-u">membres visités</div></div>
+      <div class="stat"><div class="stat-l">Appels téléphoniques</div><div class="stat-n">${data.appels}</div><div class="stat-u">membres appelés</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="bar bb">2. ÉVOLUTION DU GROUPE</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-l">Nouveaux / Recommençants</div><div class="stat-n">${data.nouveaux}</div><div class="stat-u">intégrés</div></div>
+      <div class="stat"><div class="stat-l">Absences prolongées</div><div class="stat-n">${data.absences}</div><div class="stat-u">à recontacter</div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="bar bv">3. CAS URGENTS &amp; INTERCESSION</div>
+    <div class="tl">Maladie, deuil, détresse sociale...</div>
+    <div class="tb">${esc(data.cas)||'Aucun cas signalé.'}</div>
+  </div>
+  <div class="sec">
+    <div class="bar bo">4. OBSERVATIONS &amp; BESOINS</div>
+    <div class="tl">Remarques générales, besoins...</div>
+    <div class="tb">${esc(data.obs)||'Aucune observation.'}</div>
+  </div>
+  <div class="ftr">IMPACT FOR CHRIST MINISTRIES — Branche de Kinshasa (IFCM)<br>
+  Rapport N° ${data._num}  |  Signé : ${esc(data.pastor)||'—'}  |  ${data.date_envoi}</div>`;
+}
+
+// HTML RÉUNION
+function htmlReunion(data){
+  return`<style>
+    body{font-family:Arial,sans-serif;background:#fff;color:#1A1A2E;}
+    .hdr{background:linear-gradient(135deg,#4A2878,#6B3FA0,#1A5FA8,#E8650A);
+      padding:16px;text-align:center;color:#fff;border-radius:8px;margin-bottom:12px;}
+    .hdr h1{font-size:16px;font-weight:700;}.hdr .sub{font-size:10px;opacity:.8;margin-top:3px;}
+    .hdr .badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:600;
+      border:1px solid rgba(255,255,255,.5);border-radius:20px;padding:3px 12px;}
+    .hdr .meta{font-size:9px;opacity:.7;margin-top:5px;}
+    .sec{margin-bottom:10px;}
+    .bar{color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:5px;margin-bottom:6px;}
+    .bv{background:#6B3FA0;}.bo{background:#E8650A;}.bb{background:#1A5FA8;}
+    .row{display:flex;margin-bottom:3px;}
+    .lbl{background:#F0EBF9;color:#4A2878;font-weight:700;font-size:10px;
+      padding:5px 8px;min-width:115px;border-radius:4px 0 0 4px;flex-shrink:0;}
+    .val{background:#FAF8FF;color:#1A1A2E;font-size:11px;padding:5px 8px;flex:1;
+      border-radius:0 4px 4px 0;border:1px solid #E0D8F0;border-left:none;word-break:break-word;}
+    .stats{display:flex;gap:8px;margin-bottom:6px;}
+    .stat{flex:1;background:#F5F0FF;border:1px solid #D0C0F0;border-radius:6px;
+      text-align:center;padding:10px 4px;}
+    .stat-l{font-size:8px;color:#6B3FA0;font-weight:600;margin-bottom:4px;}
+    .stat-n{font-size:26px;font-weight:700;color:#4A2878;line-height:1;}
+    .stat-u{font-size:8px;color:#888;margin-top:2px;}
+    .tl{font-size:9px;font-weight:700;color:#6B3FA0;text-transform:uppercase;margin-bottom:3px;}
+    .tb{background:#FAF8FF;border:1px solid #E0D8F0;border-radius:5px;
+      padding:7px 9px;font-size:11px;line-height:1.7;color:#1A1A2E;
+      white-space:pre-wrap;word-break:break-word;margin-bottom:6px;}
+    .ftr{margin-top:12px;background:#4A2878;color:#fff;text-align:center;
+      padding:7px;border-radius:6px;font-size:9px;}
+    @media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}@page{size:A4;margin:12mm 14mm;}}
+  </style>
+  <div class="hdr">
+    <div style="font-size:12px;margin-bottom:4px;">✝ ✦ ✦ ✦ ✦ ✦ ✦ ✦</div>
+    <h1>IMPACT FOR CHRIST MINISTRIES</h1>
+    <div class="sub">Branche de Kinshasa — IFCM</div>
+    <div class="badge">${esc(data.type).toUpperCase()} — COMPTE-RENDU</div>
+    <div class="meta">N° ${data._num}  •  Saisi le ${data.date_saisie}</div>
+  </div>
+  <div class="sec">
+    <div class="bar bv">INFORMATIONS DE LA RÉUNION</div>
+    <div class="row"><div class="lbl">Type</div><div class="val">${esc(data.type)}</div></div>
+    <div class="row"><div class="lbl">Animateur</div><div class="val">${esc(data.animateur)}</div></div>
+    <div class="row"><div class="lbl">Famille / Groupe</div><div class="val">${esc(data.groupe)||'—'}</div></div>
+    <div class="row"><div class="lbl">Date</div><div class="val">${fmtDate(data.date)}</div></div>
+    <div class="row"><div class="lbl">Lieu</div><div class="val">${esc(data.lieu)||'—'}</div></div>
+  </div>
+  <div class="sec">
+    <div class="bar bo">PARTICIPATION</div>
+    <div class="stats">
+      <div class="stat"><div class="stat-l">Membres présents</div><div class="stat-n">${data.presents}</div><div class="stat-u">personnes</div></div>
+      <div class="stat"><div class="stat-l">Membres absents</div><div class="stat-n">${data.absents}</div><div class="stat-u">personnes</div></div>
+    </div>
+    ${data.noms_absents?`<div class="row"><div class="lbl">Absents</div><div class="val">${esc(data.noms_absents)}</div></div>`:''}
+  </div>
+  <div class="sec">
+    <div class="bar bb">CONTENU DE LA RÉUNION</div>
+    <div class="row" style="margin-bottom:6px;"><div class="lbl">Thème</div><div class="val">${esc(data.theme)||'—'}</div></div>
+    <div class="tl">Résumé des discussions</div>
+    <div class="tb">${esc(data.resume)||'Aucun résumé.'}</div>
+    <div class="tl">Décisions prises</div>
+    <div class="tb">${esc(data.decisions)||'Aucune décision.'}</div>
+  </div>
+  <div class="sec">
+    <div class="bar bv">POINTS SPIRITUELS &amp; PRIÈRE</div>
+    <div class="tl">Cas de prière / Intercession</div>
+    <div class="tb">${esc(data.priere)||'Aucun cas signalé.'}</div>
+    ${data.prochaine?`<div class="row"><div class="lbl">Prochaine réunion</div><div class="val">${fmtDate(data.prochaine)}</div></div>`:''}
+  </div>
+  <div class="ftr">IMPACT FOR CHRIST MINISTRIES — Branche de Kinshasa (IFCM)<br>
+  Compte-rendu N° ${data._num}  |  ${esc(data.animateur)}  |  ${data.date_saisie}</div>`;
+}
+
+// HTML PRÉSENCE
+function htmlPresence(culte, membres, presenceData){
+  const presents=membres.filter(m=>presenceData[m.nom]);
+  const absents=membres.filter(m=>!presenceData[m.nom]);
+  return`<style>
+    body{font-family:Arial,sans-serif;background:#fff;color:#1A1A2E;}
+    .hdr{background:linear-gradient(135deg,#4A2878,#1A5FA8);padding:14px;text-align:center;color:#fff;border-radius:8px;margin-bottom:12px;}
+    .hdr h1{font-size:15px;font-weight:700;}.hdr .meta{font-size:10px;opacity:.8;margin-top:4px;}
+    table{width:100%;border-collapse:collapse;margin-top:10px;}
+    th{background:#6B3FA0;color:#fff;padding:6px 8px;font-size:10px;text-align:left;}
+    td{padding:6px 8px;font-size:11px;border-bottom:1px solid #eee;}
+    tr:nth-child(even) td{background:#F9F7FF;}
+    .check{text-align:center;font-size:14px;}
+    .ftr{margin-top:14px;background:#4A2878;color:#fff;text-align:center;padding:7px;border-radius:6px;font-size:9px;}
+    @media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}@page{size:A4;margin:12mm 14mm;}}
+  </style>
+  <div class="hdr">
+    <h1>FEUILLE DE PRÉSENCE — IFCM KINSHASA</h1>
+    <div class="meta">Date : ${fmtDate(culte.date)}  |  Prédicateur : ${esc(culte.predicateur)||'—'}</div>
+    <div class="meta">Thème : ${esc(culte.theme)||'—'}</div>
+  </div>
+  <strong style="font-size:12px;">Total : ${presents.length} présents / ${membres.length} membres</strong>
+  <table>
+    <tr><th>N°</th><th>Nom du Membre</th><th style="text-align:center;">Présent</th></tr>
+    ${membres.map((m,i)=>`<tr><td>${i+1}</td><td>${esc(m.nom)}</td><td class="check">${presenceData[m.nom]?'✓':''}</td></tr>`).join('')}
+  </table>
+  <div class="ftr">IMPACT FOR CHRIST MINISTRIES — Branche de Kinshasa (IFCM)<br>
+  Présence du ${fmtDate(culte.date)}  |  Total : ${presents.length}/${membres.length}</div>`;
+}
+
+// ══════════════════════════════════════
+// RAPPORT
+// ══════════════════════════════════════
+function collectRapport(){
+  return{
+    date_envoi:new Date().toLocaleString('fr-FR'),
+    pastor:document.getElementById('r-pastor').value.trim(),
+    famille:document.getElementById('r-famille').value.trim(),
+    du:document.getElementById('r-du').value,
+    au:document.getElementById('r-au').value,
+    visites:parseInt(document.getElementById('r-visites').value)||0,
+    appels:parseInt(document.getElementById('r-appels').value)||0,
+    nouveaux:parseInt(document.getElementById('r-nouveaux').value)||0,
+    absences:parseInt(document.getElementById('r-absences').value)||0,
+    cas:document.getElementById('r-cas').value.trim(),
+    obs:document.getElementById('r-obs').value.trim()
+  };
+}
+function validerRapport(){
+  if(!document.getElementById('r-pastor').value.trim()){showToast('⚠️ Saisir le nom du pasteur');return false;}
+  return true;
+}
+function archiverRapport(data){
+  const r=load('r');data._num=r.length+1;r.unshift(data);save('r',r);return data._num;
+}
+function sauvegarderRapport(){
+  if(!validerRapport())return;
+  const data=collectRapport();
+  const num=archiverRapport(data);
+  showToast('🗂️ Rapport N°'+num+' archivé !','var(--blue)');
+}
+function previewRapport(){
+  if(!validerRapport())return;
+  const data=collectRapport();
+  archiverRapport(data);
+  openPreview(htmlRapport(data));
+}
+function emailRapport(){
+  if(!validerRapport())return;
+  const data=collectRapport();
+  archiverRapport(data);
+  const cfg=loadObj('c');
+  const s='[IFCM] Rapport N°'+data._num+' — '+data.pastor+' — '+fmtDate(data.du);
+  const b='Rapport Pastoral N°'+data._num+'\nPasteur : '+data.pastor+'\nFamille : '+(data.famille||'—')+'\nPériode : du '+fmtDate(data.du)+' au '+fmtDate(data.au)+'\n\nContacts :\n• Visites : '+data.visites+'\n• Appels : '+data.appels+'\n\nÉvolution :\n• Nouveaux : '+data.nouveaux+'\n• Absences : '+data.absences+'\n\nCas urgents :\n'+(data.cas||'Aucun')+'\n\nObservations :\n'+(data.obs||'—')+'\n\n'+data.pastor+' — IFCM Kinshasa';
+  window.location.href='mailto:'+(cfg.email||'')+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);
+  showToast('✉️ Email prêt !','var(--violet)');
+}
+function waRapport(){
+  if(!validerRapport())return;
+  const data=collectRapport();
+  archiverRapport(data);
+  const cfg=loadObj('c');
+  const msg='*RAPPORT IFCM N°'+data._num+'*\n✝ IFCM Kinshasa\n\n*Pasteur :* '+data.pastor+'\n*Famille :* '+(data.famille||'—')+'\n*Période :* du '+fmtDate(data.du)+' au '+fmtDate(data.au)+'\n\n📊 *Contacts*\n🏠 Visites : *'+data.visites+'*  📞 Appels : *'+data.appels+'*\n\n📊 *Évolution*\n🆕 Nouveaux : *'+data.nouveaux+'*  ⚠️ Absences : *'+data.absences+'*\n\n🙏 *Cas urgents*\n'+(data.cas||'Aucun')+'\n\n📝 *Observations*\n'+(data.obs||'—');
+  let nwa=(cfg.whatsapp||'').replace(/\D/g,'');
+  window.open(nwa?'https://wa.me/'+nwa+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  showToast('💬 WhatsApp ouvert !','var(--green)');
+}
+
+// ══════════════════════════════════════
+// RÉUNION
+// ══════════════════════════════════════
+function collectReunion(){
+  return{
+    date_saisie:new Date().toLocaleString('fr-FR'),
+    type:document.getElementById('reu-type').value,
+    animateur:document.getElementById('reu-animateur').value.trim(),
+    groupe:document.getElementById('reu-groupe').value.trim(),
+    date:document.getElementById('reu-date').value,
+    lieu:document.getElementById('reu-lieu').value.trim(),
+    presents:parseInt(document.getElementById('reu-presents').value)||0,
+    absents:parseInt(document.getElementById('reu-absents').value)||0,
+    noms_absents:document.getElementById('reu-noms-absents').value.trim(),
+    theme:document.getElementById('reu-theme').value.trim(),
+    resume:document.getElementById('reu-resume').value.trim(),
+    decisions:document.getElementById('reu-decisions').value.trim(),
+    priere:document.getElementById('reu-priere').value.trim(),
+    prochaine:document.getElementById('reu-prochaine').value
+  };
+}
+function validerReunion(){
+  if(!document.getElementById('reu-animateur').value.trim()){showToast('⚠️ Saisir le nom de l\'animateur');return false;}
+  return true;
+}
+function archiverReunion(data){
+  const r=load('reu');data._num=r.length+1;r.unshift(data);save('reu',r);return data._num;
+}
+function sauvegarderReunion(){
+  if(!validerReunion())return;
+  const data=collectReunion();
+  const num=archiverReunion(data);
+  showToast('🗂️ Réunion N°'+num+' archivée !','var(--blue)');
+}
+function previewReunion(){
+  if(!validerReunion())return;
+  const data=collectReunion();
+  archiverReunion(data);
+  openPreview(htmlReunion(data));
+}
+function emailReunion(){
+  if(!validerReunion())return;
+  const data=collectReunion();
+  archiverReunion(data);
+  const cfg=loadObj('c');
+  const s='[IFCM] Compte-rendu '+data.type+' N°'+data._num+' — '+data.animateur;
+  const b=data.type+' N°'+data._num+'\nAnimateur : '+data.animateur+'\nGroupe : '+(data.groupe||'—')+'\nDate : '+fmtDate(data.date)+' | Lieu : '+(data.lieu||'—')+'\n\nParticipation : '+data.presents+' présents / '+data.absents+' absents\nThème : '+(data.theme||'—')+'\n\nRésumé :\n'+(data.resume||'—')+'\n\nDécisions :\n'+(data.decisions||'—')+'\n\nPrière :\n'+(data.priere||'—')+'\n\n'+data.animateur+' — IFCM Kinshasa';
+  window.location.href='mailto:'+(cfg.email||'')+'?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);
+  showToast('✉️ Email prêt !','var(--violet)');
+}
+function waReunion(){
+  if(!validerReunion())return;
+  const data=collectReunion();
+  archiverReunion(data);
+  const cfg=loadObj('c');
+  const msg='*COMPTE-RENDU IFCM N°'+data._num+'*\n📣 '+data.type+'\n\n*Animateur :* '+data.animateur+'\n*Groupe :* '+(data.groupe||'—')+'\n*Date :* '+fmtDate(data.date)+' | *Lieu :* '+(data.lieu||'—')+'\n\n👥 Présents : *'+data.presents+'* | Absents : *'+data.absents+'*\n📖 Thème : '+(data.theme||'—')+'\n\n📋 *Résumé :*\n'+(data.resume||'—')+'\n\n✅ *Décisions :*\n'+(data.decisions||'—')+'\n\n🙏 *Prière :*\n'+(data.priere||'—');
+  let nwa=(cfg.whatsapp||'').replace(/\D/g,'');
+  window.open(nwa?'https://wa.me/'+nwa+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  showToast('💬 WhatsApp ouvert !','var(--green)');
+}
+
+// ══════════════════════════════════════
+// PRÉSENCES
+// ══════════════════════════════════════
+let presData={};
+function renderPresence(filter=''){
+  const membres=load('m');
+  const list=document.getElementById('p-list');
+  const filtered=membres.filter(m=>m.nom.toLowerCase().includes(filter.toLowerCase()));
+  if(!filtered.length){list.innerHTML='<div class="empty">Aucun membre. Ajoutez des membres d\'abord.</div>';return;}
+  list.innerHTML=filtered.map(m=>`
+    <div class="pitem">
+      <div class="pname">${esc(m.nom)}</div>
+      <button class="ptoggle ${presData[m.nom]?'on':''}" onclick="togglePres('${m.nom.replace(/'/g,"\\'")}',this)"></button>
+    </div>`).join('');
+  updatePresCount();
+}
+function togglePres(nom,btn){
+  presData[nom]=!presData[nom];
+  btn.classList.toggle('on');
+  updatePresCount();
+}
+function updatePresCount(){
+  const n=Object.values(presData).filter(Boolean).length;
+  document.getElementById('p-count').textContent=n+' présent(s)';
+}
+function filterPresence(){renderPresence(document.getElementById('p-search').value);}
+function sauvegarderPresence(){
+  const p=load('p');
+  const membres=load('m');
+  const record={id:Date.now(),
+    date:document.getElementById('p-date').value,
+    theme:document.getElementById('p-theme').value,
+    predicateur:document.getElementById('p-predicateur').value,
+    presents:membres.filter(m=>presData[m.nom]).map(m=>m.nom),
+    total:Object.values(presData).filter(Boolean).length,
+    total_membres:membres.length
+  };
+  p.unshift(record);save('p',p);
+  showToast('✅ Présence sauvegardée — '+record.total+' présents','var(--violet)');
+}
+function previewPresence(){
+  const membres=load('m');
+  const culte={date:document.getElementById('p-date').value,
+    theme:document.getElementById('p-theme').value,
+    predicateur:document.getElementById('p-predicateur').value};
+  openPreview(htmlPresence(culte,membres,presData));
+}
+
+// ══════════════════════════════════════
+// MEMBRES — DISCIPLES + MEMBRES
+// ══════════════════════════════════════
+let editMembreIdx=null, editDisciple=null, membreTab='disciples';
+
+function switchMembreTab(tab){
+  membreTab=tab;
+  document.getElementById('mtab-disciples').classList.toggle('active',tab==='disciples');
+  document.getElementById('mtab-membres').classList.toggle('active',tab==='membres');
+  document.getElementById('mv-disciples').style.display=tab==='disciples'?'block':'none';
+  document.getElementById('mv-membres').style.display=tab==='membres'?'block':'none';
+  if(tab==='disciples') renderDisciples();
+  if(tab==='membres'){ remplirFiltreDisciple(); renderMembres(); }
+}
+
+// ── DISCIPLES ──
+function renderDisciples(){
+  const disciples=load('d');
+  const membres=load('m');
+  document.getElementById('d-count').textContent=disciples.length+' disciple(s)';
+  // Update tab label
+  document.getElementById('mtab-disciples').textContent='👤 Disciples ('+disciples.length+')';
+  const list=document.getElementById('d-list');
+  if(!disciples.length){
+    list.innerHTML='<div class="empty">Aucun disciple enregistré.<br><small>Ajoutez d\'abord les disciples du pasteur.</small></div>';
+    return;
+  }
+  list.innerHTML=disciples.map((d,i)=>{
+    const nbMembres=membres.filter(m=>m.disciple===d.nom).length;
+    const ini=(d.nom||'?')[0].toUpperCase();
+    const statutColor=d.statut==='Actif'?'mb-a':d.statut==='Absent prolongé'?'mb-ab':'mb-n';
+    return`<div class="mcard" onclick="voirDisciple(${i})">
+      <div class="mavatar" style="background:linear-gradient(135deg,#4A2878,#E8650A);">${ini}</div>
+      <div class="minfo">
+        <div class="mname">${esc(d.nom)}</div>
+        <div class="mmeta">${esc(d.tel)||'—'} · ${esc(d.adresse)||'—'}</div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
+          <span class="mbadge ${statutColor}">${d.statut||'Actif'}</span>
+          <span style="font-size:11px;color:var(--muted);">👥 ${nbMembres} membre${nbMembres>1?'s':''}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function voirDisciple(i){
+  const d=load('d')[i];
+  const membres=load('m').filter(m=>m.disciple===d.nom);
+  const listM=membres.length?membres.map(m=>`• ${m.nom} (${m.statut||'—'})`).join('\n'):'Aucun membre encore.';
+  openModal('👤 '+d.nom,
+    'Téléphone : '+(d.tel||'—')+'\nAdresse : '+(d.adresse||'—')+'\nStatut : '+(d.statut||'—')+
+    '\n\n👥 Membres ('+membres.length+') :\n'+listM,
+    `<button class="btn b-violet" style="margin-top:0;" onclick="ouvrirFormDisciple(${i});closeModal()">✏️ Modifier</button>
+     <button class="btn b-orange" style="margin-top:8px;" onclick="switchMembreTab('membres');filtrerParDisciple('${d.nom.replace(/'/g,"\\'")}');closeModal()">👥 Voir ses membres</button>
+     <button class="btn b-red" style="margin-top:8px;" onclick="supprimerDisciple(${i});closeModal()">🗑️ Supprimer</button>`
+  );
+}
+
+function ouvrirFormDisciple(idx){
+  editDisciple=idx!==undefined?idx:null;
+  document.getElementById('md-title').textContent=idx!==undefined?'Modifier Disciple':'Nouveau Disciple';
+  if(idx!==undefined){
+    const d=load('d')[idx];
+    document.getElementById('md-nom').value=d.nom||'';
+    document.getElementById('md-tel').value=d.tel||'';
+    document.getElementById('md-adresse').value=d.adresse||'';
+    document.getElementById('md-statut').value=d.statut||'Actif';
+  }else{
+    ['md-nom','md-tel','md-adresse'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('md-statut').value='Actif';
+  }
+  document.getElementById('modal-disciple').classList.add('open');
+}
+function closeDisciple(){document.getElementById('modal-disciple').classList.remove('open');}
+function saveDisciple(){
+  const d={nom:document.getElementById('md-nom').value.trim(),
+    tel:document.getElementById('md-tel').value.trim(),
+    adresse:document.getElementById('md-adresse').value.trim(),
+    statut:document.getElementById('md-statut').value,
+    date:new Date().toLocaleDateString('fr-FR')};
+  if(!d.nom){showToast('⚠️ Saisir le nom du disciple');return;}
+  const disciples=load('d');
+  if(editDisciple!==null)disciples[editDisciple]=d;
+  else disciples.unshift(d);
+  save('d',disciples);
+  closeDisciple();renderDisciples();
+  showToast(editDisciple!==null?'✅ Disciple modifié !':'✅ Disciple ajouté !','var(--violet)');
+}
+function supprimerDisciple(i){
+  const d=load('d')[i];
+  const nb=load('m').filter(m=>m.disciple===d.nom).length;
+  if(nb>0){
+    if(!confirm(`Ce disciple a ${nb} membre(s). Supprimer quand même ?`))return;
+  }else{
+    if(!confirm('Supprimer ce disciple ?'))return;
+  }
+  const disciples=load('d');disciples.splice(i,1);save('d',disciples);renderDisciples();
+  showToast('🗑️ Disciple supprimé.','#c0392b');
+}
+
+// ── MEMBRES ──
+function remplirFiltreDisciple(){
+  const disciples=load('d');
+  const sel=document.getElementById('m-filtre-disciple');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Tous les disciples</option>'+
+    disciples.map(d=>`<option value="${esc(d.nom)}">${esc(d.nom)}</option>`).join('');
+  if(cur) sel.value=cur;
+}
+function filtrerParDisciple(nom){
+  switchMembreTab('membres');
+  setTimeout(()=>{
+    const sel=document.getElementById('m-filtre-disciple');
+    if(sel) sel.value=nom;
+    renderMembres();
+  },100);
+}
+function renderMembres(filter=''){
+  const membres=load('m');
+  const filtreD=document.getElementById('m-filtre-disciple')?.value||'';
+  const search=(document.getElementById('m-search')?.value||filter).toLowerCase();
+  let filtered=membres.filter(m=>{
+    const matchSearch=!search||m.nom.toLowerCase().includes(search);
+    const matchD=!filtreD||m.disciple===filtreD;
+    return matchSearch&&matchD;
+  });
+  document.getElementById('m-count').textContent=filtered.length+' membre(s)';
+  const list=document.getElementById('m-list');
+  if(!filtered.length){
+    list.innerHTML='<div class="empty">Aucun membre trouvé.<br><small>Ajoutez des membres ou changez le filtre.</small></div>';
+    return;
+  }
+  // Grouper par disciple
+  const groupes={};
+  filtered.forEach(m=>{
+    const key=m.disciple||'Sans disciple';
+    if(!groupes[key])groupes[key]=[];
+    groupes[key].push(m);
+  });
+  list.innerHTML=Object.entries(groupes).map(([disc,mbs])=>`
+    <div style="margin-bottom:4px;">
+      <div style="font-size:11px;font-weight:700;color:var(--violet);text-transform:uppercase;
+        letter-spacing:.5px;padding:6px 10px;background:var(--violet-l);border-radius:var(--rs);
+        margin-bottom:6px;">👤 Disciple : ${esc(disc)} (${mbs.length})</div>
+      ${mbs.map((m,_)=>{
+        const i=membres.indexOf(m);
+        const sc={
+          'Actif':'mb-a','Nouveau croyant':'mb-n','En croissance':'mb-n',
+          'Recommençant':'mb-n','Absent prolongé':'mb-ab','À recontacter':'mb-ab'
+        }[m.statut]||'mb-n';
+        return`<div class="mcard" onclick="voirMembre(${i})">
+          <div class="mavatar">${(m.nom||'?')[0].toUpperCase()}</div>
+          <div class="minfo">
+            <div class="mname">${esc(m.nom)}</div>
+            <div class="mmeta">${esc(m.tel)||'—'} · ${esc(m.adresse)||'—'}</div>
+            <span class="mbadge ${sc}">${m.statut||'—'}</span>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+function filterMembres(){renderMembres();}
+
+function voirMembre(i){
+  const m=load('m')[i];
+  openModal(m.nom,
+    'Disciple : '+(m.disciple||'—')+'\nTéléphone : '+(m.tel||'—')+
+    '\nAdresse : '+(m.adresse||'—')+'\nStatut spirituel : '+(m.statut||'—')+
+    '\nIntégré le : '+(m.date_integration||'—'),
+    `<button class="btn b-violet" style="margin-top:0;" onclick="ouvrirFormMembre(${i});closeModal()">✏️ Modifier</button>
+     <button class="btn b-red" style="margin-top:8px;" onclick="supprimerMembre(${i});closeModal()">🗑️ Supprimer</button>`
+  );
+}
+function ouvrirFormMembre(idx){
+  editMembreIdx=idx!==undefined?idx:null;
+  document.getElementById('mm-title').textContent=idx!==undefined?'Modifier Membre':'Nouveau Membre';
+  // Remplir la liste des disciples
+  const disciples=load('d');
+  const selD=document.getElementById('mm-disciple');
+  selD.innerHTML=disciples.length
+    ?disciples.map(d=>`<option value="${esc(d.nom)}">${esc(d.nom)}</option>`).join('')
+    :'<option value="">Aucun disciple — ajoutez-en d\'abord</option>';
+  if(idx!==undefined){
+    const m=load('m')[idx];
+    document.getElementById('mm-nom').value=m.nom||'';
+    document.getElementById('mm-tel').value=m.tel||'';
+    document.getElementById('mm-adresse').value=m.adresse||'';
+    document.getElementById('mm-statut').value=m.statut||'Actif';
+    document.getElementById('mm-date').value=m.date_integration||'';
+    if(m.disciple) selD.value=m.disciple;
+  }else{
+    ['mm-nom','mm-tel','mm-adresse'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('mm-statut').value='Actif';
+    document.getElementById('mm-date').value='';
+    // Pré-sélectionner le filtre disciple actif
+    const filtreD=document.getElementById('m-filtre-disciple')?.value;
+    if(filtreD) selD.value=filtreD;
+  }
+  document.getElementById('modal-membre').classList.add('open');
+}
+function closeMembre(){document.getElementById('modal-membre').classList.remove('open');}
+function saveMembre(){
+  const m={
+    nom:document.getElementById('mm-nom').value.trim(),
+    disciple:document.getElementById('mm-disciple').value,
+    tel:document.getElementById('mm-tel').value.trim(),
+    adresse:document.getElementById('mm-adresse').value.trim(),
+    statut:document.getElementById('mm-statut').value,
+    date_integration:document.getElementById('mm-date').value
+  };
+  if(!m.nom){showToast('⚠️ Saisir le nom');return;}
+  if(!m.disciple){showToast('⚠️ Sélectionner un disciple');return;}
+  const membres=load('m');
+  if(editMembreIdx!==null)membres[editMembreIdx]=m;
+  else membres.unshift(m);
+  save('m',membres);
+  closeMembre();renderMembres();renderPresence();
+  showToast(editMembreIdx!==null?'✅ Modifié !':'✅ Membre ajouté !','var(--violet)');
+}
+function supprimerMembre(i){
+  if(!confirm('Supprimer ce membre ?'))return;
+  const m=load('m');m.splice(i,1);save('m',m);renderMembres();
+  showToast('🗑️ Supprimé.','#c0392b');
+}
+
+// ══════════════════════════════════════
+// CAISSE
+// ══════════════════════════════════════
+let devise='CDF';
+function setDevise(d){
+  devise=d;localStorage.setItem('ifcm_devise',d);
+  document.getElementById('fbtn-cdf').classList.toggle('active',d==='CDF');
+  document.getElementById('fbtn-usd').classList.toggle('active',d==='USD');
+  document.getElementById('f-cur').textContent=d;
+  document.getElementById('f-devise-lbl').textContent=d;
+  renderCaisse();
+}
+function ajouterTransaction(){
+  const type=document.getElementById('f-type').value;
+  const montant=parseFloat(document.getElementById('f-montant').value)||0;
+  const membre=document.getElementById('f-membre').value.trim();
+  const desc=document.getElementById('f-desc').value.trim();
+  const date=document.getElementById('f-date').value;
+  if(!montant){showToast('⚠️ Saisir un montant');return;}
+  if(!membre){showToast('⚠️ Saisir le nom');return;}
+  const fins=load('f');
+  fins.unshift({id:Date.now(),type,montant,devise,membre,desc,date,saisie:new Date().toLocaleString('fr-FR')});
+  save('f',fins);
+  ['f-montant','f-membre','f-desc'].forEach(id=>document.getElementById(id).value='');
+  renderCaisse();
+  showToast((type==='entree'?'🤝 Contribution':'📤 Dépense')+' enregistrée !','var(--gold)');
+}
+function renderCaisse(){
+  const fins=load('f');
+  const fd=fins.filter(f=>(f.devise||'CDF')===devise);
+  let ein=0,eout=0;
+  fd.forEach(f=>f.type==='entree'?ein+=f.montant:eout+=f.montant);
+  const sol=ein-eout;
+  const sym=devise==='USD'?'$ ':'';
+  document.getElementById('f-solde').textContent=sym+sol.toLocaleString('fr-FR');
+  document.getElementById('f-in').textContent=sym+ein.toLocaleString('fr-FR');
+  document.getElementById('f-out').textContent=sym+eout.toLocaleString('fr-FR');
+  document.getElementById('f-nb').textContent=fins.length;
+  const hist=document.getElementById('f-history');
+  if(!fins.length){hist.innerHTML='<div class="empty">Aucune opération.</div>';return;}
+  hist.innerHTML=fins.map((f,i)=>{
+    const s=(f.devise||'CDF')==='USD'?'$ ':'';
+    const isE=f.type==='entree';
+    return`<div class="ai ${isE?'bl':''}">
+      <div class="ai-num ${isE?'b':''}">${isE?'🤝 CONTRIBUTION':'📤 DÉPENSE'} · ${f.devise||'CDF'}</div>
+      <div class="ai-name">${esc(f.membre)||'—'}</div>
+      <div class="ai-date">${esc(f.desc)||''} · ${fmtDate(f.date)}</div>
+      <div class="ai-stats" style="font-size:14px;font-weight:700;color:${isE?'#4ecc72':'#ff5555'};">${isE?'+':'-'}${s}${f.montant.toLocaleString('fr-FR')} ${f.devise||'CDF'}</div>
+      <div class="ai-actions"><button class="ab br" onclick="supprimerTransaction(${i})">🗑️</button></div>
+    </div>`;
+  }).join('');
+}
+function supprimerTransaction(i){
+  if(!confirm('Supprimer ?'))return;
+  const f=load('f');f.splice(i,1);save('f',f);renderCaisse();
+}
+
+// ══════════════════════════════════════
+// ARCHIVES
+// ══════════════════════════════════════
+function switchArch(tab){
+  const tabs=['rapports','reunions','presences','caisse'];
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
+  tabs.forEach(t=>document.getElementById('arch-'+t).style.display=t===tab?'block':'none');
+  renderArch(tab);
+}
+function renderArch(tab){
+  if(tab==='rapports'){
+    const r=load('r');
+    const el=document.getElementById('arch-rapports');
+    if(!r.length){el.innerHTML='<div class="empty">📭 Aucun rapport archivé.</div>';return;}
+    el.innerHTML=r.map((x,i)=>`
+      <div class="ai">
+        <div class="ai-num">Rapport N° ${x._num||r.length-i}</div>
+        <div class="ai-name">${esc(x.pastor)||'—'}</div>
+        <div class="ai-date">Archivé le ${x.date_envoi}</div>
+        <div class="ai-stats">📅 ${fmtDate(x.du)} → ${fmtDate(x.au)} · 🏠${x.visites} 📞${x.appels} 🆕${x.nouveaux} ⚠️${x.absences}</div>
+        <div class="ai-actions">
+          <button class="ab bv" onclick="previewArchRapport(${i})">🖨️ PDF</button>
+          <button class="ab bv" onclick="voirArchRapport(${i})">👁 Voir</button>
+          <button class="ab br" onclick="supprimerArchRapport(${i})">🗑️</button>
+        </div>
+      </div>`).join('');
+  }
+  else if(tab==='reunions'){
+    const r=load('reu');
+    const el=document.getElementById('arch-reunions');
+    if(!r.length){el.innerHTML='<div class="empty">📭 Aucune réunion archivée.</div>';return;}
+    el.innerHTML=r.map((x,i)=>`
+      <div class="ai vl">
+        <div class="ai-num v">Réunion N° ${x._num||r.length-i}</div>
+        <div class="ai-name">${esc(x.type)} — ${esc(x.animateur)||'—'}</div>
+        <div class="ai-date">${esc(x.groupe)||'—'} · ${fmtDate(x.date)}</div>
+        <div class="ai-stats">👥 ${x.presents} présents · ${x.absents} absents</div>
+        <div class="ai-actions">
+          <button class="ab bv" onclick="previewArchReunion(${i})">🖨️ PDF</button>
+          <button class="ab bv" onclick="voirArchReunion(${i})">👁 Voir</button>
+          <button class="ab br" onclick="supprimerArchReunion(${i})">🗑️</button>
+        </div>
+      </div>`).join('');
+  }
+  else if(tab==='presences'){
+    const p=load('p');
+    const el=document.getElementById('arch-presences');
+    if(!p.length){el.innerHTML='<div class="empty">📭 Aucune présence archivée.</div>';return;}
+    el.innerHTML=p.map((x,i)=>`
+      <div class="ai bl">
+        <div class="ai-num b">Présence</div>
+        <div class="ai-name">${fmtDate(x.date)}</div>
+        <div class="ai-date">Thème : ${esc(x.theme)||'—'}</div>
+        <div class="ai-stats">✅ ${x.total} présents / ${x.total_membres} membres</div>
+        <div class="ai-actions"><button class="ab br" onclick="supprimerArchPresence(${i})">🗑️</button></div>
+      </div>`).join('');
+  }
+  else if(tab==='caisse'){
+    const f=load('f');
+    const el=document.getElementById('arch-caisse');
+    if(!f.length){el.innerHTML='<div class="empty">📭 Aucune opération.</div>';return;}
+    let totCDF=0,totUSD=0;
+    f.forEach(x=>{const v=x.type==='entree'?x.montant:-x.montant;if((x.devise||'CDF')==='USD')totUSD+=v;else totCDF+=v;});
+    el.innerHTML=`<div class="ai gl">
+      <div class="ai-num g">SOLDE TOTAL</div>
+      <div class="ai-name" style="color:${totCDF>=0?'#4ecc72':'#ff5555'}">${totCDF.toLocaleString('fr-FR')} CDF</div>
+      <div class="ai-name" style="color:${totUSD>=0?'#4ecc72':'#ff5555'}">$ ${totUSD.toLocaleString('fr-FR')} USD</div>
+    </div>`+f.map(x=>{
+      const s=(x.devise||'CDF')==='USD'?'$ ':'';
+      const isE=x.type==='entree';
+      return`<div class="ai ${isE?'bl':''}">
+        <div class="ai-num ${isE?'b':''}">${isE?'🤝':'📤'} ${x.devise||'CDF'}</div>
+        <div class="ai-name">${esc(x.membre)||'—'}</div>
+        <div class="ai-date">${esc(x.desc)||''} · ${fmtDate(x.date)}</div>
+        <div class="ai-stats" style="color:${isE?'#4ecc72':'#ff5555'};font-weight:700;">${isE?'+':'-'}${s}${x.montant.toLocaleString('fr-FR')} ${x.devise||'CDF'}</div>
+      </div>`;
+    }).join('');
+  }
+}
+function voirArchRapport(i){
+  const x=load('r')[i];
+  openModal('Rapport N°'+x._num+' — '+x.pastor,
+    'Pasteur : '+(x.pastor||'—')+'\nFamille : '+(x.famille||'—')+
+    '\nPériode : du '+fmtDate(x.du)+' au '+fmtDate(x.au)+
+    '\n\n— CONTACTS —\nVisites : '+x.visites+' | Appels : '+x.appels+
+    '\n\n— ÉVOLUTION —\nNouveaux : '+x.nouveaux+' | Absences : '+x.absences+
+    '\n\n— CAS URGENTS —\n'+(x.cas||'Aucun')+
+    '\n\n— OBSERVATIONS —\n'+(x.obs||'—')
+  );
+}
+function voirArchReunion(i){
+  const x=load('reu')[i];
+  openModal(x.type+' N°'+x._num,
+    'Animateur : '+(x.animateur||'—')+'\nGroupe : '+(x.groupe||'—')+
+    '\nDate : '+fmtDate(x.date)+' | Lieu : '+(x.lieu||'—')+
+    '\nPrésents : '+x.presents+' | Absents : '+x.absents+
+    '\nThème : '+(x.theme||'—')+
+    '\n\n— RÉSUMÉ —\n'+(x.resume||'—')+
+    '\n\n— DÉCISIONS —\n'+(x.decisions||'—')+
+    '\n\n— PRIÈRE —\n'+(x.priere||'—')
+  );
+}
+function previewArchRapport(i){
+  const x=load('r')[i];if(!x)return;
+  openPreview(htmlRapport(x));
+}
+function previewArchReunion(i){
+  const x=load('reu')[i];if(!x)return;
+  openPreview(htmlReunion(x));
+}
+function supprimerArchRapport(i){
+  if(!confirm('Supprimer ?'))return;
+  const r=load('r');r.splice(i,1);save('r',r);renderArch('rapports');
+}
+function supprimerArchReunion(i){
+  if(!confirm('Supprimer ?'))return;
+  const r=load('reu');r.splice(i,1);save('reu',r);renderArch('reunions');
+}
+function supprimerArchPresence(i){
+  if(!confirm('Supprimer ?'))return;
+  const p=load('p');p.splice(i,1);save('p',p);renderArch('presences');
+}
+
+// ══════════════════════════════════════
+// SAUVEGARDE & RESTAURATION
+// ══════════════════════════════════════
+function exporterDonnees(){
+  const cfg=loadObj('c');
+  const pastorName=(cfg.cellule||'pasteur').replace(/\s+/g,'_');
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('fr-FR').replace(/\//g,'-');
+  const heureStr=now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}).replace(':','h');
+
+  const backup={
+    version:'IFCM-PASTORAL-v1',
+    date_sauvegarde:now.toLocaleString('fr-FR'),
+    pasteur:cfg.cellule||'—',
+    donnees:{
+      config:loadObj('c'),
+      rapports:load('r'),
+      reunions:load('reu'),
+      disciples:load('d'),
+      membres:load('m'),
+      presences:load('p'),
+      finances:load('f')
+    },
+    stats:{
+      rapports:load('r').length,
+      reunions:load('reu').length,
+      disciples:load('d').length,
+      membres:load('m').length,
+      presences:load('p').length,
+      finances:load('f').length
+    }
+  };
+
+  const json=JSON.stringify(backup,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`IFCM_Sauvegarde_${pastorName}_${dateStr}_${heureStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Mémoriser date de dernière sauvegarde
+  localStorage.setItem('ifcm_last_backup',now.toLocaleString('fr-FR'));
+  majDerniereSauvegarde();
+  showToast('📥 Sauvegarde téléchargée !','var(--violet)');
+}
+
+function importerDonnees(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const backup=JSON.parse(e.target.result);
+      // Vérifier que c'est bien un fichier IFCM
+      if(!backup.version||!backup.version.startsWith('IFCM-PASTORAL')){
+        showToast('❌ Fichier invalide — ce n\'est pas une sauvegarde IFCM','#c0392b');
+        return;
+      }
+      if(!confirm(`Restaurer la sauvegarde du ${backup.date_sauvegarde} ?\n\n⚠️ Cela remplacera TOUTES vos données actuelles.\n\nContenu :\n• ${backup.stats.rapports} rapport(s)\n• ${backup.stats.reunions} réunion(s)\n• ${backup.stats.disciples} disciple(s)\n• ${backup.stats.membres} membre(s)\n• ${backup.stats.finances} opération(s)`)){
+        input.value='';return;
+      }
+      // Restaurer toutes les données
+      const d=backup.donnees;
+      save('c',d.config||{});
+      save('r',d.rapports||[]);
+      save('reu',d.reunions||[]);
+      save('d',d.disciples||[]);
+      save('m',d.membres||[]);
+      save('p',d.presences||[]);
+      save('f',d.finances||[]);
+      input.value='';
+      loadConfig();
+      showToast('✅ Données restaurées avec succès !','var(--green)');
+      // Rafraîchir la page courante
+      setTimeout(()=>showPage(curPage),800);
+    }catch(err){
+      showToast('❌ Erreur lors de la restauration','#c0392b');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function sauvegarderDrive(){
+  const driveEmail=document.getElementById('c-drive-email').value.trim();
+  if(!driveEmail){showToast('⚠️ Saisir l\'email Google Drive de l\'église','#c0392b');return;}
+
+  const cfg=loadObj('c');
+  const now=new Date();
+  const pastorName=cfg.cellule||'Pasteur';
+  const dateStr=now.toLocaleDateString('fr-FR');
+
+  // Générer le contenu de la sauvegarde
+  const backup={
+    version:'IFCM-PASTORAL-v1',
+    date_sauvegarde:now.toLocaleString('fr-FR'),
+    pasteur:pastorName,
+    donnees:{
+      config:loadObj('c'),
+      rapports:load('r'),
+      reunions:load('reu'),
+      disciples:load('d'),
+      membres:load('m'),
+      presences:load('p'),
+      finances:load('f')
+    },
+    stats:{
+      rapports:load('r').length,
+      reunions:load('reu').length,
+      disciples:load('d').length,
+      membres:load('m').length,
+      presences:load('p').length,
+      finances:load('f').length
+    }
+  };
+
+  // Télécharger le fichier
+  const json=JSON.stringify(backup,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`IFCM_Sauvegarde_${pastorName.replace(/\s+/g,'_')}_${dateStr.replace(/\//g,'-')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Ouvrir Gmail avec instructions
+  const sujet=`[IFCM] Sauvegarde données — ${pastorName} — ${dateStr}`;
+  const corps=`Bonjour,\n\nVeuillez trouver en pièce jointe la sauvegarde des données IFCM de :\n\n📋 Pasteur / Cellule : ${pastorName}\n📅 Date : ${dateStr}\n\nContenu de la sauvegarde :\n• ${backup.stats.rapports} rapport(s) hebdomadaire(s)\n• ${backup.stats.reunions} compte-rendu(s) de réunion\n• ${backup.stats.disciples} disciple(s)\n• ${backup.stats.membres} membre(s)\n• ${backup.stats.presences} feuille(s) de présence\n• ${backup.stats.finances} opération(s) de caisse\n\n⚠️ INSTRUCTIONS :\n1. Le fichier .json vient d'être téléchargé sur votre appareil\n2. Joignez-le à cet email avant d'envoyer\n3. Sauvegardez-le dans Google Drive de l'église\n\nCordialement,\n${pastorName}\nIFCM — Branche de Kinshasa`;
+
+  window.location.href=`mailto:${driveEmail}?subject=${encodeURIComponent(sujet)}&body=${encodeURIComponent(corps)}`;
+
+  localStorage.setItem('ifcm_last_backup',now.toLocaleString('fr-FR'));
+  localStorage.setItem('ifcm_last_backup_drive',driveEmail);
+  majDerniereSauvegarde();
+  showToast('📧 Fichier téléchargé — Joignez-le à l\'email !','var(--green)');
+}
+
+function majDerniereSauvegarde(){
+  const last=localStorage.getItem('ifcm_last_backup');
+  const drive=localStorage.getItem('ifcm_last_backup_drive');
+  const card=document.getElementById('card-last-backup');
+  const info=document.getElementById('last-backup-info');
+  if(last&&card&&info){
+    card.style.display='block';
+    info.innerHTML=`✅ Dernière sauvegarde : <strong>${last}</strong>`+
+      (drive?`<br>📧 Envoyée à : <strong>${drive}</strong>`:'<br>📥 Sauvegarde locale uniquement');
+  }
+}
+
+function verifierSauvegardeAuto(){
+  const last=localStorage.getItem('ifcm_last_backup');
+  if(!last)return;
+  const lastDate=new Date(last.split(' ').reverse().join(' '));
+  const now=new Date();
+  const diff=(now-lastDate)/(1000*60*60*24);
+  // Si plus de 7 jours sans sauvegarde, afficher un rappel
+  if(diff>7){
+    setTimeout(()=>{
+      showToast('⚠️ Pas de sauvegarde depuis '+Math.floor(diff)+' jours — Pensez à sauvegarder !','var(--orange-d)');
+    },3000);
+  }
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+devise=localStorage.getItem('ifcm_devise')||'CDF';
+document.getElementById('hero-date').textContent=
+  new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+loadConfig();
+majDerniereSauvegarde();
+verifierSauvegardeAuto();
+// Charger email Drive sauvegardé
+const savedDrive=localStorage.getItem('ifcm_last_backup_drive');
+if(savedDrive){const el=document.getElementById('c-drive-email');if(el)el.value=savedDrive;}
+</script>
+</body>
+</html>
