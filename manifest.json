@@ -1,0 +1,22 @@
+{
+  "name": "IFCM Pastoral",
+  "short_name": "IFCM",
+  "description": "Application pastorale IFCM Kinshasa",
+  "start_url": "/ifcm-kinshasa/",
+  "display": "standalone",
+  "background_color": "#0D0D12",
+  "theme_color": "#4A2878",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/4A2878/FFD750?text=IFCM",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/4A2878/FFD750?text=IFCM",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
