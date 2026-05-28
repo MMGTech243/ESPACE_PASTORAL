@@ -3,10 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- PWA iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="IFCM">
+<!-- PWA Android -->
 <meta name="theme-color" content="#4A2878">
+<meta name="mobile-web-app-capable" content="yes">
 <title>IFCM — Espace Pastoral</title>
+
+<!-- MANIFEST INLINE via base64 -->
+<link rel="manifest" href="data:application/json;charset=utf-8,{
+  %22name%22:%22IFCM%20Pastoral%22,
+  %22short_name%22:%22IFCM%22,
+  %22description%22:%22Application%20pastorale%20IFCM%20Kinshasa%22,
+  %22start_url%22:%22.%2F%22,
+  %22display%22:%22standalone%22,
+  %22background_color%22:%22%230D0D12%22,
+  %22theme_color%22:%22%234A2878%22,
+  %22orientation%22:%22portrait%22,
+  %22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg xmlns='http:%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%234A2878'%2F%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle' fill='%23FFD750'%3E✝%3C%2Ftext%3E%3C%2Fsvg%3E%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}]
+}">
+
+<!-- ICÔNE iOS (SVG inline encodé) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjNEEyODc4Ii8+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIHJ4PSIzOCIgZmlsbD0idXJsKCNnKSIvPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzRBMjg3OCIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjNkIzRkEwIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjRTg2NTBBIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHRleHQgeD0iOTYiIHk9IjExMCIgZm9udC1zaXplPSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZGRDc1MCI+4pyXPC90ZXh0Pjx0ZXh0IHg9Ijk2IiB5PSIxNjAiIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtd2VpZ2h0PSI3MDAiPklGQ008L3RleHQ+PC9zdmc+">
 <style>
 :root{
   --orange:#E8650A; --orange-d:#B84D06; --orange-l:rgba(232,101,10,0.13);
@@ -241,14 +261,14 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
   border-left:3px solid var(--violet);font-weight:600;line-height:1.5;}
 
 /* PREVIEW */
-#preview-wrap{display:none;padding:16px 16px 100px;background:#fff;min-height:100vh;}
+#preview-wrap{display:none;background:var(--bg);min-height:100vh;}
 #preview-wrap.active{display:block;}
-.preview-bar{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;
-  padding-bottom:max(12px,env(safe-area-inset-bottom));
-  background:rgba(10,10,20,.95);display:flex;gap:10px;z-index:200;}
-.preview-bar button{flex:1;padding:12px;border-radius:10px;border:none;
-  font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-.pb-back{background:rgba(255,255,255,.12);color:#fff;}
+.preview-bar{padding:12px 16px 24px;
+  background:rgba(10,10,20,.97);display:flex;gap:10px;
+  position:sticky;bottom:0;z-index:200;}
+.preview-bar button{flex:1;padding:13px;border-radius:10px;border:none;
+  font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.pb-back{background:rgba(255,255,255,.15);color:#fff;}
 .pb-print{background:var(--grad);color:#fff;}
 
 /* INSTALL GUIDE */
@@ -271,6 +291,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
   @page{size:A4;margin:12mm 14mm;}
 }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -304,6 +325,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="topbar-title" id="tb-title">IFCM Kinshasa</div>
     <div class="topbar-sub">Impact for Christ Ministries</div>
   </div>
+  <button id="tb-home-btn" onclick="showPage('home')"
+    style="display:none;background:rgba(255,255,255,.2);border:none;color:#fff;
+    border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;
+    cursor:pointer;font-family:inherit;flex-shrink:0;">🏠 Accueil</button>
 </div>
 
 <!-- TAB NAV -->
@@ -689,10 +714,31 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 
 <!-- APERÇU IMPRESSION -->
 <div id="preview-wrap">
-  <div id="preview-content"></div>
-  <div class="preview-bar">
-    <button class="pb-back" onclick="closePreview()">← Retour</button>
-    <button class="pb-print" onclick="window.print()">🖨️ Imprimer / PDF</button>
+  <!-- Barre HAUT -->
+  <div style="padding:10px 16px;background:#111118;display:flex;gap:8px;align-items:center;
+    border-bottom:1px solid rgba(140,120,200,0.2);position:sticky;top:0;z-index:10;">
+    <button onclick="closePreview()" style="padding:9px 14px;border-radius:10px;border:none;
+      background:rgba(255,255,255,.12);color:#fff;font-size:13px;font-weight:700;
+      cursor:pointer;font-family:inherit;flex-shrink:0;">← Retour</button>
+    <span style="flex:1;font-size:13px;font-weight:700;color:rgba(255,255,255,.7);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Aperçu du rapport</span>
+    <button onclick="telechargerPDF()" style="padding:9px 14px;border-radius:10px;border:none;
+      background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;font-size:13px;
+      font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;">📥 PDF</button>
+    <button onclick="window.print()" style="padding:9px 14px;border-radius:10px;border:none;
+      background:linear-gradient(135deg,#4A2878,#6B3FA0);color:#fff;font-size:13px;
+      font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;">🖨️</button>
+  </div>
+  <!-- Contenu blanc (rapport) -->
+  <div id="preview-content" style="padding:16px;background:#fff;"></div>
+  <!-- Barre BAS -->
+  <div style="padding:12px 16px 24px;background:#111118;display:flex;gap:8px;">
+    <button onclick="closePreview()" style="flex:1;padding:13px;border-radius:10px;border:none;
+      background:rgba(255,255,255,.12);color:#fff;font-size:14px;font-weight:700;
+      cursor:pointer;font-family:inherit;">← Retour</button>
+    <button onclick="telechargerPDF()" style="flex:1;padding:13px;border-radius:10px;border:none;
+      background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;font-size:14px;
+      font-weight:700;cursor:pointer;font-family:inherit;">📥 Télécharger PDF</button>
   </div>
 </div>
 
@@ -782,10 +828,8 @@ const titles={home:'IFCM Kinshasa',rapport:'Rapport Hebdomadaire',reunion:'Rappo
   archives:'Archives',config:'Paramètres'};
 
 function showPage(name){
-  // Masquer toutes les pages
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tabnav-item').forEach(t=>t.classList.remove('active'));
-  // Afficher la bonne
   document.getElementById('page-'+name).classList.add('active');
   document.querySelectorAll('.tabnav-item').forEach((t,i)=>{
     if(t.textContent.toLowerCase().includes(name)||
@@ -799,9 +843,11 @@ function showPage(name){
     ) t.classList.add('active');
   });
   document.getElementById('tb-title').textContent=titles[name]||'IFCM';
+  // Bouton 🏠 Accueil visible sauf sur home
+  const hBtn=document.getElementById('tb-home-btn');
+  if(hBtn) hBtn.style.display=name==='home'?'none':'block';
   curPage=name;
   window.scrollTo(0,0);
-  // Init
   if(name==='membres'){ membreTab='disciples'; switchMembreTab('disciples'); }
   if(name==='caisse') renderCaisse();
   if(name==='presence') renderPresence();
@@ -866,18 +912,30 @@ let previewFrom='home';
 function openPreview(html){
   previewFrom=curPage;
   document.getElementById('preview-content').innerHTML=html;
-  // Masquer app, afficher preview
+  // Cacher l'app complètement
   document.querySelector('.topbar').style.display='none';
   document.querySelector('.tabnav').style.display='none';
-  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-  document.getElementById('preview-wrap').classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>{p.style.display='none';});
+  // Afficher preview avec fond sombre de l'app (pas blanc)
+  const pw=document.getElementById('preview-wrap');
+  pw.classList.add('active');
+  pw.style.background='var(--bg)';
   window.scrollTo(0,0);
 }
 function closePreview(){
+  // Nettoyer complètement le preview
+  const pw=document.getElementById('preview-wrap');
+  pw.classList.remove('active');
+  pw.style.background='';
+  document.getElementById('preview-content').innerHTML='';
+  // Restaurer l'app
   document.querySelector('.topbar').style.display='';
   document.querySelector('.tabnav').style.display='';
-  document.getElementById('preview-wrap').classList.remove('active');
-  showPage(previewFrom);
+  // Forcer le retour à la bonne page sans fond blanc
+  document.querySelectorAll('.page').forEach(p=>{p.style.display='';p.classList.remove('active');});
+  const target=document.getElementById('page-'+previewFrom);
+  if(target){target.classList.add('active');}
+  window.scrollTo(0,0);
 }
 
 // HTML RAPPORT
@@ -1093,6 +1151,8 @@ function previewRapport(){
   if(!validerRapport())return;
   const data=collectRapport();
   archiverRapport(data);
+  currentPreviewData=data;
+  currentPreviewType='rapport';
   openPreview(htmlRapport(data));
 }
 function emailRapport(){
@@ -1154,6 +1214,8 @@ function previewReunion(){
   if(!validerReunion())return;
   const data=collectReunion();
   archiverReunion(data);
+  currentPreviewData=data;
+  currentPreviewType='reunion';
   openPreview(htmlReunion(data));
 }
 function emailReunion(){
@@ -1611,10 +1673,12 @@ function voirArchReunion(i){
 }
 function previewArchRapport(i){
   const x=load('r')[i];if(!x)return;
+  currentPreviewData=x; currentPreviewType='rapport';
   openPreview(htmlRapport(x));
 }
 function previewArchReunion(i){
   const x=load('reu')[i];if(!x)return;
+  currentPreviewData=x; currentPreviewType='reunion';
   openPreview(htmlReunion(x));
 }
 function supprimerArchRapport(i){
@@ -1628,6 +1692,152 @@ function supprimerArchReunion(i){
 function supprimerArchPresence(i){
   if(!confirm('Supprimer ?'))return;
   const p=load('p');p.splice(i,1);save('p',p);renderArch('presences');
+}
+
+// ══════════════════════════════════════
+// TÉLÉCHARGEMENT PDF via html2canvas + jsPDF
+// ══════════════════════════════════════
+let currentPreviewData=null;
+let currentPreviewType='rapport';
+
+function telechargerPDF(){
+  if(!currentPreviewData) return;
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W=210, H=297, mL=14, mR=14, cW=W-mL-mR;
+
+  // Couleurs
+  const VC=[107,63,160], OC=[232,101,10], BC=[26,95,168];
+
+  function addHeader(data, type){
+    // Fond dégradé simulé
+    doc.setFillColor(74,40,120); doc.rect(0,0,W,48,'F');
+    [[107,63,160,.35],[26,95,168,.35],[232,101,10,.35]].forEach(([r,g,b,a],i)=>{
+      doc.setFillColor(r,g,b); doc.setGState(doc.GState({opacity:a}));
+      doc.rect(i*(W/3),0,W/3+5,48,'F');
+    });
+    doc.setGState(doc.GState({opacity:1}));
+    // Textes header
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold'); doc.setFontSize(11);
+    doc.text('IMPACT FOR CHRIST MINISTRIES',W/2,13,{align:'center'});
+    doc.setFont('helvetica','normal'); doc.setFontSize(8);
+    doc.text('Branche de Kinshasa  —  IFCM',W/2,19,{align:'center'});
+    doc.setDrawColor(255,255,255); doc.setLineWidth(0.3);
+    doc.roundedRect(mL+20,22,cW-40,9,4,4,'S');
+    doc.setFont('helvetica','bold'); doc.setFontSize(8);
+    const badge = type==='rapport'?'RAPPORT HEBDOMADAIRE PASTORAL':
+      type==='reunion'?(data.type||'RÉUNION').toUpperCase()+' — COMPTE-RENDU':
+      'FEUILLE DE PRÉSENCE';
+    doc.text(badge,W/2,27.8,{align:'center'});
+    doc.setFont('helvetica','normal'); doc.setFontSize(7);
+    const meta = type==='rapport'?`N° ${data._num}  •  Émis le ${data.date_envoi}`:
+      `N° ${data._num}  •  Saisi le ${data.date_saisie}`;
+    doc.text(meta,W/2,38,{align:'center'});
+  }
+
+  function addFooter(data, type){
+    doc.setFillColor(74,40,120); doc.rect(0,H-15,W,15,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold'); doc.setFontSize(7);
+    doc.text('IMPACT FOR CHRIST MINISTRIES — Branche de Kinshasa (IFCM)',W/2,H-8.5,{align:'center'});
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5);
+    const sig = type==='rapport'?`N° ${data._num}  |  ${data.pastor||'—'}  |  ${data.date_envoi}`:
+      `N° ${data._num}  |  ${data.animateur||'—'}  |  ${data.date_saisie}`;
+    doc.text(sig,W/2,H-3.5,{align:'center'});
+  }
+
+  function bar(y, title, color){
+    doc.setFillColor(...color); doc.roundedRect(mL,y,cW,8,1.5,1.5,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+    doc.text(title,mL+3,y+5.6);
+    return y+11;
+  }
+  function field(y, label, value){
+    doc.setFillColor(248,244,255); doc.setDrawColor(200,190,230); doc.setLineWidth(0.2);
+    doc.rect(mL,y,cW,7.5,'FD');
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(130,100,170);
+    doc.text(label+':',mL+2,y+5);
+    const lw=doc.getTextWidth(label+':')+4;
+    doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(20,20,40);
+    const v=doc.splitTextToSize(String(value||'—'),cW-lw-4);
+    doc.text(v[0]||'—',mL+lw,y+5.2);
+    return y+8.5;
+  }
+  function stats2(y, cols){
+    const bW=(cW-5)/2;
+    cols.forEach((c,i)=>{
+      const bx=mL+i*(bW+5);
+      doc.setFillColor(245,240,255); doc.setDrawColor(200,185,230); doc.setLineWidth(0.2);
+      doc.roundedRect(bx,y,bW,22,2,2,'FD');
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(130,100,170);
+      const lbl=doc.splitTextToSize(c.label,bW-4);
+      doc.text(lbl,bx+bW/2,y+4.5,{align:'center'});
+      doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(107,63,160);
+      doc.text(String(c.val),bx+bW/2,y+16,{align:'center'});
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(130,100,170);
+      doc.text(c.unit,bx+bW/2,y+20.5,{align:'center'});
+    });
+    return y+25;
+  }
+  function textBox(y, sub, text, h){
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(130,100,170);
+    doc.text(sub.toUpperCase(),mL,y+3); y+=5;
+    const ih=h-5;
+    doc.setFillColor(248,244,255); doc.setDrawColor(200,190,230); doc.setLineWidth(0.2);
+    doc.roundedRect(mL,y,cW,ih,2,2,'FD');
+    const txt=text||'Aucun élément.';
+    const lH=4.6, pad=3;
+    const maxL=Math.floor((ih-pad*2)/lH);
+    const lines=doc.splitTextToSize(txt,cW-8).slice(0,maxL);
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(20,20,40);
+    lines.forEach((l,i)=>doc.text(l,mL+3.5,y+pad+i*lH+lH*0.85));
+    return y+ih;
+  }
+
+  const d=currentPreviewData;
+  const type=currentPreviewType;
+
+  if(type==='rapport'){
+    addHeader(d,'rapport'); addFooter(d,'rapport');
+    let y=53;const G=3;
+    y=bar(y,'IDENTITÉ DU PASTEUR',VC);
+    y=field(y,'Pasteur',d.pastor);
+    y=field(y,'Famille',d.famille);
+    y=field(y,'Période',`Du ${fmtDate(d.du)}  au  ${fmtDate(d.au)}`); y+=G;
+    y=bar(y,'1.  CONTACTS EFFECTUÉS',OC);
+    y=stats2(y,[{label:'Visites à domicile',val:d.visites,unit:'membres visités'},{label:'Appels téléphoniques',val:d.appels,unit:'membres appelés'}]); y+=G;
+    y=bar(y,'2.  ÉVOLUTION DU GROUPE',BC);
+    y=stats2(y,[{label:'Nouveaux / Recommençants',val:d.nouveaux,unit:'intégrés'},{label:'Absences prolongées',val:d.absences,unit:'à recontacter'}]); y+=G;
+    y=bar(y,'3.  CAS URGENTS & INTERCESSION',VC);
+    y=textBox(y,'Maladie, deuil, détresse...',d.cas,30); y+=G;
+    y=bar(y,'4.  OBSERVATIONS & BESOINS',OC);
+    textBox(y,'Remarques, besoins...',d.obs,30);
+    doc.save(`Rapport_IFCM_N${d._num}_${(d.pastor||'').replace(/\s+/g,'_')}.pdf`);
+
+  } else if(type==='reunion'){
+    addHeader(d,'reunion'); addFooter(d,'reunion');
+    let y=53;const G=3;
+    y=bar(y,'INFORMATIONS DE LA RÉUNION',VC);
+    y=field(y,'Type',d.type);
+    y=field(y,'Animateur',d.animateur);
+    y=field(y,'Groupe',d.groupe);
+    y=field(y,'Date',fmtDate(d.date));
+    y=field(y,'Lieu',d.lieu); y+=G;
+    y=bar(y,'PARTICIPATION',OC);
+    y=stats2(y,[{label:'Présents',val:d.presents,unit:'personnes'},{label:'Absents',val:d.absents,unit:'personnes'}]);
+    if(d.noms_absents){y=field(y,'Absents',d.noms_absents);} y+=G;
+    y=bar(y,'CONTENU DE LA RÉUNION',BC);
+    y=field(y,'Thème',d.theme); y+=2;
+    y=textBox(y,'Résumé des discussions',d.resume,26); y+=2;
+    y=textBox(y,'Décisions prises',d.decisions,22); y+=G;
+    y=bar(y,'POINTS SPIRITUELS & PRIÈRE',VC);
+    y=textBox(y,'Cas de prière / Intercession',d.priere,22);
+    if(d.prochaine){y+=2;field(y,'Prochaine réunion',fmtDate(d.prochaine));}
+    doc.save(`Reunion_IFCM_N${d._num}_${(d.animateur||'').replace(/\s+/g,'_')}.pdf`);
+  }
+
+  showToast('📥 PDF téléchargé !','var(--violet)');
 }
 
 // ══════════════════════════════════════
@@ -1804,9 +2014,21 @@ document.getElementById('hero-date').textContent=
 loadConfig();
 majDerniereSauvegarde();
 verifierSauvegardeAuto();
-// Charger email Drive sauvegardé
 const savedDrive=localStorage.getItem('ifcm_last_backup_drive');
 if(savedDrive){const el=document.getElementById('c-drive-email');if(el)el.value=savedDrive;}
+
+// SERVICE WORKER — installation PWA + mode hors-ligne
+if('serviceWorker' in navigator){
+  const swCode=`const C='ifcm-v1';
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./'])).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));});
+self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('./'))));});`;
+  try{
+    const blob=new Blob([swCode],{type:'application/javascript'});
+    const url=URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url).catch(()=>{});
+  }catch(e){}
+}
 </script>
 </body>
 </html>
