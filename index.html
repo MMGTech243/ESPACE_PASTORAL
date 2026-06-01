@@ -24,56 +24,64 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-/* ══ RESPONSIVE LAYOUT ══ */
-/* Mobile: normal scroll */
-/* PC (>768px): sidebar + content area */
+/* ══ RESPONSIVE ══ */
+/* Sur PC : centrer le contenu avec max-width, agrandir les textes */
 
+/* MOBILE BASE */
+.app-body{display:block;}
+.pages-wrap{display:block;}
+.tabnav,.admin-tabnav{position:sticky;top:54px;z-index:99;}
+
+/* PC — centrage simple et élégant */
 @media(min-width:768px){
-  #app-page{display:flex;flex-direction:column;min-height:100vh;}
-  .topbar{position:sticky;top:0;z-index:200;}
-  .app-body{display:flex;flex:1;}
-  /* SIDEBAR */
-  .tabnav,.admin-tabnav{
-    flex-direction:column;width:var(--sidebar);flex-shrink:0;
-    overflow-x:visible;overflow-y:auto;
-    border-bottom:none;border-right:1px solid var(--border);
-    position:sticky;top:54px;height:calc(100vh - 54px);
-    background:var(--card);
-  }
-  .tabnav-item,.admin-tabnav-item{
-    padding:13px 20px;border-bottom:none;border-left:3px solid transparent;
-    border-radius:0;font-size:13px;
-  }
-  .tabnav-item.active{border-left-color:var(--violet);border-bottom:none;background:var(--violet-l);}
-  .admin-tabnav-item.active{border-left-color:var(--orange);border-bottom:none;background:var(--orange-l);}
-  /* CONTENT */
-  .pages-wrap{flex:1;overflow-y:auto;max-width:900px;}
-  .page{padding:24px 28px 80px;}
-  /* HOME GRID — 4 colonnes sur PC */
-  .home-grid{grid-template-columns:repeat(4,1fr);}
+  body{font-size:16px;}
+  /* Centrer toute l'app */
+  #app-page{max-width:860px;margin:0 auto;}
+  #login-page{max-width:860px;margin:0 auto;min-height:100vh;}
+  /* Topbar full width */
+  .topbar{border-radius:0;}
+  /* Nav plus grande */
+  .tabnav-item,.admin-tabnav-item{font-size:14px;padding:13px 18px;}
+  /* Pages padding */
+  .page{padding:28px 32px 80px;}
+  /* Textes plus grands */
+  .card-title{font-size:13px;}
+  input,select,textarea{font-size:15px;}
+  .btn{font-size:15px;padding:14px;}
+  .mname,.ai-name,.pastor-name,.rc-pastor{font-size:16px;}
+  .mmeta,.ai-date,.ai-stats,.pastor-email,.rc-date,.pastor-stats,.rc-stats{font-size:13px;}
+  .flabel{font-size:12px;}
+  /* Grilles plus larges */
+  .home-grid{grid-template-columns:repeat(4,1fr);gap:16px;}
   .hcard.wide{grid-column:span 2;}
-  /* STAT GRID — 4 colonnes */
-  .stat-grid{grid-template-columns:repeat(4,1fr);}
-  /* FORMS */
+  .stat-grid{grid-template-columns:repeat(4,1fr);gap:14px;}
   .row2{grid-template-columns:1fr 1fr;}
-  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-  /* LOGIN */
-  #login-page{flex-direction:row;gap:0;}
-  .login-left{flex:1;background:var(--grad);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
-  .login-right{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;}
-  .login-logo{color:#fff;}
-  .login-logo h1{font-size:28px;color:#fff;}
-  .login-logo p{color:rgba(255,255,255,.8);font-size:14px;}
-  .login-card{max-width:420px;width:100%;}
+  .chart-grid{grid-template-columns:1fr 1fr;}
+  /* Hero plus grand */
+  .hero h1{font-size:22px;}
+  .hero-branch{font-size:14px;}
+  .hero-user{font-size:14px;padding:6px 18px;}
+  .stat-num{font-size:40px;}
+  .stat-lbl{font-size:12px;}
+  /* Login centré */
+  .login-logo h1{font-size:24px;}
+  .login-card{padding:32px;max-width:440px;margin:0 auto;}
+  .login-title{font-size:22px;}
+  /* Section labels */
+  .section-lbl{font-size:13px;}
+  .btn-lbl{font-size:12px;}
+  /* Modals centrées */
+  .overlay{align-items:center;justify-content:center;padding:20px;}
+  .modal{border-radius:var(--r);max-width:500px;max-height:90vh;}
 }
 
-@media(max-width:767px){
-  .app-body{display:block;}
-  .pages-wrap{display:block;}
-  .tabnav,.admin-tabnav{position:sticky;top:54px;z-index:99;}
-  .row3{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .login-left{display:none;}
+@media(min-width:1100px){
+  #app-page{max-width:1000px;}
+  #login-page{max-width:1000px;}
 }
+
+/* BODY BACKGROUND always full width */
+body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:-1;}
 
 /* LOADING */
 #loading{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
@@ -267,7 +275,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
 
 @media print{
-  #loading,#login-page,.preview-topbar,.preview-bottombar,.topbar,.tabnav,.admin-tabnav,#app-page .app-body{display:none!important;}
+  #loading,#login-page,.preview-topbar,.preview-bottombar,.topbar,.tabnav,.admin-tabnav,
   body{background:#fff!important;}
   .page{display:none!important;}
   #preview-content{display:block!important;}
@@ -338,8 +346,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="admin-tabnav-item" onclick="showAdminPage('finances')">💰 Finances</div>
   </div>
 
-  <div class="app-body" id="app-body">
-  <div class="pages-wrap" id="pages-wrap">
   <!-- HOME -->
   <div class="page active" id="page-home">
     <div class="hero">
@@ -631,8 +637,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       <div id="admin-finances-list"><div class="empty">Chargement...</div></div>
     </div>
   </div>
-  </div><!-- end pages-wrap -->
-  </div><!-- end app-body -->
 </div><!-- end app-page -->
 
 <!-- PREVIEW -->
