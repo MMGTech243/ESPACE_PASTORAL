@@ -291,301 +291,6 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 
 @media print{
   #loading,#login-page,.preview-topbar,.preview-bottombar,.topbar,.tabnav,.admin-tabnav,
-   body{font-size:16px;}
-  /* Centrer toute l'app */
-  #app-page{max-width:860px;margin:0 auto;}
-  #login-page{max-width:860px;margin:0 auto;min-height:100vh;}
-  /* Topbar full width */
-  .topbar{border-radius:0;}
-  /* Nav plus grande */
-  .tabnav-item,.admin-tabnav-item{font-size:14px;padding:13px 18px;}
-  /* Pages padding */
-  .page{padding:28px 32px 80px;}
-  /* Textes plus grands */
-  .card-title{font-size:13px;}
-  input,select,textarea{font-size:15px;}
-  .btn{font-size:15px;padding:14px;}
-  .mname,.ai-name,.pastor-name,.rc-pastor{font-size:16px;}
-  .mmeta,.ai-date,.ai-stats,.pastor-email,.rc-date,.pastor-stats,.rc-stats{font-size:13px;}
-  .flabel{font-size:12px;}
-  /* Grilles plus larges */
-  .home-grid{grid-template-columns:repeat(4,1fr);gap:16px;}
-  .hcard.wide{grid-column:span 2;}
-  .stat-grid{grid-template-columns:repeat(4,1fr);gap:14px;}
-  .row2{grid-template-columns:1fr 1fr;}
-  .chart-grid{grid-template-columns:1fr 1fr;}
-  /* Hero plus grand */
-  .hero h1{font-size:22px;}
-  .hero-branch{font-size:14px;}
-  .hero-user{font-size:14px;padding:6px 18px;}
-  .stat-num{font-size:40px;}
-  .stat-lbl{font-size:12px;}
-  /* Login centré */
-  .login-logo h1{font-size:24px;}
-  .login-card{padding:32px;max-width:440px;margin:0 auto;}
-  .login-title{font-size:22px;}
-  /* Section labels */
-  .section-lbl{font-size:13px;}
-  .btn-lbl{font-size:12px;}
-  /* Modals centrées */
-  .overlay{align-items:center;justify-content:center;padding:20px;}
-  .modal{border-radius:var(--r);max-width:500px;max-height:90vh;}
-}
-
-@media(min-width:1100px){
-  #app-page{max-width:1000px;}
-  #login-page{max-width:1000px;}
-}
-
-/* BODY BACKGROUND always full width */
-body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:-1;}
-
-/* LOADING */
-#loading{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;}
-.spinner-big{width:48px;height:48px;border:4px solid rgba(107,63,160,.2);border-top-color:var(--violet);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:14px;color:var(--muted);}
-
-/* LOGIN */
-#login-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg);}
-.login-logo{text-align:center;margin-bottom:28px;}
-.login-logo h1{font-size:20px;font-weight:700;color:var(--text);}
-.login-logo p{font-size:12px;color:var(--muted);margin-top:4px;}
-.login-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:100%;max-width:380px;}
-.login-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.login-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
-.login-error{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.3);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:#ff6666;margin-bottom:12px;display:none;}
-.login-error.show{display:block;}
-
-/* APP */
-#app-page{display:none;}
-.topbar{background:var(--grad);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
-.topbar-info{flex:1;}
-.topbar-title{font-size:15px;font-weight:700;color:#fff;}
-.topbar-sub{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px;}
-.topbar-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;}
-.tabnav,.admin-tabnav{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--border);-webkit-overflow-scrolling:touch;}
-.tabnav::-webkit-scrollbar,.admin-tabnav::-webkit-scrollbar{display:none;}
-.tabnav-item{flex-shrink:0;padding:11px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
-.tabnav-item.active{color:var(--violet);border-bottom-color:var(--violet);}
-.admin-tabnav-item{flex-shrink:0;padding:11px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
-.admin-tabnav-item.active{color:var(--orange);border-bottom-color:var(--orange);}
-.page{display:none;padding:16px 16px 80px;}
-.page.active{display:block;}
-
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1rem;}
-.card-title{font-size:12px;font-weight:700;color:#fff;padding:5px 12px;border-radius:20px;margin-bottom:.9rem;display:inline-block;}
-.cv{background:var(--violet);}.co{background:var(--orange);}.cb{background:var(--blue);}.cg{background:var(--gold);}.cr{background:#c0392b;}
-
-/* FORM */
-.flabel{font-size:11px;font-weight:700;color:var(--muted);display:block;margin:10px 0 4px;text-transform:uppercase;letter-spacing:.4px;}
-input,select,textarea{width:100%;font-size:14px;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--card2);color:var(--text);outline:none;font-family:inherit;transition:border-color .2s;-webkit-appearance:none;appearance:none;}
-input:focus,select:focus,textarea:focus{border-color:var(--violet);}
-textarea{resize:vertical;min-height:90px;line-height:1.6;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.ng{background:var(--card2);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 8px;text-align:center;}
-.nl{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;line-height:1.3;}
-.ni{font-size:24px;font-weight:700;width:100%;text-align:center;border:none;background:transparent;color:var(--violet);padding:0;font-family:inherit;}
-.nu{font-size:10px;color:var(--muted);margin-top:2px;}
-.twrap{position:relative;}.twrap textarea{padding-bottom:22px;}
-.ccount{position:absolute;bottom:7px;right:10px;font-size:10px;font-weight:700;color:var(--muted);pointer-events:none;}
-.ccount.warn{color:var(--orange);}.ccount.over{color:#ff5555;}
-
-/* BUTTONS */
-.btn{width:100%;padding:13px;border-radius:var(--rs);font-size:14px;font-weight:700;border:none;cursor:pointer;color:#fff;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;}
-.btn:active{opacity:.85;}.btn:disabled{opacity:.5;cursor:not-allowed;}
-.b-violet{background:linear-gradient(135deg,var(--violet-d),var(--violet));}
-.b-orange{background:linear-gradient(135deg,var(--orange-d),var(--orange));}
-.b-blue{background:linear-gradient(135deg,var(--blue-d),var(--blue));}
-.b-green{background:linear-gradient(135deg,#1a7a34,var(--green));}
-.b-gold{background:linear-gradient(135deg,#8a6020,var(--gold));}
-.b-red{background:linear-gradient(135deg,#8B0000,#c0392b);}
-.btn-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1rem;margin-bottom:2px;}
-.notice{font-size:11px;color:#FFD97D;background:rgba(255,193,7,.1);border-radius:var(--rs);padding:8px 11px;margin-top:8px;border-left:3px solid #ffc107;line-height:1.5;}
-.cnote{font-size:12px;color:#C4A8FF;background:var(--violet-l);border-radius:var(--rs);padding:9px 12px;margin-bottom:10px;border-left:3px solid var(--violet);font-weight:600;line-height:1.5;}
-
-/* HOME */
-.hero{background:var(--grad);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:1rem;}
-.hero h1{font-size:18px;font-weight:700;color:#fff;line-height:1.3;}
-.hero-branch{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;}
-.hero-user{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 16px;color:#fff;}
-.section-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:1rem 0 .6rem;}
-.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1rem;}
-.hcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;}
-.hcard:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(107,63,160,.2);}
-.hcard:active{opacity:.8;}
-.hcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;}
-.hcard.vc::before{background:var(--violet);}.hcard.oc::before{background:var(--orange);}
-.hcard.bc::before{background:var(--blue);}.hcard.gc::before{background:var(--gold);}
-.hcard-icon{font-size:30px;margin-bottom:10px;display:block;}
-.hcard-name{font-size:14px;font-weight:700;color:var(--text);}
-.hcard-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
-.hcard.wide{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:16px 18px;}
-.hcard.wide .hcard-icon{font-size:26px;margin-bottom:0;}
-
-/* ADMIN */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
-.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;text-align:center;position:relative;overflow:hidden;}
-.stat-box::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;}
-.stat-box:nth-child(1)::before{background:var(--violet);}
-.stat-box:nth-child(2)::before{background:var(--orange);}
-.stat-box:nth-child(3)::before{background:var(--blue);}
-.stat-box:nth-child(4)::before{background:var(--gold);}
-.stat-num{font-size:36px;font-weight:700;color:var(--violet);line-height:1;}
-.stat-lbl{font-size:11px;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.3px;}
-.pastor-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-bottom:10px;}
-.pastor-name{font-size:14px;font-weight:700;color:var(--text);}
-.pastor-email{font-size:11px;color:var(--muted);margin-top:2px;}
-.pastor-stats{font-size:11px;color:var(--muted);margin-top:5px;}
-.pastor-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
-.pb-actif{background:rgba(37,162,68,.2);color:#4ecc72;}.pb-inactif{background:rgba(255,80,80,.15);color:#ff6666;}
-.pastor-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
-.rapport-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:13px;margin-bottom:9px;border-left:3px solid var(--violet);}
-/* COMMENTAIRES */
-.comment-box{background:rgba(232,101,10,.07);border:1px solid rgba(232,101,10,.25);
-  border-radius:var(--rs);padding:10px 12px;margin-top:8px;}
-.comment-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
-.comment-author{font-size:11px;font-weight:700;color:var(--orange);}
-.comment-date{font-size:10px;color:var(--muted);}
-.comment-text{font-size:12px;color:var(--text);line-height:1.5;white-space:pre-wrap;}
-.comment-notif{display:inline-flex;align-items:center;gap:4px;font-size:10px;
-  font-weight:700;background:rgba(232,101,10,.15);color:var(--orange);
-  border:1px solid rgba(232,101,10,.3);border-radius:10px;padding:2px 8px;margin-top:4px;}
-.comment-input{width:100%;font-size:13px;padding:9px 11px;border:1.5px solid var(--border);
-  border-radius:var(--rs);background:var(--card);color:var(--text);outline:none;
-  font-family:inherit;resize:vertical;min-height:70px;transition:border-color .2s;}
-.comment-input:focus{border-color:var(--orange);}
-.rc-pastor{font-size:13px;font-weight:700;color:var(--text);}
-.rc-date{font-size:11px;color:var(--muted);}
-.rc-stats{font-size:11px;color:var(--muted);margin-top:4px;}
-
-/* CHARTS */
-.chart-wrap{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:1rem;}
-.chart-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;}
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem;}
-@media(max-width:767px){.chart-grid{grid-template-columns:1fr;}}
-
-/* FINANCE */
-.ftotal{background:var(--grad);border-radius:var(--r);padding:20px;text-align:center;margin-bottom:1rem;}
-.ftotal-lbl{font-size:12px;color:rgba(255,255,255,.75);margin-bottom:4px;}
-.ftotal-amt{font-size:32px;font-weight:700;color:#fff;}
-.fdevise{display:flex;justify-content:center;margin-top:10px;}
-.fdevise-inner{background:rgba(255,255,255,.15);border-radius:20px;padding:3px;display:inline-flex;gap:3px;}
-.fbtn{padding:5px 16px;border-radius:16px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:transparent;color:rgba(255,255,255,.7);font-family:inherit;}
-.fbtn.active{background:#fff;color:var(--violet);}
-.fmini-row{display:flex;gap:8px;margin-bottom:1rem;}
-.fmini{flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:12px;text-align:center;}
-.fmini-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
-.fmini-val{font-size:18px;font-weight:700;}
-.fg{color:#4ecc72;}.fr{color:#ff5555;}.fv{color:var(--violet);}
-
-/* ITEMS */
-.ai{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 13px;margin-bottom:9px;border-left:4px solid var(--orange);}
-.ai.vl{border-left-color:var(--violet);}
-.ai.i-orange{border-left-color:var(--orange);background:rgba(232,101,10,.05);}
-.ai-num{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;}
-.ai-num.v{color:var(--violet);}
-.ai-name{font-size:14px;font-weight:700;color:var(--text);margin:2px 0;}
-.ai-date,.ai-stats{font-size:11px;color:var(--muted);}
-.ai-actions{display:flex;gap:6px;margin-top:7px;}
-.empty{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:13px;}
-
-/* MEMBER */
-.mcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;margin-bottom:9px;display:flex;align-items:center;gap:12px;transition:background .15s;}
-.mcard:hover{background:var(--card2);}
-.mavatar{width:44px;height:44px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;}
-.minfo{flex:1;}
-.mname{font-size:14px;font-weight:700;color:var(--text);}
-.mmeta{font-size:11px;color:var(--muted);margin-top:2px;}
-.mbadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:4px;display:inline-block;}
-.mb-a{background:rgba(37,162,68,.2);color:#4ecc72;}.mb-n{background:var(--violet-l);color:var(--violet);}.mb-ab{background:rgba(232,101,10,.2);color:var(--orange);}
-
-/* PRESENCE */
-.pitem{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:7px;}
-.pname{flex:1;font-size:13px;font-weight:600;color:var(--text);}
-.ptoggle{width:46px;height:26px;border-radius:13px;background:rgba(255,255,255,.15);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;}
-.ptoggle.on{background:var(--violet);}
-.ptoggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;}
-.ptoggle.on::after{transform:translateX(20px);}
-
-/* STABS SEARCHBAR */
-.stabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.stabs::-webkit-scrollbar{display:none;}
-.stab{flex-shrink:0;padding:7px 14px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--card);white-space:nowrap;}
-.stab.active{background:var(--violet);color:#fff;border-color:var(--violet);}
-.searchbar{display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 13px;margin-bottom:12px;}
-.searchbar input{flex:1;border:none;background:transparent;font-size:14px;color:var(--text);outline:none;font-family:inherit;}
-
-/* MODAL */
-.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,20,.85);z-index:300;align-items:center;justify-content:center;padding:20px;}
-.overlay.open{display:flex;}
-.modal{background:var(--card);border-radius:var(--r);padding:1.4rem 1.2rem 2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-@media(max-width:767px){
-  .overlay{align-items:flex-end;padding:0;}
-  .modal{border-radius:var(--r) var(--r) 0 0;max-width:100%;}
-}
-.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
-.modal-title{font-size:15px;font-weight:700;color:var(--text);}
-.modal-close{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:5px 12px;font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;font-weight:600;}
-.modal-body{font-size:12px;color:var(--muted);white-space:pre-wrap;line-height:1.8;background:var(--card2);border-radius:var(--rs);padding:12px;}
-
-/* PREVIEW */
-#preview-wrap{display:none;background:var(--bg);min-height:100vh;}
-#preview-wrap.active{display:block;}
-.preview-topbar{padding:12px 20px;background:#111118;display:flex;gap:8px;align-items:center;border-bottom:1px solid rgba(140,120,200,.2);position:sticky;top:0;z-index:10;}
-.preview-bottombar{padding:14px 20px 28px;background:#111118;display:flex;gap:8px;}
-.pb-back{background:rgba(255,255,255,.12);color:#fff;padding:10px 16px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-.pb-pdf{background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;padding:10px 16px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* MISC */
-.ab{font-size:11px;background:none;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:4px 10px;font-weight:700;font-family:inherit;color:var(--muted);}
-.ab.bv{color:var(--violet);border-color:rgba(107,63,160,.4);}.ab.br{color:#ff5555;border-color:rgba(255,85,85,.3);}.ab.bo{color:var(--orange);border-color:rgba(232,101,10,.3);}
-.divider{height:1px;background:var(--border);margin:14px 0;}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--violet);color:#fff;padding:11px 22px;border-radius:24px;font-size:13px;font-weight:700;z-index:500;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .3s;box-shadow:0 4px 20px rgba(107,63,160,.4);}
-.toast.show{opacity:1;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-
-@media print{
-  #loading,#login-page,.preview-topbar,.preview-bottombar,.topbar,.tabnav,.admin-tabnav,
- .stabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.stabs::-webkit-scrollbar{display:none;}
-.stab{flex-shrink:0;padding:7px 14px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--card);white-space:nowrap;}
-.stab.active{background:var(--violet);color:#fff;border-color:var(--violet);}
-.searchbar{display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 13px;margin-bottom:12px;}
-.searchbar input{flex:1;border:none;background:transparent;font-size:14px;color:var(--text);outline:none;font-family:inherit;}
-
-/* MODAL */
-.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,20,.85);z-index:300;align-items:center;justify-content:center;padding:20px;}
-.overlay.open{display:flex;}
-.modal{background:var(--card);border-radius:var(--r);padding:1.4rem 1.2rem 2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-@media(max-width:767px){
-  .overlay{align-items:flex-end;padding:0;}
-  .modal{border-radius:var(--r) var(--r) 0 0;max-width:100%;}
-}
-.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
-.modal-title{font-size:15px;font-weight:700;color:var(--text);}
-.modal-close{background:var(--card2);border:1px solid var(--border);border-radius:var(--rs);padding:5px 12px;font-size:12px;cursor:pointer;color:var(--muted);font-family:inherit;font-weight:600;}
-.modal-body{font-size:12px;color:var(--muted);white-space:pre-wrap;line-height:1.8;background:var(--card2);border-radius:var(--rs);padding:12px;}
-
-/* PREVIEW */
-#preview-wrap{display:none;background:var(--bg);min-height:100vh;}
-#preview-wrap.active{display:block;}
-.preview-topbar{padding:12px 20px;background:#111118;display:flex;gap:8px;align-items:center;border-bottom:1px solid rgba(140,120,200,.2);position:sticky;top:0;z-index:10;}
-.preview-bottombar{padding:14px 20px 28px;background:#111118;display:flex;gap:8px;}
-.pb-back{background:rgba(255,255,255,.12);color:#fff;padding:10px 16px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-.pb-pdf{background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;padding:10px 16px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* MISC */
-.ab{font-size:11px;background:none;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:4px 10px;font-weight:700;font-family:inherit;color:var(--muted);}
-.ab.bv{color:var(--violet);border-color:rgba(107,63,160,.4);}.ab.br{color:#ff5555;border-color:rgba(255,85,85,.3);}.ab.bo{color:var(--orange);border-color:rgba(232,101,10,.3);}
-.divider{height:1px;background:var(--border);margin:14px 0;}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--violet);color:#fff;padding:11px 22px;border-radius:24px;font-size:13px;font-weight:700;z-index:500;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .3s;box-shadow:0 4px 20px rgba(107,63,160,.4);}
-.toast.show{opacity:1;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
-
-@media print{
-  #loading,#login-page,.preview-topbar,.preview-bottombar,.topbar,.tabnav,.admin-tabnav,
   body{background:#fff!important;}
   .page{display:none!important;}
   #preview-content{display:block!important;}
@@ -644,6 +349,8 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="tabnav-item" onclick="showPage('membres')">👥 Membres</div>
     <div class="tabnav-item" onclick="showPage('caisse')">🤝 Caisse</div>
     <div class="tabnav-item" onclick="showPage('archives')">🗂️ Archives</div>
+    <div class="tabnav-item" onclick="showPage('calendrier')">📅 Calendrier</div>
+    <div class="tabnav-item" onclick="showPage('export')">📊 Export</div>
   </div>
 
   <!-- ADMIN NAV -->
@@ -653,7 +360,9 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="admin-tabnav-item" onclick="showAdminPage('rapports')">📋 Rapports</div>
     <div class="admin-tabnav-item" onclick="showAdminPage('reunions')">📣 Réunions</div>
     <div class="admin-tabnav-item" onclick="showAdminPage('membres')">👥 Membres</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('finances')">💰 Finances</div>
+    <div class="admin-tabnav-item" onclick="showAdminPage('finances')">🤝 Finances Familles</div>
+    <div class="admin-tabnav-item" onclick="showAdminPage('calendrier')">📅 Calendrier</div>
+    <div class="admin-tabnav-item" onclick="showAdminPage('export')">📊 Export</div>
   </div>
 
   <!-- HOME -->
@@ -930,7 +639,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
   <div class="page" id="page-finances">
     <div class="card" style="background:var(--grad);border:none;margin-bottom:1rem;">
       <div style="font-size:13px;color:rgba(255,255,255,.8);">Vue globale</div>
-      <div style="font-size:20px;font-weight:700;color:#fff;margin-top:2px;">💰 Finances de l'Église</div>
+      <div style="font-size:20px;font-weight:700;color:#fff;margin-top:2px;">🤝 Finances des Familles</div>
     </div>
     <div class="stat-grid" id="finances-stats">
       <div class="stat-box"><div class="stat-num fg" id="fs-in-cdf">0</div><div class="stat-lbl">Total contributions CDF</div></div>
@@ -947,6 +656,54 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       <div id="admin-finances-list"><div class="empty">Chargement...</div></div>
     </div>
   </div>
+  <!-- ══ PAGE CALENDRIER PARTAGÉ ══ -->
+  <div class="page" id="page-calendrier">
+    <!-- Ajouter événement (admin seulement) -->
+    <div id="cal-add-section"></div>
+    <div class="card">
+      <span class="card-title cv">📅 Calendrier des Événements</span>
+      <div class="stabs">
+        <div class="stab active" onclick="switchCal('avenir')">📅 À venir</div>
+        <div class="stab" onclick="switchCal('passe')">📋 Passés</div>
+        <div class="stab" onclick="switchCal('tous')">🗂️ Tous</div>
+      </div>
+      <div id="cal-list"><div class="empty">Chargement...</div></div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE EXPORT ══ -->
+  <div class="page" id="page-export">
+    <div class="card">
+      <span class="card-title cb">📊 Export Excel</span>
+      <div class="cnote">Exportez vos données en fichier Excel (.xlsx) pour les archives ou l'analyse.</div>
+      <div class="btn-lbl">Choisir les données à exporter</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
+          <input type="checkbox" id="ex-rapports" checked style="width:16px;height:16px;accent-color:var(--violet);">
+          <span style="font-size:13px;color:var(--text);">📋 Rapports hebdomadaires</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
+          <input type="checkbox" id="ex-reunions" checked style="width:16px;height:16px;accent-color:var(--violet);">
+          <span style="font-size:13px;color:var(--text);">📣 Comptes-rendus de réunions</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
+          <input type="checkbox" id="ex-membres" checked style="width:16px;height:16px;accent-color:var(--violet);">
+          <span style="font-size:13px;color:var(--text);">👥 Membres & Disciples</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
+          <input type="checkbox" id="ex-finances" checked style="width:16px;height:16px;accent-color:var(--violet);">
+          <span style="font-size:13px;color:var(--text);">🤝 Caisse solidarité</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
+          <input type="checkbox" id="ex-presences" style="width:16px;height:16px;accent-color:var(--violet);">
+          <span style="font-size:13px;color:var(--text);">✅ Feuilles de présence</span>
+        </label>
+      </div>
+      <button class="btn b-blue" onclick="exporterExcel()">📥 Télécharger le fichier Excel</button>
+      <div class="notice" style="margin-top:10px;">📌 Le fichier Excel s'ouvre dans Microsoft Excel, Google Sheets ou LibreOffice.</div>
+    </div>
+  </div>
+
 </div><!-- end app-page -->
 
 <!-- PREVIEW -->
@@ -999,6 +756,26 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- MODAL COMMENTAIRE -->
+<div class="overlay" id="modal-comment" onclick="if(event.target.id==='modal-comment')fermerComment()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title">💬 Commenter le rapport</div>
+      <button class="modal-close" onclick="fermerComment()">✕</button>
+    </div>
+    <div id="comment-rapport-info" style="font-size:12px;color:var(--muted);background:var(--card2);
+      border-radius:var(--rs);padding:10px 12px;margin-bottom:12px;"></div>
+    <!-- Commentaires existants -->
+    <div id="comment-existing" style="margin-bottom:12px;"></div>
+    <!-- Nouveau commentaire -->
+    <label class="flabel">Votre commentaire</label>
+    <textarea class="comment-input" id="comment-text" placeholder="Écrivez votre feedback, instruction ou remarque pour ce pasteur..."></textarea>
+    <button class="btn b-orange" style="margin-top:12px;" onclick="envoyerCommentaire()">
+      💬 Envoyer le commentaire
+    </button>
+  </div>
+</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged,
@@ -1068,6 +845,7 @@ async function showApp(){
     document.getElementById('admin-nav').style.display='none';
     showPage('home'); loadPastorData();
   }
+  initCalendrier();
 }
 
 window.doLogin = async function(){
@@ -1125,6 +903,8 @@ window.showPage=function(name){
   if(name==='caisse')renderCaisse();
   if(name==='presence')renderPresence();
   if(name==='archives'){renderArch('rapports');switchArch('rapports');}
+  if(name==='calendrier'){calTab='avenir';renderCalendrier();}
+  if(name==='export'){/* page statique */}
 };
 
 window.showAdminPage=function(name){
@@ -1137,7 +917,7 @@ window.showAdminPage=function(name){
       (name==='rapports'&&t.textContent.includes('Rapport'))||(name==='reunions'&&t.textContent.includes('union'))||
       (name==='membres'&&t.textContent.includes('embre'))||(name==='finances'&&t.textContent.includes('Finance')));
   });
-  const titleMap={...titles,'finances':'Finances Globales'};
+  const titleMap={...titles,'finances':'Finances des Familles'};
   document.getElementById('tb-title').textContent=titleMap[pageId]||titleMap[name]||'Admin';
   curPage=pageId||name;window.scrollTo(0,0);
   if(name==='rapports')loadAdminRapports();
@@ -1145,6 +925,7 @@ window.showAdminPage=function(name){
   if(name==='membres')loadAdminMembres();
   if(name==='pasteurs')loadAdminPasteurs();
   if(name==='finances')loadAdminFinances();
+  if(name==='calendrier'){calTab='avenir';renderCalendrier();}
   if(name==='dashboard')loadAdminCharts();
 };
 
@@ -1492,17 +1273,47 @@ window.renderArch=async function(tab){
     const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
     const el=document.getElementById('arch-rapports');
     if(!snap.size){el.innerHTML='<div class="empty">📭 Aucun rapport.</div>';return;}
-    el.innerHTML=snap.docs.map((d,i)=>{const x={id:d.id,...d.data()};return`
-      <div class="ai">
+    // Charger les commentaires pour chaque rapport
+    const rapportsHtml=await Promise.all(snap.docs.map(async(d)=>{
+      const x={id:d.id,...d.data()};
+      let commentHtml='';
+      if(x.aCommentaire){
+        // Charger les commentaires
+        const cSnap=await getDocs(query(
+          collection(db,'users',currentUser.uid,'rapports',x.id,'commentaires'),
+          orderBy('timestamp','asc')
+        ));
+        if(cSnap.size){
+          commentHtml=`<div style="margin-top:8px;">
+            <div style="font-size:10px;font-weight:700;color:var(--orange);
+              text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;">
+              💬 Commentaires de l'Administrateur
+            </div>`+
+            cSnap.docs.map(c=>{const cm=c.data();return`
+              <div class="comment-box">
+                <div class="comment-header">
+                  <div class="comment-author">💬 ${esc(cm.auteur||'Admin')}</div>
+                  <div class="comment-date">${cm.date||'—'}</div>
+                </div>
+                <div class="comment-text">${esc(cm.texte||'')}</div>
+              </div>`;}).join('')+
+            `</div>`;
+        }
+      }
+      return`<div class="ai${x.aCommentaire?' i-orange':''}">
+        ${x.aCommentaire?`<span class="comment-notif" style="margin-bottom:6px;display:inline-flex;">💬 L'admin a commenté ce rapport</span>`:''}
         <div class="ai-num">Rapport</div>
         <div class="ai-name">${esc(x.pastor)||'—'}</div>
         <div class="ai-date">${x.date_envoi}</div>
         <div class="ai-stats">📅 ${fmtDate(x.du)} → ${fmtDate(x.au)} · 🏠${x.visites} 📞${x.appels} 🆕${x.nouveaux} ⚠️${x.absences}</div>
-        <div class="ai-actions">
+        ${commentHtml}
+        <div class="ai-actions" style="margin-top:8px;">
           <button class="ab bv" onclick="previewArchRapport('${x.id}')">🖨️ PDF</button>
           <button class="ab br" onclick="supprimerArchDoc('rapports','${x.id}','rapports')">🗑️</button>
         </div>
-      </div>`;}).join('');
+      </div>`;
+    }));
+    el.innerHTML=rapportsHtml.join('');
   }else if(tab==='reunions'){
     const snap=await getDocs(query(userCol('reunions'),orderBy('timestamp','desc')));
     const el=document.getElementById('arch-reunions');
@@ -1706,6 +1517,8 @@ async function refreshAdminRapports(){
       ${r.cas?`<div class="rc-stats" style="margin-top:3px;color:var(--text);">🙏 ${esc(r.cas.slice(0,100))}${r.cas.length>100?'...':''}</div>`:''}
       <div class="ai-actions" style="margin-top:6px;">
         <button class="ab bv" onclick="adminPreviewRapport('${r.uid}','${r.id}')">🖨️ Voir PDF</button>
+        <button class="ab bo" onclick="ouvrirComment('${r.uid}','${r.id}','${esc(r.pastorNom||'')}','Rapport du ${fmtDate(r.du)}')">💬 Commenter</button>
+        ${r.aCommentaire?`<span style="font-size:10px;color:var(--orange);font-weight:700;">✓ Commenté</span>`:''}
       </div>
     </div>`).join('');
 }
@@ -1798,6 +1611,8 @@ function renderAdminRapports(list){
       ${r.cas?`<div class="rc-stats" style="margin-top:3px;color:var(--text);">🙏 ${esc(r.cas.slice(0,120))}${r.cas.length>120?'...':''}</div>`:''}
       <div class="ai-actions" style="margin-top:6px;">
         <button class="ab bv" onclick="adminPreviewRapport('${r.uid}','${r.id}')">🖨️ Voir & PDF</button>
+        <button class="ab bo" onclick="ouvrirComment('${r.uid}','${r.id}','${esc(r.pastorNom||'')}','Rapport du ${fmtDate(r.du)}')">💬 Commenter</button>
+        ${r.aCommentaire?`<span class="comment-notif">✓ Commenté · ${esc(r.commentaireAuteur||'Admin')}</span>`:''}
       </div>
     </div>`).join('');
 }
@@ -2155,10 +1970,303 @@ async function loadAdminCharts(){
   }
 }
 
+// ══ COMMENTAIRES ADMIN → PASTEUR ══
+let _commentRapportUid=null, _commentRapportId=null, _commentRapportInfo=null;
+
+window.ouvrirComment=async function(uid,rapportId,pastorNom,rapportDesc){
+  _commentRapportUid=uid;
+  _commentRapportId=rapportId;
+  _commentRapportInfo={pastorNom,rapportDesc};
+  document.getElementById('comment-rapport-info').innerHTML=
+    `<strong style="color:var(--text);">Pasteur :</strong> ${esc(pastorNom||'—')}<br>
+     <strong style="color:var(--text);">Rapport :</strong> ${esc(rapportDesc||'—')}`;
+  document.getElementById('comment-text').value='';
+  // Charger les commentaires existants
+  const snap=await getDocs(query(
+    collection(db,'users',uid,'rapports',rapportId,'commentaires'),
+    orderBy('timestamp','asc')
+  ));
+  const existing=document.getElementById('comment-existing');
+  if(!snap.size){
+    existing.innerHTML='<div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Aucun commentaire pour l\'instant.</div>';
+  } else {
+    existing.innerHTML=`<div style="font-size:11px;font-weight:700;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Commentaires précédents</div>`+
+      snap.docs.map(d=>{const c=d.data();return`
+        <div class="comment-box">
+          <div class="comment-header">
+            <div class="comment-author">💬 ${esc(c.auteur||'Admin')}</div>
+            <div class="comment-date">${c.date||'—'}</div>
+          </div>
+          <div class="comment-text">${esc(c.texte||'')}</div>
+        </div>`;}).join('');
+  }
+  document.getElementById('modal-comment').classList.add('open');
+};
+
+window.fermerComment=function(){
+  document.getElementById('modal-comment').classList.remove('open');
+};
+
+window.envoyerCommentaire=async function(){
+  const texte=document.getElementById('comment-text').value.trim();
+  if(!texte){showToast('⚠️ Écrire un commentaire','#c0392b');return;}
+  if(!_commentRapportUid||!_commentRapportId){showToast('❌ Erreur','#c0392b');return;}
+  try{
+    // Sauvegarder dans Firestore sous le rapport du pasteur
+    await addDoc(
+      collection(db,'users',_commentRapportUid,'rapports',_commentRapportId,'commentaires'),
+      {texte,auteur:curData.nom||'Admin',auteurId:currentUser.uid,
+       date:new Date().toLocaleString('fr-FR'),timestamp:Date.now()}
+    );
+    // Marquer le rapport comme commenté
+    await updateDoc(doc(db,'users',_commentRapportUid,'rapports',_commentRapportId),
+      {aCommentaire:true,dernierCommentaire:new Date().toLocaleString('fr-FR'),
+       commentaireAuteur:curData.nom||'Admin'});
+    fermerComment();
+    showToast('💬 Commentaire envoyé au pasteur !','var(--orange)');
+    // Rafraîchir la liste
+    if(curPage==='rapports-admin') loadAdminRapports();
+    if(curPage==='dashboard') refreshAdminRapports();
+  }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
+};
+
+// ══ CALENDRIER PARTAGÉ ══
+let calTab='avenir';
+let _allEvenements=[];
+
+function initCalendrier(){
+  // Écoute temps réel sur la collection partagée
+  onSnapshot(query(collection(db,'evenements'),orderBy('date','asc')),snap=>{
+    _allEvenements=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(curPage==='calendrier'||curPage==='calendrier-admin') renderCalendrier();
+  });
+}
+
+window.switchCal=function(tab){
+  calTab=tab;
+  document.querySelectorAll('#page-calendrier .stab,#page-calendrier-admin .stab').forEach((t,i)=>{
+    t.classList.toggle('active',['avenir','passe','tous'][i]===tab);
+  });
+  renderCalendrier();
+};
+
+function renderCalendrier(){
+  const today=new Date().toISOString().split('T')[0];
+  let list=_allEvenements;
+  if(calTab==='avenir') list=_allEvenements.filter(e=>e.date>=today);
+  else if(calTab==='passe') list=_allEvenements.filter(e=>e.date<today);
+
+  // Section ajout (admin seulement)
+  const addSection=document.getElementById('cal-add-section');
+  if(addSection){
+    if(currentRole==='admin'){
+      addSection.innerHTML=`<div class="card">
+        <span class="card-title co">📅 Planifier un Événement</span>
+        <div class="cnote">Cet événement sera visible par tous les pasteurs.</div>
+        <label class="flabel">Type d'événement</label>
+        <select id="ev-type">
+          <option value="Culte dominical">Culte dominical</option>
+          <option value="Culte de prière">Culte de prière</option>
+          <option value="Culte spécial">Culte spécial</option>
+          <option value="Réunion pastorale">Réunion pastorale</option>
+          <option value="Formation">Formation / Séminaire</option>
+          <option value="Évangélisation">Évangélisation</option>
+          <option value="Retraite spirituelle">Retraite spirituelle</option>
+          <option value="Autre événement">Autre</option>
+        </select>
+        <label class="flabel">Titre / Description</label>
+        <input type="text" id="ev-titre" placeholder="Ex : Culte de réveil annuel...">
+        <div class="row2" style="margin-top:8px;">
+          <div><label class="flabel">Date</label><input type="date" id="ev-date"></div>
+          <div><label class="flabel">Heure</label><input type="time" id="ev-heure" value="09:00"></div>
+        </div>
+        <label class="flabel">Lieu</label>
+        <input type="text" id="ev-lieu" placeholder="Ex : Salle principale IFCM">
+        <label class="flabel">Responsable</label>
+        <input type="text" id="ev-responsable" placeholder="Ex : Pasteur Jean">
+        <label class="flabel">Notes</label>
+        <textarea id="ev-notes" rows="2" placeholder="Informations complémentaires..."></textarea>
+        <button class="btn b-violet" onclick="ajouterEvenement()">📅 Publier l'Événement</button>
+      </div>`;
+    } else {
+      addSection.innerHTML='';
+    }
+  }
+
+  const el=document.getElementById('cal-list');
+  if(!list.length){
+    el.innerHTML=`<div class="empty">📭 Aucun événement ${calTab==='avenir'?'à venir':calTab==='passe'?'passé':''}.</div>`;
+    return;
+  }
+  const typeColors={'Culte dominical':'var(--violet)','Culte de prière':'var(--blue)',
+    'Culte spécial':'var(--orange)','Réunion pastorale':'var(--gold)','Formation':'var(--green)'};
+  el.innerHTML=list.map(e=>{
+    const color=typeColors[e.type]||'var(--violet)';
+    const isPast=e.date<new Date().toISOString().split('T')[0];
+    return`<div class="ai" style="border-left-color:${color};${isPast?'opacity:.7':''}">
+      <div class="ai-num" style="color:${color}">📅 ${esc(e.type||'ÉVÉNEMENT')}</div>
+      <div class="ai-name">${esc(e.titre)||'—'}</div>
+      <div class="ai-date">${fmtDate(e.date)} à ${e.heure||'—'} · ${esc(e.lieu)||'—'}</div>
+      ${e.responsable?`<div class="ai-stats">👤 ${esc(e.responsable)}</div>`:''}
+      ${e.notes?`<div class="ai-stats" style="margin-top:3px;">${esc(e.notes)}</div>`:''}
+      <div class="ai-date" style="margin-top:3px;">Publié par ${esc(e.publiePar||'Admin')}</div>
+      ${currentRole==='admin'?`<div class="ai-actions"><button class="ab br" onclick="supprimerEvenement('${e.id}')">🗑️ Supprimer</button></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+window.ajouterEvenement=async function(){
+  const titre=document.getElementById('ev-titre')?.value.trim();
+  const date=document.getElementById('ev-date')?.value;
+  if(!titre){showToast('⚠️ Saisir un titre','#c0392b');return;}
+  if(!date){showToast('⚠️ Saisir une date','#c0392b');return;}
+  try{
+    await addDoc(collection(db,'evenements'),{
+      type:document.getElementById('ev-type').value,
+      titre,date,heure:document.getElementById('ev-heure').value,
+      lieu:document.getElementById('ev-lieu').value.trim(),
+      responsable:document.getElementById('ev-responsable').value.trim(),
+      notes:document.getElementById('ev-notes').value.trim(),
+      publiePar:currentPastorData?.nom||currentUser.email,
+      timestamp:Date.now()
+    });
+    ['ev-titre','ev-lieu','ev-responsable','ev-notes'].forEach(id=>{
+      const el=document.getElementById(id);if(el)el.value='';
+    });
+    showToast('📅 Événement publié !','var(--violet)');
+  }catch(e){showToast('❌ '+e.message,'#c0392b');}
+};
+
+window.supprimerEvenement=async function(id){
+  if(!confirm('Supprimer cet événement ?'))return;
+  await deleteDoc(doc(db,'evenements',id));
+  showToast('🗑️ Supprimé.','#c0392b');
+};
+
+// ══ EXPORT EXCEL ══
+window.exporterExcel=async function(){
+  showToast('⏳ Préparation du fichier Excel...','var(--blue)');
+  try{
+    const inclure={
+      rapports:document.getElementById('ex-rapports')?.checked,
+      reunions:document.getElementById('ex-reunions')?.checked,
+      membres:document.getElementById('ex-membres')?.checked,
+      finances:document.getElementById('ex-finances')?.checked,
+      presences:document.getElementById('ex-presences')?.checked
+    };
+
+    // Construire le contenu CSV multi-feuilles
+    // On génère un fichier HTML avec tableaux (compatible Excel)
+    let html=`<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:x="urn:schemas-microsoft-com:office:excel"
+      xmlns="http://www.w3.org/TR/REC-html40">
+      <head><meta charset="UTF-8">
+      <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>`;
+
+    const sheets=[];
+
+    if(inclure.rapports){
+      const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
+      const rows=snap.docs.map(d=>{const r=d.data();
+        return`<tr><td>${r.date_envoi||''}</td><td>${r.pastor||''}</td><td>${r.famille||''}</td>
+          <td>${fmtDate(r.du)}</td><td>${fmtDate(r.au)}</td>
+          <td>${r.visites||0}</td><td>${r.appels||0}</td>
+          <td>${r.nouveaux||0}</td><td>${r.absences||0}</td>
+          <td>${(r.cas||'').replace(/</g,'&lt;')}</td>
+          <td>${(r.obs||'').replace(/</g,'&lt;')}</td></tr>`;}).join('');
+      html+=`<x:ExcelWorksheet><x:Name>Rapports</x:Name></x:ExcelWorksheet>`;
+      sheets.push({name:'Rapports',header:'<tr style="background:#6B3FA0;color:white;font-weight:bold;"><th>Date</th><th>Pasteur</th><th>Famille</th><th>Semaine Du</th><th>Au</th><th>Visites</th><th>Appels</th><th>Nouveaux</th><th>Absences</th><th>Cas Urgents</th><th>Observations</th></tr>',rows});
+    }
+    if(inclure.reunions){
+      const snap=await getDocs(query(userCol('reunions'),orderBy('timestamp','desc')));
+      const rows=snap.docs.map(d=>{const r=d.data();
+        return`<tr><td>${r.date_saisie||''}</td><td>${r.type||''}</td><td>${r.animateur||''}</td>
+          <td>${r.groupe||''}</td><td>${fmtDate(r.date)}</td><td>${r.lieu||''}</td>
+          <td>${r.presents||0}</td><td>${r.absents||0}</td>
+          <td>${(r.theme||'').replace(/</g,'&lt;')}</td>
+          <td>${(r.resume||'').replace(/</g,'&lt;')}</td>
+          <td>${(r.decisions||'').replace(/</g,'&lt;')}</td></tr>`;}).join('');
+      html+=`<x:ExcelWorksheet><x:Name>Réunions</x:Name></x:ExcelWorksheet>`;
+      sheets.push({name:'Réunions',header:'<tr style="background:#6B3FA0;color:white;font-weight:bold;"><th>Date</th><th>Type</th><th>Animateur</th><th>Groupe</th><th>Date Réunion</th><th>Lieu</th><th>Présents</th><th>Absents</th><th>Thème</th><th>Résumé</th><th>Décisions</th></tr>',rows});
+    }
+    if(inclure.membres){
+      const [mSnap,dSnap]=await Promise.all([getDocs(userCol('membres')),getDocs(userCol('disciples'))]);
+      const rowsD=dSnap.docs.map(d=>{const m=d.data();
+        return`<tr><td>Disciple</td><td>${m.nom||''}</td><td></td><td>${m.tel||''}</td><td>${m.adresse||''}</td><td>${m.statut||''}</td><td>${m.date||''}</td></tr>`;}).join('');
+      const rowsM=mSnap.docs.map(d=>{const m=d.data();
+        return`<tr><td>Membre</td><td>${m.nom||''}</td><td>${m.disciple_nom||''}</td><td>${m.tel||''}</td><td>${m.adresse||''}</td><td>${m.statut||''}</td><td>${m.date||''}</td></tr>`;}).join('');
+      html+=`<x:ExcelWorksheet><x:Name>Membres</x:Name></x:ExcelWorksheet>`;
+      sheets.push({name:'Membres',header:'<tr style="background:#1A5FA8;color:white;font-weight:bold;"><th>Type</th><th>Nom</th><th>Disciple/Pasteur</th><th>Téléphone</th><th>Adresse</th><th>Statut</th><th>Date</th></tr>',rows:rowsD+rowsM});
+    }
+    if(inclure.finances){
+      const snap=await getDocs(query(userCol('finances'),orderBy('timestamp','desc')));
+      const rows=snap.docs.map(d=>{const f=d.data();
+        return`<tr><td>${f.saisie||''}</td><td>${f.type==='entree'?'Contribution':'Dépense'}</td>
+          <td>${f.membre||''}</td><td>${f.montant||0}</td><td>${f.devise||'CDF'}</td>
+          <td>${(f.desc||'').replace(/</g,'&lt;')}</td><td>${fmtDate(f.date)}</td></tr>`;}).join('');
+      html+=`<x:ExcelWorksheet><x:Name>Caisse</x:Name></x:ExcelWorksheet>`;
+      sheets.push({name:'Caisse',header:'<tr style="background:#C9A84C;color:black;font-weight:bold;"><th>Date Saisie</th><th>Type</th><th>Membre</th><th>Montant</th><th>Devise</th><th>Description</th><th>Date</th></tr>',rows});
+    }
+    if(inclure.presences){
+      const snap=await getDocs(query(userCol('presences'),orderBy('timestamp','desc')));
+      const rows=snap.docs.map(d=>{const p=d.data();
+        return`<tr><td>${fmtDate(p.date)}</td><td>${p.theme||''}</td><td>${p.predicateur||''}</td>
+          <td>${p.total||0}</td><td>${p.total_membres||0}</td>
+          <td>${(p.presents||[]).join(', ')}</td></tr>`;}).join('');
+      html+=`<x:ExcelWorksheet><x:Name>Présences</x:Name></x:ExcelWorksheet>`;
+      sheets.push({name:'Présences',header:'<tr style="background:#25a244;color:white;font-weight:bold;"><th>Date</th><th>Thème</th><th>Prédicateur</th><th>Présents</th><th>Total Membres</th><th>Noms Présents</th></tr>',rows});
+    }
+
+    html+=`</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+      <style>table{border-collapse:collapse;}td,th{border:1px solid #ccc;padding:6px 10px;font-size:11pt;}</style>
+      </head><body>`;
+
+    // Ajouter chaque feuille
+    sheets.forEach(s=>{
+      html+=`<h2 style="color:#4A2878;margin-top:20px;">${s.name}</h2>
+        <table><thead>${s.header}</thead><tbody>${s.rows||'<tr><td colspan="20">Aucune donnée.</td></tr>'}</tbody></table>`;
+    });
+    html+=`<p style="margin-top:20px;color:#888;font-size:10pt;">
+      Export IFCM Pastoral — ${new Date().toLocaleString('fr-FR')} — ${currentPastorData?.nom||''}</p>
+      </body></html>`;
+
+    // Télécharger
+    const blob=new Blob([html],{type:'application/vnd.ms-excel;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    const nom=(currentPastorData?.nom||'IFCM').replace(/\s+/g,'_');
+    a.download=`IFCM_Export_${nom}_${new Date().toISOString().split('T')[0]}.xls`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 Fichier Excel téléchargé !','var(--green)');
+  }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
+};
+
 // KEYBOARD
 document.getElementById('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')window.doLogin();});
 document.getElementById('login-email').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('login-password').focus();});
 
+</script>
+
+<!-- SERVICE WORKER mode hors-ligne + installation PWA -->
+<script>
+if('serviceWorker' in navigator){
+  const sw=`const C='ifcm-pastoral-v2';
+self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./']).catch(()=>{})).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));});
+self.addEventListener('fetch',e=>{
+  if(e.request.url.includes('googleapis.com')||e.request.url.includes('firebase'))return;
+  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
+    if(res.ok&&e.request.method==='GET'){const clone=res.clone();caches.open(C).then(c=>c.put(e.request,clone));}
+    return res;
+  }).catch(()=>caches.match('./'))));
+});`;
+  try{const b=new Blob([sw],{type:'application/javascript'});navigator.serviceWorker.register(URL.createObjectURL(b)).catch(()=>{});}catch(e){}
+  window.addEventListener('offline',()=>{if(window.showToast)showToast('📵 Mode hors-ligne actif','#E8650A');});
+  window.addEventListener('online',()=>{if(window.showToast)showToast('✅ Connexion rétablie !','#25a244');});
+}
 </script>
 </body>
 </html>
