@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#4A2878">
 <title>IFCM — Espace Pastoral</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{
   --orange:#E8650A;--orange-d:#B84D06;--orange-l:rgba(232,101,10,0.13);
@@ -2520,8 +2521,11 @@ window.supprimerEvenement=async function(id){
   showToast('🗑️ Supprimé.','#c0392b');
 };
 
-// ══ EXPORT EXCEL ══
+// ══ EXPORT EXCEL (SheetJS — vrai .xlsx) ══
 window.exporterExcel=async function(){
+  if(typeof XLSX==='undefined'){
+    showToast('⚠️ Librairie Excel en cours de chargement, réessayez','#c0392b');return;
+  }
   showToast('⏳ Préparation du fichier Excel...','var(--blue)');
   try{
     const inclure={
@@ -2531,92 +2535,91 @@ window.exporterExcel=async function(){
       finances:document.getElementById('ex-finances')?.checked,
       presences:document.getElementById('ex-presences')?.checked
     };
-
-    // Construire le contenu CSV multi-feuilles
-    // On génère un fichier HTML avec tableaux (compatible Excel)
-    let html=`<html xmlns:o="urn:schemas-microsoft-com:office:office"
-      xmlns:x="urn:schemas-microsoft-com:office:excel"
-      xmlns="http://www.w3.org/TR/REC-html40">
-      <head><meta charset="UTF-8">
-      <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>`;
-
-    const sheets=[];
+    const wb=XLSX.utils.book_new();
+    const nom=(currentPastorData?.nom||'IFCM').replace(/\s+/g,'_');
 
     if(inclure.rapports){
       const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
-      const rows=snap.docs.map(d=>{const r=d.data();
-        return`<tr><td>${r.date_envoi||''}</td><td>${r.pastor||''}</td><td>${r.famille||''}</td>
-          <td>${fmtDate(r.du)}</td><td>${fmtDate(r.au)}</td>
-          <td>${r.visites||0}</td><td>${r.appels||0}</td>
-          <td>${r.nouveaux||0}</td><td>${r.absences||0}</td>
-          <td>${(r.cas||'').replace(/</g,'&lt;')}</td>
-          <td>${(r.obs||'').replace(/</g,'&lt;')}</td></tr>`;}).join('');
-      html+=`<x:ExcelWorksheet><x:Name>Rapports</x:Name></x:ExcelWorksheet>`;
-      sheets.push({name:'Rapports',header:'<tr style="background:#6B3FA0;color:white;font-weight:bold;"><th>Date</th><th>Pasteur</th><th>Famille</th><th>Semaine Du</th><th>Au</th><th>Visites</th><th>Appels</th><th>Nouveaux</th><th>Absences</th><th>Cas Urgents</th><th>Observations</th></tr>',rows});
+      const data=[['Date saisie','Pasteur','Famille','Semaine du','Au','Visites','Appels','Nouveaux','Absences','Cas Urgents','Observations']];
+      snap.docs.forEach(d=>{const r=d.data();
+        data.push([r.date_envoi||'',r.pastor||'',r.famille||'',
+          fmtDate(r.du),fmtDate(r.au),
+          r.visites||0,r.appels||0,r.nouveaux||0,r.absences||0,
+          r.cas||'',r.obs||'']);
+      });
+      const ws=XLSX.utils.aoa_to_sheet(data);
+      // Largeur des colonnes
+      ws['!cols']=[{wch:18},{wch:22},{wch:20},{wch:16},{wch:16},{wch:8},{wch:8},{wch:10},{wch:10},{wch:40},{wch:40}];
+      XLSX.utils.book_append_sheet(wb,ws,'Rapports');
     }
+
     if(inclure.reunions){
       const snap=await getDocs(query(userCol('reunions'),orderBy('timestamp','desc')));
-      const rows=snap.docs.map(d=>{const r=d.data();
-        return`<tr><td>${r.date_saisie||''}</td><td>${r.type||''}</td><td>${r.animateur||''}</td>
-          <td>${r.groupe||''}</td><td>${fmtDate(r.date)}</td><td>${r.lieu||''}</td>
-          <td>${r.presents||0}</td><td>${r.absents||0}</td>
-          <td>${(r.theme||'').replace(/</g,'&lt;')}</td>
-          <td>${(r.resume||'').replace(/</g,'&lt;')}</td>
-          <td>${(r.decisions||'').replace(/</g,'&lt;')}</td></tr>`;}).join('');
-      html+=`<x:ExcelWorksheet><x:Name>Réunions</x:Name></x:ExcelWorksheet>`;
-      sheets.push({name:'Réunions',header:'<tr style="background:#6B3FA0;color:white;font-weight:bold;"><th>Date</th><th>Type</th><th>Animateur</th><th>Groupe</th><th>Date Réunion</th><th>Lieu</th><th>Présents</th><th>Absents</th><th>Thème</th><th>Résumé</th><th>Décisions</th></tr>',rows});
+      const data=[['Date saisie','Type','Animateur','Groupe','Date réunion','Lieu','Présents','Absents','Thème','Résumé','Décisions','Prière']];
+      snap.docs.forEach(d=>{const r=d.data();
+        data.push([r.date_saisie||'',r.type||'',r.animateur||'',r.groupe||'',
+          fmtDate(r.date),r.lieu||'',r.presents||0,r.absents||0,
+          r.theme||'',r.resume||'',r.decisions||'',r.priere||'']);
+      });
+      const ws=XLSX.utils.aoa_to_sheet(data);
+      ws['!cols']=[{wch:18},{wch:22},{wch:20},{wch:20},{wch:16},{wch:16},{wch:8},{wch:8},{wch:30},{wch:40},{wch:40},{wch:30}];
+      XLSX.utils.book_append_sheet(wb,ws,'Réunions');
     }
+
     if(inclure.membres){
       const [mSnap,dSnap]=await Promise.all([getDocs(userCol('membres')),getDocs(userCol('disciples'))]);
-      const rowsD=dSnap.docs.map(d=>{const m=d.data();
-        return`<tr><td>Disciple</td><td>${m.nom||''}</td><td></td><td>${m.tel||''}</td><td>${m.adresse||''}</td><td>${m.statut||''}</td><td>${m.date||''}</td></tr>`;}).join('');
-      const rowsM=mSnap.docs.map(d=>{const m=d.data();
-        return`<tr><td>Membre</td><td>${m.nom||''}</td><td>${m.disciple_nom||''}</td><td>${m.tel||''}</td><td>${m.adresse||''}</td><td>${m.statut||''}</td><td>${m.date||''}</td></tr>`;}).join('');
-      html+=`<x:ExcelWorksheet><x:Name>Membres</x:Name></x:ExcelWorksheet>`;
-      sheets.push({name:'Membres',header:'<tr style="background:#1A5FA8;color:white;font-weight:bold;"><th>Type</th><th>Nom</th><th>Disciple/Pasteur</th><th>Téléphone</th><th>Adresse</th><th>Statut</th><th>Date</th></tr>',rows:rowsD+rowsM});
+      const data=[['Type','Nom','Disciple Responsable','Téléphone','Adresse','Statut','Date ajout']];
+      dSnap.docs.forEach(d=>{const m=d.data();
+        data.push(['Disciple',m.nom||'','',m.tel||'',m.adresse||'',m.statut||'actif',m.date||'']);
+      });
+      mSnap.docs.forEach(d=>{const m=d.data();
+        data.push(['Membre',m.nom||'',m.disciple_nom||'',m.tel||'',m.adresse||'',m.statut||'actif',m.date||'']);
+      });
+      const ws=XLSX.utils.aoa_to_sheet(data);
+      ws['!cols']=[{wch:10},{wch:25},{wch:22},{wch:16},{wch:25},{wch:12},{wch:14}];
+      XLSX.utils.book_append_sheet(wb,ws,'Membres');
     }
+
     if(inclure.finances){
       const snap=await getDocs(query(userCol('finances'),orderBy('timestamp','desc')));
-      const rows=snap.docs.map(d=>{const f=d.data();
-        return`<tr><td>${f.saisie||''}</td><td>${f.type==='entree'?'Contribution':'Dépense'}</td>
-          <td>${f.membre||''}</td><td>${f.montant||0}</td><td>${f.devise||'CDF'}</td>
-          <td>${(f.desc||'').replace(/</g,'&lt;')}</td><td>${fmtDate(f.date)}</td></tr>`;}).join('');
-      html+=`<x:ExcelWorksheet><x:Name>Caisse</x:Name></x:ExcelWorksheet>`;
-      sheets.push({name:'Caisse',header:'<tr style="background:#C9A84C;color:black;font-weight:bold;"><th>Date Saisie</th><th>Type</th><th>Membre</th><th>Montant</th><th>Devise</th><th>Description</th><th>Date</th></tr>',rows});
+      const data=[['Date saisie','Type','Membre / Bénéficiaire','Montant','Devise','Description','Date opération']];
+      snap.docs.forEach(d=>{const f=d.data();
+        data.push([f.saisie||'',f.type==='entree'?'Contribution':'Dépense',
+          f.membre||'',f.montant||0,f.devise||'CDF',f.desc||'',fmtDate(f.date)]);
+      });
+      const ws=XLSX.utils.aoa_to_sheet(data);
+      ws['!cols']=[{wch:18},{wch:14},{wch:25},{wch:12},{wch:8},{wch:30},{wch:16}];
+      XLSX.utils.book_append_sheet(wb,ws,'Caisse');
     }
+
     if(inclure.presences){
       const snap=await getDocs(query(userCol('presences'),orderBy('timestamp','desc')));
-      const rows=snap.docs.map(d=>{const p=d.data();
-        return`<tr><td>${fmtDate(p.date)}</td><td>${p.theme||''}</td><td>${p.predicateur||''}</td>
-          <td>${p.total||0}</td><td>${p.total_membres||0}</td>
-          <td>${(p.presents||[]).join(', ')}</td></tr>`;}).join('');
-      html+=`<x:ExcelWorksheet><x:Name>Présences</x:Name></x:ExcelWorksheet>`;
-      sheets.push({name:'Présences',header:'<tr style="background:#25a244;color:white;font-weight:bold;"><th>Date</th><th>Thème</th><th>Prédicateur</th><th>Présents</th><th>Total Membres</th><th>Noms Présents</th></tr>',rows});
+      const data=[['Date culte','Thème','Prédicateur','Nb Présents','Total Membres','% Présence','Noms des Présents']];
+      snap.docs.forEach(d=>{const p=d.data();
+        const pct=p.total_membres>0?Math.round((p.total/p.total_membres)*100):0;
+        data.push([fmtDate(p.date),p.theme||'',p.predicateur||'',
+          p.total||0,p.total_membres||0,pct+'%',
+          (p.presents||[]).join(', ')]);
+      });
+      const ws=XLSX.utils.aoa_to_sheet(data);
+      ws['!cols']=[{wch:16},{wch:30},{wch:22},{wch:12},{wch:14},{wch:10},{wch:60}];
+      XLSX.utils.book_append_sheet(wb,ws,'Présences');
     }
 
-    html+=`</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-      <style>table{border-collapse:collapse;}td,th{border:1px solid #ccc;padding:6px 10px;font-size:11pt;}</style>
-      </head><body>`;
+    if(!wb.SheetNames.length){
+      showToast('⚠️ Sélectionner au moins une catégorie','#c0392b');return;
+    }
 
-    // Ajouter chaque feuille
-    sheets.forEach(s=>{
-      html+=`<h2 style="color:#4A2878;margin-top:20px;">${s.name}</h2>
-        <table><thead>${s.header}</thead><tbody>${s.rows||'<tr><td colspan="20">Aucune donnée.</td></tr>'}</tbody></table>`;
-    });
-    html+=`<p style="margin-top:20px;color:#888;font-size:10pt;">
-      Export IFCM Pastoral — ${new Date().toLocaleString('fr-FR')} — ${currentPastorData?.nom||''}</p>
-      </body></html>`;
-
-    // Télécharger
-    const blob=new Blob([html],{type:'application/vnd.ms-excel;charset=utf-8'});
+    // Générer et télécharger
+    const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+    const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
     a.href=url;
-    const nom=(currentPastorData?.nom||'IFCM').replace(/\s+/g,'_');
-    a.download=`IFCM_Export_${nom}_${new Date().toISOString().split('T')[0]}.xls`;
+    a.download=`IFCM_Export_${nom}_${new Date().toISOString().split('T')[0]}.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('📥 Fichier Excel téléchargé !','var(--green)');
+    showToast('📥 Fichier Excel .xlsx téléchargé !','var(--green)');
   }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
 };
 
