@@ -452,7 +452,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="tabnav-item" onclick="showPage('presence')">✅ Présence</div>
     <div class="tabnav-item" onclick="showPage('membres')">👥 Membres</div>
     <div class="tabnav-item" onclick="showPage('caisse')">🤝 Caisse</div>
-    <div class="tabnav-item" onclick="showPage('archives')">🗂️ Archives</div>
+    <div class="tabnav-item" onclick="showPage('archives')" id="nav-archives" style="position:relative;">🗂️ Archives<span id="nav-archives-dot" style="display:none;position:absolute;top:6px;right:6px;width:10px;height:10px;background:#ff4444;border-radius:50%;"></span></div>
     <div class="tabnav-item" onclick="showPage('calendrier')">📅 Calendrier</div>
     <div class="tabnav-item" onclick="showPage('export')">📊 Export</div>
   </div>
@@ -477,6 +477,25 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       <div class="hero-branch">Branche de Kinshasa — IFCM</div>
       <div class="hero-user" id="hero-user"></div>
     </div>
+    <!-- BANNIÈRE NOUVEAUX COMMENTAIRES -->
+    <div id="notif-banner" style="display:none;background:linear-gradient(135deg,var(--orange-d),var(--orange));
+      border-radius:var(--r);padding:14px 16px;margin-bottom:1rem;cursor:pointer;
+      display:none;align-items:center;gap:12px;" onclick="showPage('archives')">
+      <div style="font-size:28px;animation:bellRing 1s infinite;">🔔</div>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:700;color:#fff;" id="notif-title">Nouveau message de l'Administrateur</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;" id="notif-sub">Appuyez pour voir vos rapports commentés</div>
+      </div>
+      <div style="font-size:12px;color:#fff;font-weight:700;">Voir →</div>
+    </div>
+    <style>
+      @keyframes bellRing{0%,100%{transform:rotate(0);}20%{transform:rotate(-15deg);}40%{transform:rotate(15deg);}60%{transform:rotate(-10deg);}80%{transform:rotate(10deg);}}
+      .notif-dot{position:absolute;top:-4px;right:-4px;width:14px;height:14px;
+        background:#ff4444;border-radius:50%;border:2px solid var(--bg);
+        animation:pulseDot 1.5s infinite;}
+      @keyframes pulseDot{0%,100%{transform:scale(1);}50%{transform:scale(1.3);}}
+      .tab-notif{position:relative;display:inline-block;}
+    </style>
     <div class="section-lbl">Rapports & Suivi</div>
     <div class="home-grid">
       <div class="hcard vc" onclick="showPage('rapport')"><span class="hcard-icon">📋</span><div class="hcard-name">Rapport Hebdo</div><div class="hcard-desc">Rapport pastoral semaine</div></div>
@@ -487,7 +506,11 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="section-lbl">Finances & Archives</div>
     <div class="home-grid">
       <div class="hcard gc wide" onclick="showPage('caisse')"><span class="hcard-icon">🤝</span><div><div class="hcard-name">Caisse Solidarité</div><div class="hcard-desc">Contributions & dépenses</div></div></div>
-      <div class="hcard bc wide" onclick="showPage('archives')"><span class="hcard-icon">🗂️</span><div><div class="hcard-name">Archives</div><div class="hcard-desc">Historique complet cloud</div></div></div>
+      <div class="hcard bc wide" id="hcard-archives" onclick="showPage('archives')">
+        <span class="hcard-icon" style="position:relative;display:inline-block;">🗂️<span id="archives-dot" style="display:none;" class="notif-dot"></span></span>
+        <div><div class="hcard-name">Archives <span id="archives-badge" style="display:none;background:#ff4444;color:#fff;font-size:11px;font-weight:700;border-radius:10px;padding:2px 7px;margin-left:4px;vertical-align:middle;"></span></div>
+        <div class="hcard-desc">Historique complet cloud</div></div>
+      </div>
     </div>
   </div>
 
@@ -1039,6 +1062,7 @@ onAuthStateChanged(auth, async user => {
     if(pd.exists()){
       currentPastorData = pd.data();
       currentRole = currentPastorData.role || 'pastor';
+      console.log('Rôle chargé:', currentRole); // Debug
     } else {
       // Premier compte = Super Admin
       currentRole = 'super_admin';
@@ -1141,7 +1165,7 @@ window.showPage=function(name){
   if(name==='membres')switchMembreTab('disciples');
   if(name==='caisse')renderCaisse();
   if(name==='presence')renderPresence();
-  if(name==='archives'){renderArch('rapports');switchArch('rapports');}
+  if(name==='archives'){renderArch('rapports');switchArch('rapports');marquerCommentairesLus();}
   if(name==='calendrier'){calTab='avenir';renderCalendrier();}
   if(name==='export'){/* page statique */}
 };
@@ -1162,7 +1186,12 @@ window.showAdminPage=function(name){
   if(name==='rapports')loadAdminRapports();
   if(name==='reunions')loadAdminReunions();
   if(name==='membres')loadAdminMembres();
-  if(name==='pasteurs')loadAdminPasteurs();
+  if(name==='pasteurs'){
+    loadAdminPasteurs();
+    // Afficher section créer admin seulement pour super_admin
+    const secAdmin=document.getElementById('section-creer-admin');
+    if(secAdmin) secAdmin.style.display=currentRole==='super_admin'?'block':'none';
+  }
   if(name==='finances')loadAdminFinances();
   if(name==='calendrier'){calTab='avenir';renderCalendrier();}
   if(name==='dashboard')loadAdminCharts();
@@ -1202,6 +1231,13 @@ async function loadPastorData(){
     document.getElementById('reu-animateur').value=currentPastorData.nom;
   }
   renderCaisse();renderPresence();
+  // Demander permission notifications et vérifier commentaires
+  demanderPermissionNotif();
+  verifierNouveauxCommentaires();
+  // Écouter en temps réel les nouveaux commentaires
+  onSnapshot(userCol('rapports'),()=>{
+    verifierNouveauxCommentaires();
+  });
 }
 
 // ══ RAPPORT ══
@@ -1808,11 +1844,11 @@ async function loadAdminPasteurs(){
         <span class="pastor-badge ${p.actif?'pb-actif':'pb-inactif'}">${p.actif?'Actif':'Inactif'}</span>
       </div>
       <div class="pastor-actions">
-        <button class="ab bv" onclick="ouvrirEditUtilisateur('${p.id}')">✏️ Modifier</button>
+        ${currentRole==='super_admin'||p.role!=='super_admin'?`<button class="ab bv" onclick="ouvrirEditUtilisateur('${p.id}')">✏️ Modifier</button>`:''}
         ${p.role==='pastor'?`
         <button class="ab bo" onclick="togglePasteurActif('${p.id}',${!p.actif})">${p.actif?'🔒 Désactiver':'🔓 Activer'}</button>
         <button class="ab bv" onclick="voirRapportsPasteur('${p.id}','${esc(p.nom||'')}')">📋 Rapports</button>`:''}
-        ${p.id!==currentUser.uid?`<button class="ab br" onclick="supprimerUtilisateur('${p.id}','${esc(p.nom||'')}')">🗑️ Supprimer</button>`:''}
+        ${p.id!==currentUser.uid && p.role!=='super_admin' ? `<button class="ab br" onclick="supprimerUtilisateur('${p.id}','${esc(p.nom||'')}')">🗑️ Supprimer</button>`:''}
       </div>
     </div>`).join('');
 }
@@ -1841,16 +1877,26 @@ window.sauvegarderEditUser=async function(){
   const uid=document.getElementById('eu-uid').value;
   const nom=document.getElementById('eu-nom').value.trim();
   if(!nom){showToast('⚠️ Saisir le nom','#c0392b');return;}
+  // Bloquer la modification du super_admin par un admin normal
   try{
-    await updateDoc(doc(db,'users',uid),{
+    const pd=await getDoc(doc(db,'users',uid));
+    if(pd.exists()&&pd.data().role==='super_admin'&&currentRole!=='super_admin'){
+      showToast('❌ Vous ne pouvez pas modifier le Super Administrateur.','#c0392b');
+      return;
+    }
+    // Empêcher de changer le rôle super_admin
+    const newRole=document.getElementById('eu-role').value;
+    const updates={
       nom,
       cellule:document.getElementById('eu-cellule').value.trim(),
       emailResponsable:document.getElementById('eu-email-resp').value.trim(),
       emailResponsable2:document.getElementById('eu-email-resp2').value.trim(),
       whatsappResponsable:document.getElementById('eu-wa-resp').value.trim(),
-      role:document.getElementById('eu-role').value,
       modifieLe:new Date().toLocaleString('fr-FR')
-    });
+    };
+    // Seulement le super_admin peut changer les rôles
+    if(currentRole==='super_admin') updates.role=newRole;
+    await updateDoc(doc(db,'users',uid),updates);
     fermerEditUser();
     loadAdminPasteurs();
     showToast('✅ Utilisateur modifié !','#25a244');
@@ -1859,17 +1905,25 @@ window.sauvegarderEditUser=async function(){
 
 // ══ SUPPRIMER UTILISATEUR ══
 window.supprimerUtilisateur=async function(uid,nom){
-  if(!confirm(`Supprimer définitivement le compte de ${nom} ?\n\n⚠️ Cette action est irréversible.\nSes données (rapports, membres, etc.) seront conservées mais il ne pourra plus se connecter.`))return;
+  // Vérifier que la cible n'est pas super_admin
   try{
-    // Désactiver le compte (on ne peut pas supprimer Auth depuis le client)
+    const pd=await getDoc(doc(db,'users',uid));
+    if(pd.exists()&&pd.data().role==='super_admin'){
+      showToast('❌ Impossible de supprimer le Super Administrateur.','#c0392b');
+      return;
+    }
+  }catch(e){}
+  // Vérifier que c'est pas son propre compte
+  if(uid===currentUser.uid){showToast('❌ Vous ne pouvez pas supprimer votre propre compte.','#c0392b');return;}
+  if(!confirm(`Supprimer définitivement le compte de ${nom} ?\n\n⚠️ Cette action est irréversible.`))return;
+  try{
     await updateDoc(doc(db,'users',uid),{
-      actif:false,
-      supprime:true,
+      actif:false,supprime:true,
       supprimeLe:new Date().toLocaleString('fr-FR'),
       supprimePar:currentUser.uid
     });
     loadAdminPasteurs();
-    showToast('🗑️ Compte désactivé et marqué supprimé.','#c0392b');
+    showToast('🗑️ Compte désactivé.','#c0392b');
   }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
 };
 
@@ -2627,6 +2681,88 @@ window.exporterExcel=async function(){
     showToast('📥 Fichier Excel .xlsx téléchargé !','var(--green)');
   }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
 };
+
+// ══ SYSTÈME DE NOTIFICATIONS COMMENTAIRES ══
+let _unreadComments=0;
+
+async function verifierNouveauxCommentaires(){
+  if(currentRole==='admin'||currentRole==='super_admin') return;
+  try{
+    const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
+    let nbNouveaux=0;
+    let dernierAuteur='';
+    for(const d of snap.docs){
+      const r=d.data();
+      if(r.aCommentaire&&!r.commentaireLu){
+        const cSnap=await getDocs(collection(db,'users',currentUser.uid,'rapports',d.id,'commentaires'));
+        if(cSnap.size>0){
+          nbNouveaux++;
+          if(!dernierAuteur) dernierAuteur=cSnap.docs[cSnap.docs.length-1].data().auteur||'Admin';
+        }
+      }
+    }
+    _unreadComments=nbNouveaux;
+    mettreAJourBadges(nbNouveaux,dernierAuteur);
+    if(nbNouveaux>0) envoyerNotifPush(nbNouveaux,dernierAuteur);
+  }catch(e){console.log('Notif:',e);}
+}
+
+function mettreAJourBadges(nb,auteur){
+  const banner=document.getElementById('notif-banner');
+  const dot=document.getElementById('archives-dot');
+  const badge=document.getElementById('archives-badge');
+  const navDot=document.getElementById('nav-archives-dot');
+  if(nb>0){
+    if(banner){
+      banner.style.display='flex';
+      document.getElementById('notif-title').textContent=
+        nb===1?'💬 Nouveau commentaire de l\'Administrateur':`💬 ${nb} nouveaux commentaires`;
+      document.getElementById('notif-sub').textContent=
+        `${auteur||'Admin'} vous a laissé un message — Appuyez pour lire`;
+    }
+    if(dot) dot.style.display='block';
+    if(badge){badge.style.display='inline';badge.textContent=nb;}
+    if(navDot) navDot.style.display='block';
+    document.title=`(${nb}) IFCM — Espace Pastoral`;
+  }else{
+    if(banner) banner.style.display='none';
+    if(dot) dot.style.display='none';
+    if(badge) badge.style.display='none';
+    if(navDot) navDot.style.display='none';
+    document.title='IFCM — Espace Pastoral';
+  }
+}
+
+async function marquerCommentairesLus(){
+  if(currentRole==='admin'||currentRole==='super_admin') return;
+  try{
+    const snap=await getDocs(userCol('rapports'));
+    for(const d of snap.docs){
+      if(d.data().aCommentaire&&!d.data().commentaireLu){
+        await updateDoc(userDoc2('rapports',d.id),{commentaireLu:true});
+      }
+    }
+    mettreAJourBadges(0,'');
+  }catch(e){}
+}
+
+async function demanderPermissionNotif(){
+  if(!('Notification' in window)) return;
+  if(Notification.permission==='default'){
+    const p=await Notification.requestPermission();
+    if(p==='granted') showToast('🔔 Notifications activées !','var(--green)');
+  }
+}
+
+function envoyerNotifPush(nb,auteur){
+  if(!('Notification' in window)||Notification.permission!=='granted') return;
+  const n=new Notification('💬 IFCM — Nouveau message',{
+    body:`${auteur||'Admin'} vous a laissé ${nb===1?'un commentaire':'des commentaires'} sur votre rapport.`,
+    icon:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjNEEyODc4Ii8+PHRleHQgeD0iOTYiIHk9IjExMCIgZm9udC1zaXplPSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZGRDc1MCI+4pyXPC90ZXh0Pjwvc3ZnPg==',
+    vibrate:[200,100,200],tag:'ifcm-comment',renotify:true
+  });
+  n.onclick=function(){window.focus();showPage('archives');this.close();};
+}
 
 // KEYBOARD
 document.getElementById('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')window.doLogin();});
