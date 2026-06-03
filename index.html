@@ -1231,12 +1231,19 @@ async function loadPastorData(){
     document.getElementById('reu-animateur').value=currentPastorData.nom;
   }
   renderCaisse();renderPresence();
-  // Demander permission notifications et vérifier commentaires
   demanderPermissionNotif();
   verifierNouveauxCommentaires();
-  // Écouter en temps réel les nouveaux commentaires
-  onSnapshot(userCol('rapports'),()=>{
-    verifierNouveauxCommentaires();
+  // Écouter les rapports en temps réel — si un rapport est commenté, re-vérifier
+  onSnapshot(query(userCol('rapports'),orderBy('timestamp','desc')),async(snap)=>{
+    // Pour chaque rapport commenté, écouter les nouveaux commentaires
+    snap.docs.forEach(d=>{
+      if(d.data().aCommentaire){
+        onSnapshot(
+          collection(db,'users',currentUser.uid,'rapports',d.id,'commentaires'),
+          ()=>{ verifierNouveauxCommentaires(); }
+        );
+      }
+    });
   });
 }
 
@@ -2688,16 +2695,28 @@ let _unreadComments=0;
 async function verifierNouveauxCommentaires(){
   if(currentRole==='admin'||currentRole==='super_admin') return;
   try{
+    // Récupérer la dernière fois que le pasteur a ouvert ses archives
+    const profil=await getDoc(doc(db,'users',currentUser.uid));
+    const derniereVisite=profil.data()?.derniereVisiteArchives||0;
+
     const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
     let nbNouveaux=0;
     let dernierAuteur='';
+
     for(const d of snap.docs){
       const r=d.data();
-      if(r.aCommentaire&&!r.commentaireLu){
-        const cSnap=await getDocs(collection(db,'users',currentUser.uid,'rapports',d.id,'commentaires'));
+      if(r.aCommentaire){
+        const cSnap=await getDocs(query(
+          collection(db,'users',currentUser.uid,'rapports',d.id,'commentaires'),
+          orderBy('timestamp','desc')
+        ));
         if(cSnap.size>0){
-          nbNouveaux++;
-          if(!dernierAuteur) dernierAuteur=cSnap.docs[cSnap.docs.length-1].data().auteur||'Admin';
+          const dernierComment=cSnap.docs[0].data();
+          // Nouveau si le commentaire est plus récent que la dernière visite
+          if((dernierComment.timestamp||0) > derniereVisite){
+            nbNouveaux++;
+            if(!dernierAuteur) dernierAuteur=dernierComment.auteur||'Admin';
+          }
         }
       }
     }
@@ -2736,13 +2755,12 @@ function mettreAJourBadges(nb,auteur){
 async function marquerCommentairesLus(){
   if(currentRole==='admin'||currentRole==='super_admin') return;
   try{
-    const snap=await getDocs(userCol('rapports'));
-    for(const d of snap.docs){
-      if(d.data().aCommentaire&&!d.data().commentaireLu){
-        await updateDoc(userDoc2('rapports',d.id),{commentaireLu:true});
-      }
-    }
+    // Sauvegarder le timestamp de la visite
+    await updateDoc(doc(db,'users',currentUser.uid),{
+      derniereVisiteArchives:Date.now()
+    });
     mettreAJourBadges(0,'');
+    _unreadComments=0;
   }catch(e){}
 }
 
