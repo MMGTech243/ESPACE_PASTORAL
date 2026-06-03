@@ -2392,13 +2392,13 @@ window.envoyerCommentaire=async function(){
     // Sauvegarder dans Firestore sous le rapport du pasteur
     await addDoc(
       collection(db,'users',_commentRapportUid,'rapports',_commentRapportId,'commentaires'),
-      {texte,auteur:curData.nom||'Admin',auteurId:currentUser.uid,
+      {texte,auteur:currentPastorData?.nom||'Admin',auteurId:currentUser.uid,
        date:new Date().toLocaleString('fr-FR'),timestamp:Date.now()}
     );
     // Marquer le rapport comme commenté
     await updateDoc(doc(db,'users',_commentRapportUid,'rapports',_commentRapportId),
       {aCommentaire:true,dernierCommentaire:new Date().toLocaleString('fr-FR'),
-       commentaireAuteur:curData.nom||'Admin'});
+       commentaireAuteur:currentPastorData?.nom||'Admin'});
     fermerComment();
     showToast('💬 Commentaire envoyé au pasteur !','var(--orange)');
     // Rafraîchir la liste
