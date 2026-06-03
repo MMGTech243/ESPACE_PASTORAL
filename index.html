@@ -22,7 +22,9 @@
   --sidebar:260px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+body::before{content:"";position:fixed;inset:0;background:var(--bg);z-index:-1;}
 
 /* ══ RESPONSIVE ══ */
 /* Sur PC : centrer le contenu avec max-width, agrandir les textes */
@@ -34,45 +36,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
 /* PC — centrage simple et élégant */
 @media(min-width:768px){
-  body{font-size:16px;}
-  /* Centrer toute l'app */
+  body{font-size:17px;}
   #app-page{max-width:860px;margin:0 auto;}
   #login-page{max-width:860px;margin:0 auto;min-height:100vh;}
-  /* Topbar full width */
   .topbar{border-radius:0;}
-  /* Nav plus grande */
-  .tabnav-item,.admin-tabnav-item{font-size:14px;padding:13px 18px;}
-  /* Pages padding */
+  .tabnav-item,.admin-tabnav-item{font-size:15px;padding:13px 20px;}
   .page{padding:28px 32px 80px;}
-  /* Textes plus grands */
-  .card-title{font-size:13px;}
-  input,select,textarea{font-size:15px;}
-  .btn{font-size:15px;padding:14px;}
-  .mname,.ai-name,.pastor-name,.rc-pastor{font-size:16px;}
-  .mmeta,.ai-date,.ai-stats,.pastor-email,.rc-date,.pastor-stats,.rc-stats{font-size:13px;}
-  .flabel{font-size:12px;}
-  /* Grilles plus larges */
+  .card-title{font-size:14px;padding:6px 14px;}
+  input,select,textarea{font-size:16px;padding:12px 14px;}
+  .btn{font-size:16px;padding:15px;}
+  .mname,.ai-name,.pastor-name,.rc-pastor{font-size:17px;}
+  .mmeta,.ai-date,.ai-stats,.pastor-email,.rc-date,.pastor-stats,.rc-stats{font-size:14px;}
+  .flabel{font-size:13px;}
   .home-grid{grid-template-columns:repeat(4,1fr);gap:16px;}
   .hcard.wide{grid-column:span 2;}
+  .hcard-name{font-size:15px;}
+  .hcard-desc{font-size:13px;}
   .stat-grid{grid-template-columns:repeat(4,1fr);gap:14px;}
   .row2{grid-template-columns:1fr 1fr;}
   .chart-grid{grid-template-columns:1fr 1fr;}
-  /* Hero plus grand */
-  .hero h1{font-size:22px;}
-  .hero-branch{font-size:14px;}
-  .hero-user{font-size:14px;padding:6px 18px;}
+  .hero h1{font-size:24px;}
+  .hero-branch{font-size:15px;}
+  .hero-user{font-size:15px;padding:7px 20px;}
   .stat-num{font-size:40px;}
-  .stat-lbl{font-size:12px;}
-  /* Login centré */
-  .login-logo h1{font-size:24px;}
+  .stat-lbl{font-size:13px;}
+  .login-logo h1{font-size:26px;}
   .login-card{padding:32px;max-width:440px;margin:0 auto;}
-  .login-title{font-size:22px;}
-  /* Section labels */
-  .section-lbl{font-size:13px;}
-  .btn-lbl{font-size:12px;}
-  /* Modals centrées */
+  .login-title{font-size:24px;}
+  .section-lbl{font-size:14px;}
+  .btn-lbl{font-size:13px;}
+  .notice,.cnote{font-size:14px;}
+  .topbar-title{font-size:17px;}
+  .topbar-sub{font-size:12px;}
+  .ai-num,.item-tag{font-size:12px;}
   .overlay{align-items:center;justify-content:center;padding:20px;}
   .modal{border-radius:var(--r);max-width:500px;max-height:90vh;}
+  .modal-title{font-size:18px;}
 }
 
 @media(min-width:1100px){
@@ -301,10 +300,113 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 </style>
 </head>
 <body>
-<!-- LOADING -->
-<div id="loading">
-  <div class="spinner-big"></div>
-  <div class="loading-text">Chargement IFCM...</div>
+<!-- PAGE BIENVENUE ANIMÉE -->
+<div id="welcome-page">
+  <style>
+    #welcome-page{
+      position:fixed;inset:0;background:var(--bg);z-index:999;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:24px;overflow:hidden;
+    }
+    /* Cercles animés en fond */
+    .wp-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+    .wp-circle{position:absolute;border-radius:50%;opacity:0;animation:circleIn 1.2s ease forwards;}
+    .c1{width:400px;height:400px;background:radial-gradient(circle,rgba(107,63,160,.18),transparent 70%);
+      top:-100px;right:-100px;animation-delay:.2s;}
+    .c2{width:350px;height:350px;background:radial-gradient(circle,rgba(232,101,10,.12),transparent 70%);
+      bottom:-80px;left:-80px;animation-delay:.4s;}
+    .c3{width:250px;height:250px;background:radial-gradient(circle,rgba(26,95,168,.12),transparent 70%);
+      top:40%;left:50%;transform:translate(-50%,-50%);animation-delay:.6s;}
+    @keyframes circleIn{to{opacity:1;}}
+
+    /* Contenu principal */
+    .wp-content{position:relative;z-index:1;text-align:center;max-width:480px;width:100%;}
+
+    /* Croix animée */
+    .wp-cross{font-size:64px;display:block;margin-bottom:8px;
+      animation:crossPop .8s cubic-bezier(.34,1.56,.64,1) both;}
+    @keyframes crossPop{from{opacity:0;transform:scale(.4) rotate(-10deg);}to{opacity:1;transform:scale(1) rotate(0);}}
+
+    /* Chandelier */
+    .wp-candles{display:flex;justify-content:center;gap:6px;margin-bottom:20px;
+      animation:fadeSlideDown .8s .3s ease both;}
+    .wp-candle{font-size:22px;}
+    @keyframes fadeSlideDown{from{opacity:0;transform:translateY(-16px);}to{opacity:1;transform:translateY(0);}}
+
+    /* Titre */
+    .wp-title{font-size:26px;font-weight:800;color:var(--text);line-height:1.2;
+      margin-bottom:8px;letter-spacing:.5px;
+      animation:fadeUp .7s .5s ease both;}
+    .wp-title span{background:linear-gradient(135deg,var(--violet),var(--orange));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    .wp-sub{font-size:17px;color:var(--muted);margin-bottom:6px;
+      animation:fadeUp .7s .65s ease both;}
+    .wp-branch{font-size:14px;color:var(--muted);margin-bottom:32px;
+      animation:fadeUp .7s .75s ease both;}
+
+    /* Séparateur animé */
+    .wp-line{width:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--orange));
+      margin:0 auto 32px;border-radius:2px;animation:lineGrow .8s .9s ease forwards;}
+    @keyframes lineGrow{to{width:120px;}}
+
+    /* Bouton connexion */
+    .wp-btn{display:inline-flex;align-items:center;gap:12px;
+      background:linear-gradient(135deg,var(--violet-d),var(--violet));
+      color:#fff;font-size:18px;font-weight:700;padding:16px 36px;
+      border-radius:50px;border:none;cursor:pointer;font-family:inherit;
+      box-shadow:0 8px 32px rgba(107,63,160,.4);
+      animation:btnPop .7s 1.1s cubic-bezier(.34,1.56,.64,1) both;
+      transition:transform .2s,box-shadow .2s;}
+    .wp-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(107,63,160,.5);}
+    .wp-btn:active{transform:scale(.97);}
+    @keyframes btnPop{from{opacity:0;transform:scale(.7);}to{opacity:1;transform:scale(1);}}
+
+    .wp-btn-icon{font-size:22px;animation:pulse 2s 2s infinite;}
+
+    /* Mention bas */
+    .wp-footer{font-size:13px;color:var(--muted);margin-top:24px;
+      animation:fadeUp .7s 1.4s ease both;}
+
+    /* Chargement initial */
+    .wp-loading{font-size:15px;color:var(--muted);animation:fadeUp .5s ease both;}
+    .wp-spinner{width:36px;height:36px;border:3px solid rgba(107,63,160,.2);
+      border-top-color:var(--violet);border-radius:50%;animation:spin .8s linear infinite;
+      margin:0 auto 14px;}
+  </style>
+
+  <div class="wp-bg">
+    <div class="wp-circle c1"></div>
+    <div class="wp-circle c2"></div>
+    <div class="wp-circle c3"></div>
+  </div>
+
+  <!-- Écran chargement initial -->
+  <div class="wp-content" id="wp-loading-screen">
+    <div class="wp-spinner"></div>
+    <div class="wp-loading">Chargement IFCM...</div>
+  </div>
+
+  <!-- Écran bienvenue -->
+  <div class="wp-content" id="wp-main-screen" style="display:none;">
+    <span class="wp-cross">✝</span>
+    <div class="wp-candles">
+      <span class="wp-candle">🕯</span><span class="wp-candle">🕯</span>
+      <span class="wp-candle">🕯</span><span class="wp-candle">✝</span>
+      <span class="wp-candle">🕯</span><span class="wp-candle">🕯</span>
+      <span class="wp-candle">🕯</span>
+    </div>
+    <div class="wp-title">Impact for<br><span>Christ Ministries</span></div>
+    <div class="wp-sub">Branche de Kinshasa</div>
+    <div class="wp-branch">ESPACE PASTORAL — IFCM</div>
+    <div class="wp-line"></div>
+    <button class="wp-btn" onclick="afficherLogin()">
+      <span class="wp-btn-icon">🔐</span>
+      Se connecter ici
+    </button>
+    <div class="wp-footer">Application réservée au personnel pastoral IFCM</div>
+  </div>
 </div>
 
 <!-- LOGIN -->
@@ -318,13 +420,14 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <div class="login-sub">Espace Pastoral IFCM</div>
     <div class="login-error" id="login-error"></div>
     <label class="flabel">Email</label>
-    <input type="email" id="login-email" placeholder="pasteur@ifcm.org" autocomplete="email">
-    <label class="flabel" style="margin-top:12px;">Mot de passe</label>
-    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
-    <button class="btn b-violet" style="margin-top:20px;" id="login-btn" onclick="doLogin()">🔐 Se connecter</button>
-    <div style="text-align:center;margin-top:12px;">
-      <span style="font-size:11px;color:var(--muted);">Mot de passe oublié ? </span>
-      <span style="font-size:11px;color:var(--violet);cursor:pointer;font-weight:700;" onclick="resetPassword()">Réinitialiser</span>
+    <input type="email" id="login-email" placeholder="pasteur@ifcm.org" autocomplete="email" style="font-size:16px;padding:13px 14px;">
+    <label class="flabel" style="margin-top:14px;">Mot de passe</label>
+    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" style="font-size:16px;padding:13px 14px;">
+    <button class="btn b-violet" style="margin-top:22px;font-size:16px;padding:15px;" id="login-btn" onclick="doLogin()">🔐 Se connecter</button>
+    <button class="btn b-outline" style="margin-top:8px;font-size:14px;" onclick="retourBienvenue()">← Retour</button>
+    <div style="text-align:center;margin-top:14px;">
+      <span style="font-size:13px;color:var(--muted);">Mot de passe oublié ? </span>
+      <span style="font-size:13px;color:var(--violet);cursor:pointer;font-weight:700;" onclick="resetPassword()">Réinitialiser</span>
     </div>
   </div>
 </div>
@@ -755,6 +858,105 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
   </div>
 </div>
 
+<!-- MODAL MODIFIER UTILISATEUR -->
+<div class="overlay" id="modal-edit-user" onclick="if(event.target.id==='modal-edit-user')fermerEditUser()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title">✏️ Modifier l'utilisateur</div>
+      <button class="modal-close" onclick="fermerEditUser()">✕</button>
+    </div>
+    <input type="hidden" id="eu-uid">
+    <label class="flabel">Nom complet</label>
+    <input type="text" id="eu-nom" placeholder="Nom du pasteur/admin">
+    <label class="flabel">Cellule / Groupe pastoral</label>
+    <input type="text" id="eu-cellule" placeholder="Ex : Cellule Est — Zone Gombe">
+    <label class="flabel">Email responsable 1</label>
+    <input type="email" id="eu-email-resp" placeholder="responsable1@ifcm.org">
+    <label class="flabel">Email responsable 2</label>
+    <input type="email" id="eu-email-resp2" placeholder="responsable2@ifcm.org">
+    <label class="flabel">WhatsApp responsable</label>
+    <input type="text" id="eu-wa-resp" placeholder="+243812345678">
+    <label class="flabel">Rôle</label>
+    <select id="eu-role">
+      <option value="pastor">👨‍💼 Pasteur</option>
+      <option value="admin">🔐 Admin</option>
+    </select>
+    <button class="btn b-violet" style="margin-top:14px;" onclick="sauvegarderEditUser()">✅ Enregistrer les modifications</button>
+  </div>
+</div>
+
+<!-- MODAL MODIFIER RAPPORT -->
+<div class="overlay" id="modal-edit-rapport" onclick="if(event.target.id==='modal-edit-rapport')fermerEditRapport()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title">✏️ Modifier le Rapport</div>
+      <button class="modal-close" onclick="fermerEditRapport()">✕</button>
+    </div>
+    <input type="hidden" id="er-id">
+    <label class="flabel">Nom du Pasteur</label>
+    <input type="text" id="er-pastor" placeholder="Nom du pasteur">
+    <label class="flabel">Famille</label>
+    <input type="text" id="er-famille" placeholder="Famille du pasteur">
+    <div class="row2">
+      <div><label class="flabel">Semaine du</label><input type="date" id="er-du"></div>
+      <div><label class="flabel">Au</label><input type="date" id="er-au"></div>
+    </div>
+    <div class="row2" style="margin-top:8px;">
+      <div class="ng"><div class="nl">Visites</div><input class="ni" type="number" id="er-visites" min="0"></div>
+      <div class="ng"><div class="nl">Appels</div><input class="ni" type="number" id="er-appels" min="0"></div>
+    </div>
+    <div class="row2" style="margin-top:8px;">
+      <div class="ng"><div class="nl">Nouveaux</div><input class="ni" type="number" id="er-nouveaux" min="0"></div>
+      <div class="ng"><div class="nl">Absences</div><input class="ni" type="number" id="er-absences" min="0"></div>
+    </div>
+    <label class="flabel" style="margin-top:10px;">Cas Urgents</label>
+    <textarea id="er-cas" rows="3" placeholder="Cas urgents..."></textarea>
+    <label class="flabel">Observations</label>
+    <textarea id="er-obs" rows="3" placeholder="Observations..."></textarea>
+    <button class="btn b-violet" style="margin-top:14px;" onclick="sauvegarderEditRapport()">✅ Enregistrer</button>
+  </div>
+</div>
+
+<!-- MODAL MODIFIER RÉUNION -->
+<div class="overlay" id="modal-edit-reunion" onclick="if(event.target.id==='modal-edit-reunion')fermerEditReunion()">
+  <div class="modal">
+    <div class="modal-h">
+      <div class="modal-title">✏️ Modifier le Compte-rendu</div>
+      <button class="modal-close" onclick="fermerEditReunion()">✕</button>
+    </div>
+    <input type="hidden" id="ereu-id">
+    <label class="flabel">Type</label>
+    <select id="ereu-type">
+      <option value="Réunion de Famille">Réunion de Famille</option>
+      <option value="Réunion de Département">Réunion de Département</option>
+      <option value="Réunion de Prière">Réunion de Prière</option>
+      <option value="Réunion de Discipline">Réunion de Discipline</option>
+      <option value="Autre Réunion">Autre</option>
+    </select>
+    <label class="flabel">Animateur</label>
+    <input type="text" id="ereu-animateur" placeholder="Animateur">
+    <label class="flabel">Groupe</label>
+    <input type="text" id="ereu-groupe" placeholder="Famille / Département">
+    <div class="row2">
+      <div><label class="flabel">Date</label><input type="date" id="ereu-date"></div>
+      <div><label class="flabel">Lieu</label><input type="text" id="ereu-lieu" placeholder="Lieu"></div>
+    </div>
+    <div class="row2" style="margin-top:8px;">
+      <div class="ng"><div class="nl">Présents</div><input class="ni" type="number" id="ereu-presents" min="0"></div>
+      <div class="ng"><div class="nl">Absents</div><input class="ni" type="number" id="ereu-absents" min="0"></div>
+    </div>
+    <label class="flabel" style="margin-top:10px;">Thème</label>
+    <input type="text" id="ereu-theme" placeholder="Thème de la réunion">
+    <label class="flabel">Résumé</label>
+    <textarea id="ereu-resume" rows="3" placeholder="Résumé..."></textarea>
+    <label class="flabel">Décisions</label>
+    <textarea id="ereu-decisions" rows="3" placeholder="Décisions..."></textarea>
+    <label class="flabel">Prière</label>
+    <textarea id="ereu-priere" rows="2" placeholder="Cas de prière..."></textarea>
+    <button class="btn b-violet" style="margin-top:14px;" onclick="sauvegarderEditReunion()">✅ Enregistrer</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- MODAL COMMENTAIRE -->
@@ -806,10 +1008,31 @@ let currentPreviewData = null, currentPreviewType = 'rapport';
 let previewFrom = 'home', curPage = 'home';
 let allRapports = [], allReunions = [];
 
+// ══ PAGE BIENVENUE ══
+window.afficherLogin=function(){
+  document.getElementById('wp-main-screen').style.display='none';
+  document.getElementById('welcome-page').style.display='none';
+  document.getElementById('login-page').style.display='flex';
+  setTimeout(()=>document.getElementById('login-email').focus(),300);
+};
+window.retourBienvenue=function(){
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('welcome-page').style.display='flex';
+  document.getElementById('wp-main-screen').style.display='block';
+  document.getElementById('wp-loading-screen').style.display='none';
+};
+
 // ══ AUTH ══
 onAuthStateChanged(auth, async user => {
-  document.getElementById('loading').style.display = 'none';
+  // Masquer spinner, afficher page bienvenue
+  const wpLoad=document.getElementById('wp-loading-screen');
+  const wpMain=document.getElementById('wp-main-screen');
+  if(wpLoad)wpLoad.style.display='none';
+  if(wpMain)wpMain.style.display='block';
+
   if(user){
+    document.getElementById('welcome-page').style.display='none';
+    document.getElementById('login-page').style.display='none';
     currentUser = user;
     const pd = await getDoc(doc(db,'users',user.uid));
     if(pd.exists()){
@@ -823,12 +1046,14 @@ onAuthStateChanged(auth, async user => {
     showApp();
   } else {
     currentUser = null; currentRole = null;
-    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('login-page').style.display = 'none';
     document.getElementById('app-page').style.display = 'none';
+    // Page bienvenue reste visible
   }
 });
 
 async function showApp(){
+  document.getElementById('welcome-page').style.display='none';
   document.getElementById('login-page').style.display = 'none';
   document.getElementById('app-page').style.display = 'block';
   const nom = currentPastorData.nom || currentUser.email;
@@ -864,7 +1089,15 @@ window.doLogin = async function(){
     showLoginError(m[e.code]||'Erreur de connexion.');
   }
 };
-window.doLogout=async function(){if(!confirm('Se déconnecter ?'))return;await signOut(auth);};
+window.doLogout=async function(){
+  if(!confirm('Se déconnecter ?'))return;
+  await signOut(auth);
+  document.getElementById('app-page').style.display='none';
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('welcome-page').style.display='flex';
+  document.getElementById('wp-loading-screen').style.display='none';
+  document.getElementById('wp-main-screen').style.display='block';
+};
 window.resetPassword=async function(){
   const email=document.getElementById('login-email').value.trim();
   if(!email){showLoginError('Saisissez votre email.');return;}
@@ -1309,6 +1542,7 @@ window.renderArch=async function(tab){
         ${commentHtml}
         <div class="ai-actions" style="margin-top:8px;">
           <button class="ab bv" onclick="previewArchRapport('${x.id}')">🖨️ PDF</button>
+          <button class="ab bv" onclick="ouvrirEditRapport('${x.id}')">✏️ Modifier</button>
           <button class="ab br" onclick="supprimerArchDoc('rapports','${x.id}','rapports')">🗑️</button>
         </div>
       </div>`;
@@ -1326,6 +1560,7 @@ window.renderArch=async function(tab){
         <div class="ai-stats">👥 ${x.presents} présents · ${x.absents} absents</div>
         <div class="ai-actions">
           <button class="ab bv" onclick="previewArchReunion('${x.id}')">🖨️ PDF</button>
+          <button class="ab bv" onclick="ouvrirEditReunion('${x.id}')">✏️ Modifier</button>
           <button class="ab br" onclick="supprimerArchDoc('reunions','${x.id}','reunions')">🗑️</button>
         </div>
       </div>`;}).join('');
@@ -1562,12 +1797,16 @@ async function loadAdminPasteurs(){
           <div class="pastor-email">${esc(p.email)||'—'}</div>
           <div class="pastor-stats">${p.cellule?'Cellule : '+esc(p.cellule)+' · ':''} Créé le ${p.dateCreation||'—'}</div>
           ${p.emailResponsable?`<div class="pastor-stats">📧 ${esc(p.emailResponsable)}${p.emailResponsable2?' / '+esc(p.emailResponsable2):''}</div>`:''}
+          ${p.whatsappResponsable?`<div class="pastor-stats">💬 ${esc(p.whatsappResponsable)}</div>`:''}
         </div>
         <span class="pastor-badge ${p.actif?'pb-actif':'pb-inactif'}">${p.actif?'Actif':'Inactif'}</span>
       </div>
       <div class="pastor-actions">
-        ${p.role==='pastor'?`<button class="ab bo" onclick="togglePasteurActif('${p.id}',${!p.actif})">${p.actif?'🔒 Désactiver':'🔓 Activer'}</button>
+        <button class="ab bv" onclick="ouvrirEditUtilisateur('${p.id}')">✏️ Modifier</button>
+        ${p.role==='pastor'?`
+        <button class="ab bo" onclick="togglePasteurActif('${p.id}',${!p.actif})">${p.actif?'🔒 Désactiver':'🔓 Activer'}</button>
         <button class="ab bv" onclick="voirRapportsPasteur('${p.id}','${esc(p.nom||'')}')">📋 Rapports</button>`:''}
+        ${p.id!==currentUser.uid?`<button class="ab br" onclick="supprimerUtilisateur('${p.id}','${esc(p.nom||'')}')">🗑️ Supprimer</button>`:''}
       </div>
     </div>`).join('');
 }
@@ -1575,6 +1814,143 @@ async function loadAdminPasteurs(){
 window.togglePasteurActif=async function(uid,actif){
   await updateDoc(doc(db,'users',uid),{actif});loadAdminPasteurs();
   showToast(actif?'✅ Activé':'🔒 Désactivé',actif?'#25a244':'#c0392b');
+};
+
+// ══ MODIFIER UTILISATEUR ══
+window.ouvrirEditUtilisateur=async function(uid){
+  const d=await getDoc(doc(db,'users',uid));
+  if(!d.exists())return;
+  const p=d.data();
+  document.getElementById('eu-uid').value=uid;
+  document.getElementById('eu-nom').value=p.nom||'';
+  document.getElementById('eu-cellule').value=p.cellule||'';
+  document.getElementById('eu-email-resp').value=p.emailResponsable||'';
+  document.getElementById('eu-email-resp2').value=p.emailResponsable2||'';
+  document.getElementById('eu-wa-resp').value=p.whatsappResponsable||'';
+  document.getElementById('eu-role').value=p.role||'pastor';
+  document.getElementById('modal-edit-user').classList.add('open');
+};
+window.fermerEditUser=function(){document.getElementById('modal-edit-user').classList.remove('open');};
+window.sauvegarderEditUser=async function(){
+  const uid=document.getElementById('eu-uid').value;
+  const nom=document.getElementById('eu-nom').value.trim();
+  if(!nom){showToast('⚠️ Saisir le nom','#c0392b');return;}
+  try{
+    await updateDoc(doc(db,'users',uid),{
+      nom,
+      cellule:document.getElementById('eu-cellule').value.trim(),
+      emailResponsable:document.getElementById('eu-email-resp').value.trim(),
+      emailResponsable2:document.getElementById('eu-email-resp2').value.trim(),
+      whatsappResponsable:document.getElementById('eu-wa-resp').value.trim(),
+      role:document.getElementById('eu-role').value,
+      modifieLe:new Date().toLocaleString('fr-FR')
+    });
+    fermerEditUser();
+    loadAdminPasteurs();
+    showToast('✅ Utilisateur modifié !','#25a244');
+  }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
+};
+
+// ══ SUPPRIMER UTILISATEUR ══
+window.supprimerUtilisateur=async function(uid,nom){
+  if(!confirm(`Supprimer définitivement le compte de ${nom} ?\n\n⚠️ Cette action est irréversible.\nSes données (rapports, membres, etc.) seront conservées mais il ne pourra plus se connecter.`))return;
+  try{
+    // Désactiver le compte (on ne peut pas supprimer Auth depuis le client)
+    await updateDoc(doc(db,'users',uid),{
+      actif:false,
+      supprime:true,
+      supprimeLe:new Date().toLocaleString('fr-FR'),
+      supprimePar:currentUser.uid
+    });
+    loadAdminPasteurs();
+    showToast('🗑️ Compte désactivé et marqué supprimé.','#c0392b');
+  }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
+};
+
+// ══ MODIFIER RAPPORT (PASTEUR) ══
+window.ouvrirEditRapport=async function(id){
+  const d=await getDoc(userDoc2('rapports',id));
+  if(!d.exists())return;
+  const r=d.data();
+  document.getElementById('er-id').value=id;
+  document.getElementById('er-pastor').value=r.pastor||'';
+  document.getElementById('er-famille').value=r.famille||'';
+  document.getElementById('er-du').value=r.du||'';
+  document.getElementById('er-au').value=r.au||'';
+  document.getElementById('er-visites').value=r.visites||0;
+  document.getElementById('er-appels').value=r.appels||0;
+  document.getElementById('er-nouveaux').value=r.nouveaux||0;
+  document.getElementById('er-absences').value=r.absences||0;
+  document.getElementById('er-cas').value=r.cas||'';
+  document.getElementById('er-obs').value=r.obs||'';
+  document.getElementById('modal-edit-rapport').classList.add('open');
+};
+window.fermerEditRapport=function(){document.getElementById('modal-edit-rapport').classList.remove('open');};
+window.sauvegarderEditRapport=async function(){
+  const id=document.getElementById('er-id').value;
+  if(!id)return;
+  try{
+    await updateDoc(userDoc2('rapports',id),{
+      pastor:document.getElementById('er-pastor').value.trim(),
+      famille:document.getElementById('er-famille').value.trim(),
+      du:document.getElementById('er-du').value,
+      au:document.getElementById('er-au').value,
+      visites:parseInt(document.getElementById('er-visites').value)||0,
+      appels:parseInt(document.getElementById('er-appels').value)||0,
+      nouveaux:parseInt(document.getElementById('er-nouveaux').value)||0,
+      absences:parseInt(document.getElementById('er-absences').value)||0,
+      cas:document.getElementById('er-cas').value.trim(),
+      obs:document.getElementById('er-obs').value.trim(),
+      modifieLe:new Date().toLocaleString('fr-FR')
+    });
+    fermerEditRapport();
+    renderArch('rapports');
+    showToast('✅ Rapport modifié !','#25a244');
+  }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
+};
+
+// ══ MODIFIER RÉUNION (PASTEUR) ══
+window.ouvrirEditReunion=async function(id){
+  const d=await getDoc(userDoc2('reunions',id));
+  if(!d.exists())return;
+  const r=d.data();
+  document.getElementById('ereu-id').value=id;
+  document.getElementById('ereu-type').value=r.type||'Réunion de Famille';
+  document.getElementById('ereu-animateur').value=r.animateur||'';
+  document.getElementById('ereu-groupe').value=r.groupe||'';
+  document.getElementById('ereu-date').value=r.date||'';
+  document.getElementById('ereu-lieu').value=r.lieu||'';
+  document.getElementById('ereu-presents').value=r.presents||0;
+  document.getElementById('ereu-absents').value=r.absents||0;
+  document.getElementById('ereu-theme').value=r.theme||'';
+  document.getElementById('ereu-resume').value=r.resume||'';
+  document.getElementById('ereu-decisions').value=r.decisions||'';
+  document.getElementById('ereu-priere').value=r.priere||'';
+  document.getElementById('modal-edit-reunion').classList.add('open');
+};
+window.fermerEditReunion=function(){document.getElementById('modal-edit-reunion').classList.remove('open');};
+window.sauvegarderEditReunion=async function(){
+  const id=document.getElementById('ereu-id').value;
+  if(!id)return;
+  try{
+    await updateDoc(userDoc2('reunions',id),{
+      type:document.getElementById('ereu-type').value,
+      animateur:document.getElementById('ereu-animateur').value.trim(),
+      groupe:document.getElementById('ereu-groupe').value.trim(),
+      date:document.getElementById('ereu-date').value,
+      lieu:document.getElementById('ereu-lieu').value.trim(),
+      presents:parseInt(document.getElementById('ereu-presents').value)||0,
+      absents:parseInt(document.getElementById('ereu-absents').value)||0,
+      theme:document.getElementById('ereu-theme').value.trim(),
+      resume:document.getElementById('ereu-resume').value.trim(),
+      decisions:document.getElementById('ereu-decisions').value.trim(),
+      priere:document.getElementById('ereu-priere').value.trim(),
+      modifieLe:new Date().toLocaleString('fr-FR')
+    });
+    fermerEditReunion();
+    renderArch('reunions');
+    showToast('✅ Réunion modifiée !','#25a244');
+  }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
 };
 
 window.voirRapportsPasteur=async function(uid,nom){
