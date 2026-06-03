@@ -710,10 +710,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       <label class="flabel">WhatsApp responsable</label><input type="text" id="np-wa-resp" placeholder="+243812345678">
       <button class="btn b-violet" onclick="creerPasteur()">👨‍💼 Créer le compte Pasteur</button>
     </div>
-    <!-- CRÉER ADMIN -->
-    <div class="card">
+    <!-- CRÉER ADMIN — visible seulement pour super_admin -->
+    <div class="card" id="section-creer-admin" style="display:none;">
       <span class="card-title cr">🔐 Ajouter un Administrateur</span>
-      <div class="cnote">Les administrateurs ont accès à toutes les données et peuvent générer les PDFs.</div>
+      <div class="cnote">⚠️ Réservé au Super Administrateur. Les admins ont accès à toutes les données.</div>
       <label class="flabel">Nom de l'administrateur</label><input type="text" id="na-nom" placeholder="Ex : Évêque Samuel">
       <label class="flabel">Email</label><input type="email" id="na-email" placeholder="admin@ifcm.org">
       <label class="flabel">Mot de passe</label><input type="text" id="na-password" value="IFCM_Admin2024">
@@ -1040,8 +1040,9 @@ onAuthStateChanged(auth, async user => {
       currentPastorData = pd.data();
       currentRole = currentPastorData.role || 'pastor';
     } else {
-      currentRole = 'admin';
-      currentPastorData = {nom:'Administrateur',role:'admin',email:user.email};
+      // Premier compte = Super Admin
+      currentRole = 'super_admin';
+      currentPastorData = {nom:'Super Administrateur',role:'super_admin',email:user.email};
       await setDoc(doc(db,'users',user.uid), currentPastorData);
     }
     showApp();
@@ -1058,13 +1059,17 @@ async function showApp(){
   document.getElementById('login-page').style.display = 'none';
   document.getElementById('app-page').style.display = 'block';
   const nom = currentPastorData.nom || currentUser.email;
-  document.getElementById('tb-user').textContent = nom+(currentRole==='admin'?' · Admin':'');
+  const roleLabel = currentRole==='super_admin'?'👑 Super Admin':currentRole==='admin'?' · Admin':'';
+  document.getElementById('tb-user').textContent = nom + roleLabel;
   document.getElementById('hero-user').textContent = '👋 '+nom;
   document.getElementById('admin-date').textContent =
     new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  if(currentRole==='admin'){
+  if(currentRole==='admin'||currentRole==='super_admin'){
     document.getElementById('admin-nav').style.display='flex';
     document.getElementById('pastor-nav').style.display='none';
+    // Afficher la section créer admin seulement pour le super_admin
+    const secAdmin=document.getElementById('section-creer-admin');
+    if(secAdmin) secAdmin.style.display=currentRole==='super_admin'?'block':'none';
     showAdminPage('dashboard'); loadAdminData();
   } else {
     document.getElementById('pastor-nav').style.display='flex';
@@ -1163,7 +1168,7 @@ window.showAdminPage=function(name){
   if(name==='dashboard')loadAdminCharts();
 };
 
-window.goHome=function(){if(currentRole==='admin')showAdminPage('dashboard');else showPage('home');};
+window.goHome=function(){if(currentRole==='admin'||currentRole==='super_admin')showAdminPage('dashboard');else showPage('home');};
 
 // ══ UTILS ══
 window.showToast=function(msg,col){
@@ -1793,7 +1798,7 @@ async function loadAdminPasteurs(){
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
         <div>
           <div class="pastor-name">${esc(p.nom)||'—'}
-            <span class="pastor-badge" style="background:${p.role==='admin'?'rgba(232,101,10,.2)':'rgba(107,63,160,.2)'};color:${p.role==='admin'?'var(--orange)':'var(--violet)'};">${p.role==='admin'?'🔐 Admin':'👨‍💼 Pasteur'}</span>
+            <span class="pastor-badge" style="background:${p.role==='super_admin'?'rgba(201,168,76,.2)':p.role==='admin'?'rgba(232,101,10,.2)':'rgba(107,63,160,.2)'};color:${p.role==='super_admin'?'var(--gold)':p.role==='admin'?'var(--orange)':'var(--violet)'};">${p.role==='super_admin'?'👑 Super Admin':p.role==='admin'?'🔐 Admin':'👨‍💼 Pasteur'}</span>
           </div>
           <div class="pastor-email">${esc(p.email)||'—'}</div>
           <div class="pastor-stats">${p.cellule?'Cellule : '+esc(p.cellule)+' · ':''} Créé le ${p.dateCreation||'—'}</div>
@@ -2095,7 +2100,7 @@ window.closePreview=function(){
   document.getElementById('preview-wrap').classList.remove('active');
   document.querySelector('.topbar').style.display='';
   document.querySelectorAll('.page').forEach(p=>{p.style.display='';p.classList.remove('active');});
-  if(currentRole==='admin'){
+  if(currentRole==='admin'||currentRole==='super_admin'){
     document.getElementById('admin-nav').style.display='flex';
     showAdminPage(previewFrom.replace('-admin','')||'dashboard');
   }else{
@@ -2437,7 +2442,7 @@ function renderCalendrier(){
   // Section ajout (admin seulement)
   const addSection=document.getElementById('cal-add-section');
   if(addSection){
-    if(currentRole==='admin'){
+    if(currentRole==='admin'||currentRole==='super_admin'){
       addSection.innerHTML=`<div class="card">
         <span class="card-title co">📅 Planifier un Événement</span>
         <div class="cnote">Cet événement sera visible par tous les pasteurs.</div>
