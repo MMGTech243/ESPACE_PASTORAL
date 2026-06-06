@@ -2508,7 +2508,7 @@ function initCalendrier(){
   // Écoute temps réel sur la collection partagée
   onSnapshot(query(collection(db,'evenements'),orderBy('date','asc')),snap=>{
     _allEvenements=snap.docs.map(d=>({id:d.id,...d.data()}));
-    if(curPage==='calendrier'||curPage==='calendrier-admin') renderCalendrier();
+    if(curPage==='calendrier') renderCalendrier();
   });
 }
 
