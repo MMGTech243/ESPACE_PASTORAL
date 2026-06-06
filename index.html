@@ -790,11 +790,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
   </div>
   <!-- ══ PAGE CALENDRIER PARTAGÉ ══ -->
   <div class="page" id="page-calendrier">
-    <!-- Ajouter événement (admin seulement) -->
     <div id="cal-add-section"></div>
     <div class="card">
       <span class="card-title cv">📅 Calendrier des Événements</span>
-      <div class="stabs">
+      <div class="stabs" id="cal-stabs">
         <div class="stab active" onclick="switchCal('avenir')">📅 À venir</div>
         <div class="stab" onclick="switchCal('passe')">📋 Passés</div>
         <div class="stab" onclick="switchCal('tous')">🗂️ Tous</div>
@@ -2503,18 +2502,35 @@ window.envoyerCommentaire=async function(){
 // ══ CALENDRIER PARTAGÉ ══
 let calTab='avenir';
 let _allEvenements=[];
+let _calInitDone=false;
 
 function initCalendrier(){
-  // Écoute temps réel sur la collection partagée
-  onSnapshot(query(collection(db,'evenements'),orderBy('date','asc')),snap=>{
-    _allEvenements=snap.docs.map(d=>({id:d.id,...d.data()}));
-    if(curPage==='calendrier') renderCalendrier();
-  });
+  if(_calInitDone) return;
+  _calInitDone=true;
+  try{
+    // Écoute temps réel — se déclenche immédiatement et à chaque changement
+    onSnapshot(
+      query(collection(db,'evenements'),orderBy('date','asc')),
+      (snap)=>{
+        _allEvenements=snap.docs.map(d=>({id:d.id,...d.data()}));
+        console.log('Calendrier: '+_allEvenements.length+' événement(s) chargé(s)');
+        // Toujours rafraîchir si la page calendrier est active
+        const calPage=document.getElementById('page-calendrier');
+        if(calPage&&calPage.classList.contains('active')){
+          renderCalendrier();
+        }
+      },
+      (err)=>{
+        console.error('Calendrier onSnapshot erreur:',err);
+      }
+    );
+  }catch(e){console.error('initCalendrier erreur:',e);}
 }
 
 window.switchCal=function(tab){
   calTab=tab;
-  document.querySelectorAll('#page-calendrier .stab,#page-calendrier-admin .stab').forEach((t,i)=>{
+  // Cibler uniquement les stabs du calendrier
+  document.querySelectorAll('#cal-stabs .stab').forEach((t,i)=>{
     t.classList.toggle('active',['avenir','passe','tous'][i]===tab);
   });
   renderCalendrier();
@@ -2522,68 +2538,74 @@ window.switchCal=function(tab){
 
 function renderCalendrier(){
   const today=new Date().toISOString().split('T')[0];
-  let list=_allEvenements;
-  if(calTab==='avenir') list=_allEvenements.filter(e=>e.date>=today);
-  else if(calTab==='passe') list=_allEvenements.filter(e=>e.date<today);
+  let list=[..._allEvenements];
+  if(calTab==='avenir') list=list.filter(e=>(e.date||'')>=today);
+  else if(calTab==='passe') list=list.filter(e=>(e.date||'')<today);
 
-  // Section ajout (admin seulement)
+  // Section ajout (admin/super_admin seulement)
   const addSection=document.getElementById('cal-add-section');
   if(addSection){
     if(currentRole==='admin'||currentRole==='super_admin'){
-      addSection.innerHTML=`<div class="card">
-        <span class="card-title co">📅 Planifier un Événement</span>
-        <div class="cnote">Cet événement sera visible par tous les pasteurs.</div>
-        <label class="flabel">Type d'événement</label>
-        <select id="ev-type">
-          <option value="Culte dominical">Culte dominical</option>
-          <option value="Culte de prière">Culte de prière</option>
-          <option value="Culte spécial">Culte spécial</option>
-          <option value="Réunion pastorale">Réunion pastorale</option>
-          <option value="Formation">Formation / Séminaire</option>
-          <option value="Évangélisation">Évangélisation</option>
-          <option value="Retraite spirituelle">Retraite spirituelle</option>
-          <option value="Autre événement">Autre</option>
-        </select>
-        <label class="flabel">Titre / Description</label>
-        <input type="text" id="ev-titre" placeholder="Ex : Culte de réveil annuel...">
-        <div class="row2" style="margin-top:8px;">
-          <div><label class="flabel">Date</label><input type="date" id="ev-date"></div>
-          <div><label class="flabel">Heure</label><input type="time" id="ev-heure" value="09:00"></div>
-        </div>
-        <label class="flabel">Lieu</label>
-        <input type="text" id="ev-lieu" placeholder="Ex : Salle principale IFCM">
-        <label class="flabel">Responsable</label>
-        <input type="text" id="ev-responsable" placeholder="Ex : Pasteur Jean">
-        <label class="flabel">Notes</label>
-        <textarea id="ev-notes" rows="2" placeholder="Informations complémentaires..."></textarea>
-        <button class="btn b-violet" onclick="ajouterEvenement()">📅 Publier l'Événement</button>
-      </div>`;
+      if(!document.getElementById('ev-titre')){
+        addSection.innerHTML=`<div class="card">
+          <span class="card-title co">📅 Planifier un Événement</span>
+          <div class="cnote">Cet événement sera visible par tous les pasteurs.</div>
+          <label class="flabel">Type d'événement</label>
+          <select id="ev-type">
+            <option value="Culte dominical">Culte dominical</option>
+            <option value="Culte de prière">Culte de prière</option>
+            <option value="Culte spécial">Culte spécial</option>
+            <option value="Réunion pastorale">Réunion pastorale</option>
+            <option value="Formation">Formation / Séminaire</option>
+            <option value="Évangélisation">Évangélisation</option>
+            <option value="Retraite spirituelle">Retraite spirituelle</option>
+            <option value="Autre événement">Autre</option>
+          </select>
+          <label class="flabel">Titre / Description</label>
+          <input type="text" id="ev-titre" placeholder="Ex : Culte de réveil annuel...">
+          <div class="row2" style="margin-top:8px;">
+            <div><label class="flabel">Date</label><input type="date" id="ev-date"></div>
+            <div><label class="flabel">Heure</label><input type="time" id="ev-heure" value="09:00"></div>
+          </div>
+          <label class="flabel">Lieu</label>
+          <input type="text" id="ev-lieu" placeholder="Ex : Salle principale IFCM">
+          <label class="flabel">Responsable</label>
+          <input type="text" id="ev-responsable" placeholder="Ex : Pasteur Jean">
+          <label class="flabel">Notes</label>
+          <textarea id="ev-notes" rows="2" placeholder="Informations complémentaires..."></textarea>
+          <button class="btn b-violet" onclick="ajouterEvenement()">📅 Publier l'Événement</button>
+        </div>`;
+      }
     } else {
       addSection.innerHTML='';
     }
   }
 
   const el=document.getElementById('cal-list');
+  if(!el) return;
   if(!list.length){
-    el.innerHTML=`<div class="empty">📭 Aucun événement ${calTab==='avenir'?'à venir':calTab==='passe'?'passé':''}.</div>`;
+    el.innerHTML=`<div class="empty">📭 Aucun événement ${calTab==='avenir'?'à venir':calTab==='passe'?'passé':'enregistré'}.</div>`;
     return;
   }
   const typeColors={'Culte dominical':'var(--violet)','Culte de prière':'var(--blue)',
-    'Culte spécial':'var(--orange)','Réunion pastorale':'var(--gold)','Formation':'var(--green)'};
+    'Culte spécial':'var(--orange)','Réunion pastorale':'var(--gold)',
+    'Formation':'var(--green)','Évangélisation':'var(--green)'};
   el.innerHTML=list.map(e=>{
     const color=typeColors[e.type]||'var(--violet)';
-    const isPast=e.date<new Date().toISOString().split('T')[0];
+    const isPast=(e.date||'')<today;
     return`<div class="ai" style="border-left-color:${color};${isPast?'opacity:.7':''}">
       <div class="ai-num" style="color:${color}">📅 ${esc(e.type||'ÉVÉNEMENT')}</div>
       <div class="ai-name">${esc(e.titre)||'—'}</div>
-      <div class="ai-date">${fmtDate(e.date)} à ${e.heure||'—'} · ${esc(e.lieu)||'—'}</div>
-      ${e.responsable?`<div class="ai-stats">👤 ${esc(e.responsable)}</div>`:''}
-      ${e.notes?`<div class="ai-stats" style="margin-top:3px;">${esc(e.notes)}</div>`:''}
-      <div class="ai-date" style="margin-top:3px;">Publié par ${esc(e.publiePar||'Admin')}</div>
-      ${currentRole==='admin'?`<div class="ai-actions"><button class="ab br" onclick="supprimerEvenement('${e.id}')">🗑️ Supprimer</button></div>`:''}
+      <div class="ai-date">${fmtDate(e.date)}${e.heure?' à '+e.heure:''} · ${esc(e.lieu||'—')}</div>
+      ${e.responsable?`<div class="ai-stats">👤 Responsable : ${esc(e.responsable)}</div>`:''}
+      ${e.notes?`<div class="ai-stats">${esc(e.notes)}</div>`:''}
+      <div class="ai-date" style="margin-top:3px;font-size:10px;">Publié par ${esc(e.publiePar||'—')}</div>
+      ${(currentRole==='admin'||currentRole==='super_admin')?
+        `<div class="ai-actions"><button class="ab br" onclick="supprimerEvenement('${e.id}')">🗑️ Supprimer</button></div>`:''}
     </div>`;
   }).join('');
 }
+
 
 window.ajouterEvenement=async function(){
   const titre=document.getElementById('ev-titre')?.value.trim();
@@ -2592,19 +2614,25 @@ window.ajouterEvenement=async function(){
   if(!date){showToast('⚠️ Saisir une date','#c0392b');return;}
   try{
     await addDoc(collection(db,'evenements'),{
-      type:document.getElementById('ev-type').value,
-      titre,date,heure:document.getElementById('ev-heure').value,
-      lieu:document.getElementById('ev-lieu').value.trim(),
-      responsable:document.getElementById('ev-responsable').value.trim(),
-      notes:document.getElementById('ev-notes').value.trim(),
-      publiePar:currentPastorData?.nom||currentUser.email,
+      type:document.getElementById('ev-type')?.value||'Culte dominical',
+      titre,
+      date,
+      heure:document.getElementById('ev-heure')?.value||'',
+      lieu:document.getElementById('ev-lieu')?.value.trim()||'',
+      responsable:document.getElementById('ev-responsable')?.value.trim()||'',
+      notes:document.getElementById('ev-notes')?.value.trim()||'',
+      publiePar:currentPastorData?.nom||currentUser?.email||'Admin',
       timestamp:Date.now()
     });
+    // Vider les champs
     ['ev-titre','ev-lieu','ev-responsable','ev-notes'].forEach(id=>{
       const el=document.getElementById(id);if(el)el.value='';
     });
-    showToast('📅 Événement publié !','var(--violet)');
-  }catch(e){showToast('❌ '+e.message,'#c0392b');}
+    showToast('📅 Événement publié avec succès !','#25a244');
+  }catch(e){
+    console.error('Erreur publication événement:',e);
+    showToast('❌ Erreur : '+e.message,'#c0392b');
+  }
 };
 
 window.supprimerEvenement=async function(id){
