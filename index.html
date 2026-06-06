@@ -670,12 +670,17 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       <span class="card-title cg">🤝 Nouvelle Opération</span>
       <div class="row2">
         <div><label class="flabel">Type</label>
-          <select id="f-type"><option value="entree">Contribution</option><option value="depense">Dépense</option></select></div>
+          <select id="f-type" onchange="updateCaisseLabel()">
+            <option value="entree">Contribution</option>
+            <option value="depense">Dépense</option>
+          </select></div>
         <div><label class="flabel">Montant (<span id="f-devise-lbl">CDF</span>)</label>
           <input type="number" id="f-montant" placeholder="0" min="0"></div>
       </div>
-      <label class="flabel">Membre / Bénéficiaire</label><input type="text" id="f-membre" placeholder="Nom...">
-      <label class="flabel">Description</label><input type="text" id="f-desc" placeholder="Description...">
+      <label class="flabel" id="f-membre-label">Membre / Contributeur</label>
+      <input type="text" id="f-membre" placeholder="Nom du membre contributeur...">
+      <label class="flabel">Description</label>
+      <input type="text" id="f-desc" placeholder="Description...">
       <label class="flabel">Date</label><input type="date" id="f-date">
       <button class="btn b-gold" onclick="ajouterTransaction()">+ Enregistrer</button>
     </div>
@@ -684,7 +689,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 
   <!-- ARCHIVES -->
   <div class="page" id="page-archives">
-    <div class="stabs">
+    <div class="stabs" id="arch-stabs">
       <div class="stab active" onclick="switchArch('rapports')">📋 Rapports</div>
       <div class="stab" onclick="switchArch('reunions')">📣 Réunions</div>
       <div class="stab" onclick="switchArch('presences')">✅ Présences</div>
@@ -1176,11 +1181,16 @@ window.showAdminPage=function(name){
   const p=document.getElementById('page-'+pageId);if(p)p.classList.add('active');
   document.querySelectorAll('.admin-tabnav-item').forEach(t=>{
     t.classList.toggle('active',
-      (name==='dashboard'&&t.textContent.includes('Tableau'))||(name==='pasteurs'&&t.textContent.includes('Pasteur'))||
-      (name==='rapports'&&t.textContent.includes('Rapport'))||(name==='reunions'&&t.textContent.includes('union'))||
-      (name==='membres'&&t.textContent.includes('embre'))||(name==='finances'&&t.textContent.includes('Finance')));
+      (name==='dashboard'&&t.textContent.includes('Tableau'))||
+      (name==='pasteurs'&&t.textContent.includes('Pasteur'))||
+      (name==='rapports'&&t.textContent.includes('Rapport'))||
+      (name==='reunions'&&t.textContent.includes('union'))||
+      (name==='membres'&&t.textContent.includes('embre'))||
+      (name==='finances'&&t.textContent.includes('Finance'))||
+      (name==='calendrier'&&t.textContent.includes('Calendrier'))||
+      (name==='export'&&t.textContent.includes('Export')));
   });
-  const titleMap={...titles,'finances':'Finances des Familles'};
+  const titleMap={...titles,'finances':'Finances des Familles','calendrier':'Calendrier','export':'Export Excel'};
   document.getElementById('tb-title').textContent=titleMap[pageId]||titleMap[name]||'Admin';
   curPage=pageId||name;window.scrollTo(0,0);
   if(name==='rapports')loadAdminRapports();
@@ -1188,7 +1198,6 @@ window.showAdminPage=function(name){
   if(name==='membres')loadAdminMembres();
   if(name==='pasteurs'){
     loadAdminPasteurs();
-    // Afficher section créer admin seulement pour super_admin
     const secAdmin=document.getElementById('section-creer-admin');
     if(secAdmin) secAdmin.style.display=currentRole==='super_admin'?'block':'none';
   }
@@ -1491,6 +1500,18 @@ window.supprimerMembre=async function(id){
 };
 
 // ══ CAISSE ══
+window.updateCaisseLabel=function(){
+  const type=document.getElementById('f-type').value;
+  const lbl=document.getElementById('f-membre-label');
+  const input=document.getElementById('f-membre');
+  if(type==='entree'){
+    lbl.textContent='Membre / Contributeur';
+    input.placeholder='Nom du membre contributeur...';
+  } else {
+    lbl.textContent='Bénéficiaire / Destinataire';
+    input.placeholder='Nom du bénéficiaire...';
+  }
+};
 window.setDevise=function(d){
   devise=d;
   document.getElementById('fbtn-cdf').classList.toggle('active',d==='CDF');
@@ -1546,8 +1567,13 @@ window.supprimerTransaction=async function(id){
 // ══ ARCHIVES ══
 window.switchArch=function(tab){
   const tabs=['rapports','reunions','presences','caisse'];
-  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
-  tabs.forEach(t=>document.getElementById('arch-'+t).style.display=t===tab?'block':'none');
+  // Cibler uniquement les stabs des archives
+  const archStabs=document.querySelectorAll('#arch-stabs .stab');
+  archStabs.forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
+  tabs.forEach(t=>{
+    const el=document.getElementById('arch-'+t);
+    if(el) el.style.display=t===tab?'block':'none';
+  });
   renderArch(tab);
 };
 window.renderArch=async function(tab){
@@ -2589,10 +2615,8 @@ window.supprimerEvenement=async function(id){
 
 // ══ EXPORT EXCEL (SheetJS — vrai .xlsx) ══
 window.exporterExcel=async function(){
-  if(typeof XLSX==='undefined'){
-    showToast('⚠️ Librairie Excel en cours de chargement, réessayez','#c0392b');return;
-  }
-  showToast('⏳ Préparation du fichier Excel...','var(--blue)');
+  if(typeof XLSX==='undefined'){showToast('⚠️ Chargement en cours, réessayez','#c0392b');return;}
+  showToast('⏳ Génération du fichier Excel...','var(--blue)');
   try{
     const inclure={
       rapports:document.getElementById('ex-rapports')?.checked,
@@ -2603,184 +2627,123 @@ window.exporterExcel=async function(){
     };
     const wb=XLSX.utils.book_new();
     const nom=(currentPastorData?.nom||'IFCM').replace(/\s+/g,'_');
+    const entete=[[`IMPACT FOR CHRIST MINISTRIES — Branche de Kinshasa`],
+      [`Pasteur/Famille : ${currentPastorData?.nom||'—'} — ${currentPastorData?.cellule||'—'}`],
+      [`Export du : ${new Date().toLocaleDateString('fr-FR')}`],[]];
 
     if(inclure.rapports){
       const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
-      const data=[['Date saisie','Pasteur','Famille','Semaine du','Au','Visites','Appels','Nouveaux','Absences','Cas Urgents','Observations']];
+      const rows=[...entete,
+        ['RAPPORT HEBDOMADAIRE — HISTORIQUE COMPLET'],
+        ['Date saisie','Pasteur','Famille','Semaine Du','Au','Visites','Appels','Nouveaux','Absences','Cas Urgents','Observations']
+      ];
       snap.docs.forEach(d=>{const r=d.data();
-        data.push([r.date_envoi||'',r.pastor||'',r.famille||'',
-          fmtDate(r.du),fmtDate(r.au),
-          r.visites||0,r.appels||0,r.nouveaux||0,r.absences||0,
-          r.cas||'',r.obs||'']);
+        rows.push([r.date_envoi||'',r.pastor||'',r.famille||'',fmtDate(r.du),fmtDate(r.au),
+          r.visites||0,r.appels||0,r.nouveaux||0,r.absences||0,r.cas||'',r.obs||'']);
       });
-      const ws=XLSX.utils.aoa_to_sheet(data);
-      // Largeur des colonnes
-      ws['!cols']=[{wch:18},{wch:22},{wch:20},{wch:16},{wch:16},{wch:8},{wch:8},{wch:10},{wch:10},{wch:40},{wch:40}];
+      rows.push([],[`Total rapports : ${snap.size}`]);
+      const ws=XLSX.utils.aoa_to_sheet(rows);
+      ws['!cols']=[{wch:18},{wch:22},{wch:20},{wch:16},{wch:16},{wch:8},{wch:8},{wch:10},{wch:10},{wch:45},{wch:45}];
       XLSX.utils.book_append_sheet(wb,ws,'Rapports');
     }
 
     if(inclure.reunions){
       const snap=await getDocs(query(userCol('reunions'),orderBy('timestamp','desc')));
-      const data=[['Date saisie','Type','Animateur','Groupe','Date réunion','Lieu','Présents','Absents','Thème','Résumé','Décisions','Prière']];
+      const rows=[...entete,
+        ['COMPTES-RENDUS DE RÉUNIONS'],
+        ['Date saisie','Type','Animateur','Groupe','Date Réunion','Lieu','Présents','Absents','Thème','Résumé','Décisions','Prière']
+      ];
       snap.docs.forEach(d=>{const r=d.data();
-        data.push([r.date_saisie||'',r.type||'',r.animateur||'',r.groupe||'',
+        rows.push([r.date_saisie||'',r.type||'',r.animateur||'',r.groupe||'',
           fmtDate(r.date),r.lieu||'',r.presents||0,r.absents||0,
           r.theme||'',r.resume||'',r.decisions||'',r.priere||'']);
       });
-      const ws=XLSX.utils.aoa_to_sheet(data);
+      rows.push([],[`Total réunions : ${snap.size}`]);
+      const ws=XLSX.utils.aoa_to_sheet(rows);
       ws['!cols']=[{wch:18},{wch:22},{wch:20},{wch:20},{wch:16},{wch:16},{wch:8},{wch:8},{wch:30},{wch:40},{wch:40},{wch:30}];
       XLSX.utils.book_append_sheet(wb,ws,'Réunions');
     }
 
     if(inclure.membres){
       const [mSnap,dSnap]=await Promise.all([getDocs(userCol('membres')),getDocs(userCol('disciples'))]);
-      const data=[['Type','Nom','Disciple Responsable','Téléphone','Adresse','Statut','Date ajout']];
+      const rows=[...entete,['REGISTRE DES MEMBRES ET DISCIPLES'],[]];
+      rows.push(['— DISCIPLES —']);
+      rows.push(['Nom','Téléphone','Adresse','Statut','Date ajout']);
       dSnap.docs.forEach(d=>{const m=d.data();
-        data.push(['Disciple',m.nom||'','',m.tel||'',m.adresse||'',m.statut||'actif',m.date||'']);
+        rows.push([m.nom||'',m.tel||'',m.adresse||'',m.statut||'actif',m.date||'']);
       });
+      rows.push([],[`Sous-total disciples : ${dSnap.size}`],[]);
+      rows.push(['— MEMBRES —']);
+      rows.push(['Nom','Disciple Responsable','Téléphone','Adresse','Statut','Date ajout']);
       mSnap.docs.forEach(d=>{const m=d.data();
-        data.push(['Membre',m.nom||'',m.disciple_nom||'',m.tel||'',m.adresse||'',m.statut||'actif',m.date||'']);
+        rows.push([m.nom||'',m.disciple_nom||'',m.tel||'',m.adresse||'',m.statut||'actif',m.date||'']);
       });
-      const ws=XLSX.utils.aoa_to_sheet(data);
-      ws['!cols']=[{wch:10},{wch:25},{wch:22},{wch:16},{wch:25},{wch:12},{wch:14}];
+      rows.push([],[`Sous-total membres : ${mSnap.size}`],[`Total général : ${mSnap.size+dSnap.size}`]);
+      const ws=XLSX.utils.aoa_to_sheet(rows);
+      ws['!cols']=[{wch:25},{wch:22},{wch:16},{wch:25},{wch:12},{wch:14}];
       XLSX.utils.book_append_sheet(wb,ws,'Membres');
     }
 
     if(inclure.finances){
       const snap=await getDocs(query(userCol('finances'),orderBy('timestamp','desc')));
-      const data=[['Date saisie','Type','Membre / Bénéficiaire','Montant','Devise','Description','Date opération']];
+      const rows=[...entete,['CAISSE SOLIDARITÉ — RAPPORT COMPLET'],[]];
+      // Calcul totaux
+      let totInCDF=0,totInUSD=0,totOutCDF=0,totOutUSD=0;
       snap.docs.forEach(d=>{const f=d.data();
-        data.push([f.saisie||'',f.type==='entree'?'Contribution':'Dépense',
-          f.membre||'',f.montant||0,f.devise||'CDF',f.desc||'',fmtDate(f.date)]);
+        if(f.type==='entree'){f.devise==='USD'?totInUSD+=f.montant||0:totInCDF+=f.montant||0;}
+        else{f.devise==='USD'?totOutUSD+=f.montant||0:totOutCDF+=f.montant||0;}
       });
-      const ws=XLSX.utils.aoa_to_sheet(data);
-      ws['!cols']=[{wch:18},{wch:14},{wch:25},{wch:12},{wch:8},{wch:30},{wch:16}];
+      // Résumé en haut
+      rows.push(['RÉSUMÉ'],
+        ['Total Contributions CDF',totInCDF,'Total Contributions USD',totInUSD],
+        ['Total Dépenses CDF',totOutCDF,'Total Dépenses USD',totOutUSD],
+        ['Solde CDF',totInCDF-totOutCDF,'Solde USD',totInUSD-totOutUSD],[]);
+      // Contributions
+      rows.push(['— CONTRIBUTIONS —']);
+      rows.push(['Date','Membre / Contributeur','Montant','Devise','Description','Saisi le']);
+      snap.docs.filter(d=>d.data().type==='entree').forEach(d=>{const f=d.data();
+        rows.push([fmtDate(f.date),f.membre||'',f.montant||0,f.devise||'CDF',f.desc||'',f.saisie||'']);
+      });
+      rows.push([]);
+      // Dépenses
+      rows.push(['— DÉPENSES —']);
+      rows.push(['Date','Bénéficiaire','Montant','Devise','Description','Saisi le']);
+      snap.docs.filter(d=>d.data().type==='depense').forEach(d=>{const f=d.data();
+        rows.push([fmtDate(f.date),f.membre||'',f.montant||0,f.devise||'CDF',f.desc||'',f.saisie||'']);
+      });
+      rows.push([],[`Total opérations : ${snap.size}`]);
+      const ws=XLSX.utils.aoa_to_sheet(rows);
+      ws['!cols']=[{wch:16},{wch:25},{wch:12},{wch:8},{wch:30},{wch:18}];
       XLSX.utils.book_append_sheet(wb,ws,'Caisse');
     }
 
     if(inclure.presences){
       const snap=await getDocs(query(userCol('presences'),orderBy('timestamp','desc')));
-      const data=[['Date culte','Thème','Prédicateur','Nb Présents','Total Membres','% Présence','Noms des Présents']];
+      const rows=[...entete,['FEUILLES DE PRÉSENCE AUX CULTES'],[]];
+      let totalP=0,totalC=0;
+      snap.docs.forEach(d=>{const p=d.data();totalP+=(p.total||0);totalC++;});
+      rows.push(['RÉSUMÉ'],[`Total cultes : ${totalC}`],[`Moyenne présence : ${totalC>0?Math.round(totalP/totalC):0} personnes`],[]);
+      rows.push(['Date Culte','Thème','Prédicateur','Nb Présents','Total Membres','% Présence','Noms des Présents']);
       snap.docs.forEach(d=>{const p=d.data();
         const pct=p.total_membres>0?Math.round((p.total/p.total_membres)*100):0;
-        data.push([fmtDate(p.date),p.theme||'',p.predicateur||'',
-          p.total||0,p.total_membres||0,pct+'%',
-          (p.presents||[]).join(', ')]);
+        rows.push([fmtDate(p.date),p.theme||'',p.predicateur||'',
+          p.total||0,p.total_membres||0,pct+'%',(p.presents||[]).join(', ')]);
       });
-      const ws=XLSX.utils.aoa_to_sheet(data);
+      const ws=XLSX.utils.aoa_to_sheet(rows);
       ws['!cols']=[{wch:16},{wch:30},{wch:22},{wch:12},{wch:14},{wch:10},{wch:60}];
       XLSX.utils.book_append_sheet(wb,ws,'Présences');
     }
 
-    if(!wb.SheetNames.length){
-      showToast('⚠️ Sélectionner au moins une catégorie','#c0392b');return;
-    }
-
-    // Générer et télécharger
+    if(!wb.SheetNames.length){showToast('⚠️ Sélectionner au moins une catégorie','#c0392b');return;}
     const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
     const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
     const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;
+    const a=document.createElement('a');a.href=url;
     a.download=`IFCM_Export_${nom}_${new Date().toISOString().split('T')[0]}.xlsx`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showToast('📥 Fichier Excel .xlsx téléchargé !','var(--green)');
+    a.click();URL.revokeObjectURL(url);
+    showToast('📥 Fichier Excel téléchargé !','var(--green)');
   }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
 };
-
-// ══ SYSTÈME DE NOTIFICATIONS COMMENTAIRES ══
-let _unreadComments=0;
-
-async function verifierNouveauxCommentaires(){
-  if(currentRole==='admin'||currentRole==='super_admin') return;
-  try{
-    // Récupérer la dernière fois que le pasteur a ouvert ses archives
-    const profil=await getDoc(doc(db,'users',currentUser.uid));
-    const derniereVisite=profil.data()?.derniereVisiteArchives||0;
-
-    const snap=await getDocs(query(userCol('rapports'),orderBy('timestamp','desc')));
-    let nbNouveaux=0;
-    let dernierAuteur='';
-
-    for(const d of snap.docs){
-      const r=d.data();
-      if(r.aCommentaire){
-        const cSnap=await getDocs(query(
-          collection(db,'users',currentUser.uid,'rapports',d.id,'commentaires'),
-          orderBy('timestamp','desc')
-        ));
-        if(cSnap.size>0){
-          const dernierComment=cSnap.docs[0].data();
-          // Nouveau si le commentaire est plus récent que la dernière visite
-          if((dernierComment.timestamp||0) > derniereVisite){
-            nbNouveaux++;
-            if(!dernierAuteur) dernierAuteur=dernierComment.auteur||'Admin';
-          }
-        }
-      }
-    }
-    _unreadComments=nbNouveaux;
-    mettreAJourBadges(nbNouveaux,dernierAuteur);
-    if(nbNouveaux>0) envoyerNotifPush(nbNouveaux,dernierAuteur);
-  }catch(e){console.log('Notif:',e);}
-}
-
-function mettreAJourBadges(nb,auteur){
-  const banner=document.getElementById('notif-banner');
-  const dot=document.getElementById('archives-dot');
-  const badge=document.getElementById('archives-badge');
-  const navDot=document.getElementById('nav-archives-dot');
-  if(nb>0){
-    if(banner){
-      banner.style.display='flex';
-      document.getElementById('notif-title').textContent=
-        nb===1?'💬 Nouveau commentaire de l\'Administrateur':`💬 ${nb} nouveaux commentaires`;
-      document.getElementById('notif-sub').textContent=
-        `${auteur||'Admin'} vous a laissé un message — Appuyez pour lire`;
-    }
-    if(dot) dot.style.display='block';
-    if(badge){badge.style.display='inline';badge.textContent=nb;}
-    if(navDot) navDot.style.display='block';
-    document.title=`(${nb}) IFCM — Espace Pastoral`;
-  }else{
-    if(banner) banner.style.display='none';
-    if(dot) dot.style.display='none';
-    if(badge) badge.style.display='none';
-    if(navDot) navDot.style.display='none';
-    document.title='IFCM — Espace Pastoral';
-  }
-}
-
-async function marquerCommentairesLus(){
-  if(currentRole==='admin'||currentRole==='super_admin') return;
-  try{
-    // Sauvegarder le timestamp de la visite
-    await updateDoc(doc(db,'users',currentUser.uid),{
-      derniereVisiteArchives:Date.now()
-    });
-    mettreAJourBadges(0,'');
-    _unreadComments=0;
-  }catch(e){}
-}
-
-async function demanderPermissionNotif(){
-  if(!('Notification' in window)) return;
-  if(Notification.permission==='default'){
-    const p=await Notification.requestPermission();
-    if(p==='granted') showToast('🔔 Notifications activées !','var(--green)');
-  }
-}
-
-function envoyerNotifPush(nb,auteur){
-  if(!('Notification' in window)||Notification.permission!=='granted') return;
-  const n=new Notification('💬 IFCM — Nouveau message',{
-    body:`${auteur||'Admin'} vous a laissé ${nb===1?'un commentaire':'des commentaires'} sur votre rapport.`,
-    icon:'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjM4IiBmaWxsPSIjNEEyODc4Ii8+PHRleHQgeD0iOTYiIHk9IjExMCIgZm9udC1zaXplPSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI0ZGRDc1MCI+4pyXPC90ZXh0Pjwvc3ZnPg==',
-    vibrate:[200,100,200],tag:'ifcm-comment',renotify:true
-  });
-  n.onclick=function(){window.focus();showPage('archives');this.close();};
-}
 
 // KEYBOARD
 document.getElementById('login-password').addEventListener('keydown',e=>{if(e.key==='Enter')window.doLogin();});
