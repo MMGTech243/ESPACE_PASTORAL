@@ -648,377 +648,23 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 
     <!-- PAGES -->
   <!-- HOME -->
-  <div class="page active" id="page-home">
-    <div class="hero" style="background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:1rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,.06),transparent 70%);pointer-events:none;"></div>
-      <div style="position:absolute;bottom:-10px;right:16px;font-size:60px;color:rgba(255,215,0,.04);line-height:1;pointer-events:none;">✝</div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
-        <img id="hero-logo" src="" alt="IFCM" style="width:54px;height:54px;border-radius:50%;filter:drop-shadow(0 0 10px rgba(255,215,0,.3));animation:divineGlow 4s infinite;flex-shrink:0;">
-        <div>
-          <h1 style="font-family:var(--font-display);font-size:clamp(18px,5vw,26px);letter-spacing:2px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:3px;">Impact for Christ Ministries</h1>
-          <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;">Branche de Kinshasa — IFCM</div>
-        </div>
-      </div>
-      <div style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);border-radius:20px;padding:5px 14px;" id="hero-user"></div>
-    </div>
-    <!-- BANNIÈRE NOUVEAUX COMMENTAIRES -->
-    <div id="notif-banner" style="display:none;background:linear-gradient(135deg,var(--orange-d),var(--orange));
-      border-radius:var(--r);padding:14px 16px;margin-bottom:1rem;cursor:pointer;
-      display:none;align-items:center;gap:12px;" onclick="showPage('archives')">
-      <div style="font-size:28px;animation:bellRing 1s infinite;">🔔</div>
-      <div style="flex:1;">
-        <div style="font-size:15px;font-weight:700;color:#fff;" id="notif-title">Nouveau message de l'Administrateur</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;" id="notif-sub">Appuyez pour voir vos rapports commentés</div>
-      </div>
-      <div style="font-size:12px;color:#fff;font-weight:700;">Voir →</div>
-    </div>
-    <style>
-      @keyframes bellRing{0%,100%{transform:rotate(0);}20%{transform:rotate(-15deg);}40%{transform:rotate(15deg);}60%{transform:rotate(-10deg);}80%{transform:rotate(10deg);}}
-      .notif-dot{position:absolute;top:-4px;right:-4px;width:14px;height:14px;
-        background:#ff4444;border-radius:50%;border:2px solid var(--bg);
-        animation:pulseDot 1.5s infinite;}
-      @keyframes pulseDot{0%,100%{transform:scale(1);}50%{transform:scale(1.3);}}
-      .tab-notif{position:relative;display:inline-block;}
-    </style>
-    <div class="section-lbl">Rapports & Suivi</div>
-    <div class="home-grid">
-      <div class="hcard vc" onclick="showPage('rapport')"><span class="hcard-icon">📋</span><div class="hcard-name">Rapport Hebdo</div><div class="hcard-desc">Rapport pastoral semaine</div></div>
-      <div class="hcard oc" onclick="showPage('reunion')"><span class="hcard-icon">📣</span><div class="hcard-name">Réunion</div><div class="hcard-desc">Compte-rendu famille/dép.</div></div>
-      <div class="hcard bc" onclick="showPage('presence')"><span class="hcard-icon">✅</span><div class="hcard-name">Présences</div><div class="hcard-desc">Feuille de présence culte</div></div>
-      <div class="hcard vc" onclick="showPage('membres')"><span class="hcard-icon">👥</span><div class="hcard-name">Membres</div><div class="hcard-desc">Disciples & membres</div></div>
-    </div>
-    <div class="section-lbl">Finances & Archives</div>
-    <div class="home-grid">
-      <div class="hcard gc wide" onclick="showPage('caisse')"><span class="hcard-icon">🤝</span><div><div class="hcard-name">Caisse Solidarité</div><div class="hcard-desc">Contributions & dépenses</div></div></div>
-      <div class="hcard bc wide" id="hcard-archives" onclick="showPage('archives')">
-        <span class="hcard-icon" style="position:relative;display:inline-block;">🗂️<span id="archives-dot" style="display:none;" class="notif-dot"></span></span>
-        <div><div class="hcard-name">Archives <span id="archives-badge" style="display:none;background:#ff4444;color:#fff;font-size:11px;font-weight:700;border-radius:10px;padding:2px 7px;margin-left:4px;vertical-align:middle;"></span></div>
-        <div class="hcard-desc">Historique complet cloud</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RAPPORT -->
-  <div class="page" id="page-rapport">
-    <div class="card">
-      <span class="card-title cv">👤 Identité du Pasteur</span>
-      <label class="flabel">Nom du Pasteur</label>
-      <input type="text" id="r-pastor" placeholder="Ex : Pasteur Jean Kimbu" maxlength="60">
-      <label class="flabel">Famille du Pasteur</label>
-      <input type="text" id="r-famille" placeholder="Ex : Famille Kimbu" maxlength="60">
-      <div class="row2" style="margin-top:8px;">
-        <div><label class="flabel">Semaine du</label><input type="date" id="r-du"></div>
-        <div><label class="flabel">Au</label><input type="date" id="r-au"></div>
-      </div>
-    </div>
-    <div class="card">
-      <span class="card-title co">📞 1. Contacts</span>
-      <div class="row2">
-        <div class="ng"><div class="nl">Visites domicile</div><input class="ni" type="number" id="r-visites" min="0" value="0"><div class="nu">visités</div></div>
-        <div class="ng"><div class="nl">Appels téléphone</div><input class="ni" type="number" id="r-appels" min="0" value="0"><div class="nu">appelés</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <span class="card-title cb">👥 2. Évolution</span>
-      <div class="row2">
-        <div class="ng"><div class="nl">Nouveaux</div><input class="ni" type="number" id="r-nouveaux" min="0" value="0"><div class="nu">intégrés</div></div>
-        <div class="ng"><div class="nl">Absences</div><input class="ni" type="number" id="r-absences" min="0" value="0"><div class="nu">à recontacter</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <span class="card-title cv">🙏 3. Cas Urgents</span>
-      <div class="twrap"><textarea id="r-cas" maxlength="400" rows="4" placeholder="Cas urgents..." oninput="cc('r-cas','cc-r1',400)"></textarea><span class="ccount" id="cc-r1">0/400</span></div>
-    </div>
-    <div class="card">
-      <span class="card-title co">📝 4. Observations</span>
-      <div class="twrap"><textarea id="r-obs" maxlength="400" rows="4" placeholder="Observations..." oninput="cc('r-obs','cc-r2',400)"></textarea><span class="ccount" id="cc-r2">0/400</span></div>
-    </div>
-    <div class="btn-lbl">Envoyer</div>
-    <button class="btn b-violet" onclick="emailRapport()">✉️ Email</button>
-    <button class="btn b-green" onclick="waRapport()">💬 WhatsApp</button>
-    <div class="btn-lbl">Cloud</div>
-    <button class="btn b-blue" onclick="sauvegarderRapport()">☁️ <span data-t="sauvegarder">Sauvegarder sur le Cloud</span></button>
-    <div class="notice">📌 Le PDF est disponible dans l'espace Administrateur.</div>
-  </div>
-
-  <!-- RÉUNION -->
-  <div class="page" id="page-reunion">
-    <div class="card">
-      <span class="card-title cv">📋 Informations</span>
-      <label class="flabel">Type de réunion</label>
-      <select id="reu-type">
-        <option value="Réunion de Famille">Réunion de Famille</option>
-        <option value="Réunion de Département">Réunion de Département</option>
-        <option value="Réunion de Prière">Réunion de Prière</option>
-        <option value="Réunion de Discipline">Réunion de Discipline</option>
-        <option value="Autre Réunion">Autre</option>
-      </select>
-      <label class="flabel">Animateur</label><input type="text" id="reu-animateur" placeholder="Animateur...">
-      <label class="flabel">Famille / Département</label><input type="text" id="reu-groupe" placeholder="Groupe...">
-      <div class="row2" style="margin-top:8px;">
-        <div><label class="flabel">Date</label><input type="date" id="reu-date"></div>
-        <div><label class="flabel">Lieu</label><input type="text" id="reu-lieu" placeholder="Lieu..."></div>
-      </div>
-    </div>
-    <div class="card">
-      <span class="card-title co">👥 Participation</span>
-      <div class="row2">
-        <div class="ng"><div class="nl">Présents</div><input class="ni" type="number" id="reu-presents" min="0" value="0"><div class="nu">personnes</div></div>
-        <div class="ng"><div class="nl">Absents</div><input class="ni" type="number" id="reu-absents" min="0" value="0"><div class="nu">personnes</div></div>
-      </div>
-      <label class="flabel" style="margin-top:10px;">Noms des absents</label>
-      <input type="text" id="reu-noms-absents" placeholder="Absents...">
-    </div>
-    <div class="card">
-      <span class="card-title cb">📖 Contenu</span>
-      <label class="flabel">Thème</label><input type="text" id="reu-theme" placeholder="Thème...">
-      <label class="flabel">Résumé (max 400)</label>
-      <div class="twrap"><textarea id="reu-resume" maxlength="400" rows="4" placeholder="Résumé..." oninput="cc('reu-resume','cc-reu1',400)"></textarea><span class="ccount" id="cc-reu1">0/400</span></div>
-      <label class="flabel">Décisions (max 300)</label>
-      <div class="twrap"><textarea id="reu-decisions" maxlength="300" rows="3" placeholder="Décisions..." oninput="cc('reu-decisions','cc-reu2',300)"></textarea><span class="ccount" id="cc-reu2">0/300</span></div>
-    </div>
-    <div class="card">
-      <span class="card-title cv">🙏 Points Spirituels</span>
-      <label class="flabel">Cas de prière (max 300)</label>
-      <div class="twrap"><textarea id="reu-priere" maxlength="300" rows="3" placeholder="Prière..." oninput="cc('reu-priere','cc-reu3',300)"></textarea><span class="ccount" id="cc-reu3">0/300</span></div>
-      <label class="flabel">Prochaine réunion</label><input type="date" id="reu-prochaine">
-    </div>
-    <div class="btn-lbl">Envoyer</div>
-    <button class="btn b-violet" onclick="emailReunion()">✉️ Email</button>
-    <button class="btn b-green" onclick="waReunion()">💬 WhatsApp</button>
-    <div class="btn-lbl">Cloud</div>
-    <button class="btn b-blue" onclick="sauvegarderReunion()">☁️ <span data-t="sauvegarder">Sauvegarder sur le Cloud</span></button>
-    <div class="notice">📌 Le PDF est disponible dans l'espace Administrateur.</div>
-  </div>
-
-  <!-- PRÉSENCE -->
-  <div class="page" id="page-presence">
-    <div class="card">
-      <span class="card-title co">📅 Détails du Culte</span>
-      <label class="flabel">Date</label><input type="date" id="p-date">
-      <label class="flabel">Thème</label><input type="text" id="p-theme" placeholder="Thème...">
-      <label class="flabel">Prédicateur</label><input type="text" id="p-predicateur" placeholder="Prédicateur...">
-    </div>
-    <div class="card">
-      <span class="card-title cv">✅ Présence</span>
-      <div class="searchbar"><span>🔍</span><input type="text" id="p-search" placeholder="Rechercher..." oninput="filterPresence()"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <span style="font-size:12px;color:var(--muted);">Membres</span>
-        <span style="font-size:13px;font-weight:700;color:var(--violet);" id="p-count">0 présents</span>
-      </div>
-      <div id="p-list"></div>
-    </div>
-    <button class="btn b-blue" onclick="sauvegarderPresence()">☁️ <span data-t="sauvegarder">Sauvegarder sur le Cloud</span></button>
-    <div class="notice">📌 La feuille PDF est disponible dans l'espace Administrateur.</div>
-  </div>
-
-  <!-- MEMBRES -->
-  <div class="page" id="page-membres">
-    <div class="stabs">
-      <div class="stab active" onclick="switchMembreTab('disciples')">👤 Disciples</div>
-      <div class="stab" onclick="switchMembreTab('membres')">👥 Membres</div>
-    </div>
-    <div id="mt-disciples">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <span id="d-count" style="font-size:12px;font-weight:700;color:var(--muted);">— disciples</span>
-        <button class="btn b-violet" style="width:auto;padding:8px 16px;margin-top:0;font-size:12px;" onclick="ouvrirFormDisciple()">+ Ajouter</button>
-      </div>
-      <div id="d-list"></div>
-    </div>
-    <div id="mt-membres" style="display:none;">
-      <div class="searchbar"><span>🔍</span><input type="text" id="m-search" placeholder="Rechercher..." oninput="filterMembres()"></div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <span id="m-count" style="font-size:12px;font-weight:700;color:var(--muted);">— membres</span>
-        <button class="btn b-violet" style="width:auto;padding:8px 16px;margin-top:0;font-size:12px;" onclick="ouvrirFormMembre()">+ Ajouter</button>
-      </div>
-      <div id="m-list"></div>
-    </div>
-  </div>
-
-  <!-- CAISSE -->
-  <div class="page" id="page-caisse">
-    <div class="ftotal">
-      <div class="ftotal-lbl">Solde de la Caisse</div>
-      <div><span class="ftotal-amt" id="f-solde">0</span><span style="font-size:13px;color:rgba(255,255,255,.7);margin-left:4px;" id="f-cur">CDF</span></div>
-      <div class="fdevise"><div class="fdevise-inner">
-        <button class="fbtn active" id="fbtn-cdf" onclick="setDevise('CDF')">CDF</button>
-        <button class="fbtn" id="fbtn-usd" onclick="setDevise('USD')">USD $</button>
-      </div></div>
-    </div>
-    <div class="fmini-row">
-      <div class="fmini"><div class="fmini-lbl">Contributions</div><div class="fmini-val fg" id="f-in">0</div></div>
-      <div class="fmini"><div class="fmini-lbl">Dépenses</div><div class="fmini-val fr" id="f-out">0</div></div>
-      <div class="fmini"><div class="fmini-lbl">Opérations</div><div class="fmini-val fv" id="f-nb">0</div></div>
-    </div>
-    <div class="card">
-      <span class="card-title cg">🤝 Nouvelle Opération</span>
-      <div class="row2">
-        <div><label class="flabel">Type</label>
-          <select id="f-type" onchange="updateCaisseLabel()">
-            <option value="entree">Contribution</option>
-            <option value="depense">Dépense</option>
-          </select></div>
-        <div><label class="flabel">Montant (<span id="f-devise-lbl">CDF</span>)</label>
-          <input type="number" id="f-montant" placeholder="0" min="0"></div>
-      </div>
-      <label class="flabel" id="f-membre-label">Membre / Contributeur</label>
-      <input type="text" id="f-membre" placeholder="Nom du membre contributeur...">
-      <label class="flabel">Description</label>
-      <input type="text" id="f-desc" placeholder="Description...">
-      <label class="flabel">Date</label><input type="date" id="f-date">
-      <button class="btn b-gold" onclick="ajouterTransaction()">+ Enregistrer</button>
-    </div>
-    <div class="card"><span class="card-title cg">📊 Historique</span><div id="f-history"><div class="empty">Aucune opération.</div></div></div>
-  </div>
-
-  <!-- ARCHIVES -->
-  <div class="page" id="page-archives">
-    <div class="stabs" id="arch-stabs">
-      <div class="stab active" onclick="switchArch('rapports')">📋 Rapports</div>
-      <div class="stab" onclick="switchArch('reunions')">📣 Réunions</div>
-      <div class="stab" onclick="switchArch('presences')">✅ Présences</div>
-      <div class="stab" onclick="switchArch('caisse')">🤝 Caisse</div>
-    </div>
-    <div id="arch-rapports"></div>
-    <div id="arch-reunions" style="display:none;"></div>
-    <div id="arch-presences" style="display:none;"></div>
-    <div id="arch-caisse" style="display:none;"></div>
-  </div>
-
-  <!-- ADMIN PAGES -->
-  <div class="page" id="page-dashboard">
-    <div class="card" style="background:var(--grad);border:none;">
-      <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:4px;">Tableau de bord</div>
-      <div style="font-size:20px;font-weight:700;color:#fff;">Administration IFCM</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;" id="admin-date"></div>
-    </div>
-    <div class="stat-grid">
-      <div class="stat-box"><div class="stat-num" id="stat-pasteurs">0</div><div class="stat-lbl">Pasteurs actifs</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-rapports">0</div><div class="stat-lbl">Rapports reçus</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-membres">0</div><div class="stat-lbl">Membres total</div></div>
-      <div class="stat-box"><div class="stat-num" id="stat-reunions">0</div><div class="stat-lbl">Réunions tenues</div></div>
-    </div>
-    <!-- Indicateur temps réel -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;background:rgba(37,162,68,.1);border-radius:10px;border:1px solid rgba(37,162,68,.2);">
-      <div style="width:8px;height:8px;border-radius:50%;background:#4ecc72;animation:pulse 2s infinite;"></div>
-      <span style="font-size:12px;color:#4ecc72;font-weight:600;">Mise à jour en temps réel activée</span>
-    </div>
-    <style>@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}</style>
-    <div class="card"><span class="card-title co">📋 Derniers rapports reçus</span><div id="admin-last-rapports"><div class="empty">Chargement...</div></div></div>
-    <div class="card"><span class="card-title cv">📣 Dernières réunions</span><div id="admin-last-reunions"><div class="empty">Chargement...</div></div></div>
-  </div>
-
-  <div class="page" id="page-pasteurs">
-    <!-- CRÉER PASTEUR -->
-    <div class="card">
-      <span class="card-title co">➕ Créer un compte Pasteur</span>
-      <div class="cnote">Le pasteur reçoit ses identifiants pour se connecter.</div>
-      <label class="flabel">Nom complet</label><input type="text" id="np-nom" placeholder="Pasteur Jean Kimbu">
-      <label class="flabel">Email</label><input type="email" id="np-email" placeholder="pasteur@ifcm.org">
-      <label class="flabel">Mot de passe temporaire</label><input type="text" id="np-password" value="IFCM2024">
-      <label class="flabel">Cellule / Groupe pastoral</label><input type="text" id="np-cellule" placeholder="Cellule Est...">
-      <label class="flabel">Email responsable 1 (réception rapports)</label><input type="email" id="np-email-resp" placeholder="admin1@ifcm.org">
-      <label class="flabel">Email responsable 2 (copie rapports)</label><input type="email" id="np-email-resp2" placeholder="admin2@ifcm.org">
-      <label class="flabel">WhatsApp responsable</label><input type="text" id="np-wa-resp" placeholder="+243812345678">
-      <button class="btn b-violet" onclick="creerPasteur()">👨‍💼 Créer le compte Pasteur</button>
-    </div>
-    <!-- CRÉER ADMIN — visible seulement pour super_admin -->
-    <div class="card" id="section-creer-admin" style="display:none;">
-      <span class="card-title cr">🔐 Ajouter un Administrateur</span>
-      <div class="cnote">⚠️ Réservé au Super Administrateur. Les admins ont accès à toutes les données.</div>
-      <label class="flabel">Nom de l'administrateur</label><input type="text" id="na-nom" placeholder="Ex : Évêque Samuel">
-      <label class="flabel">Email</label><input type="email" id="na-email" placeholder="admin@ifcm.org">
-      <label class="flabel">Mot de passe</label><input type="text" id="na-password" value="IFCM_Admin2024">
-      <button class="btn b-red" onclick="creerAdmin()">🔐 Créer le compte Admin</button>
-    </div>
-    <div class="card"><span class="card-title cb">👨‍💼 Liste des Pasteurs & Admins</span><div id="admin-pasteurs-list"><div class="empty">Chargement...</div></div></div>
-  </div>
-
-  <div class="page" id="page-rapports-admin">
-    <div class="card">
-      <span class="card-title cv">📋 Tous les Rapports</span>
-      <div class="searchbar"><span>🔍</span><input type="text" id="ar-search" placeholder="Filtrer par pasteur..." oninput="filterAdminRapports()"></div>
-      <div id="admin-rapports-list"><div class="empty">Chargement...</div></div>
-    </div>
-  </div>
-
-  <div class="page" id="page-reunions-admin">
-    <div class="card"><span class="card-title cv">📣 Tous les Comptes-rendus</span><div id="admin-reunions-list"><div class="empty">Chargement...</div></div></div>
-  </div>
-
-  <div class="page" id="page-membres-admin">
-    <div class="card"><span class="card-title cb">👥 Tous les Membres & Disciples</span><div id="admin-membres-list"><div class="empty">Chargement...</div></div></div>
-  </div>
-
-
-  <!-- ADMIN FINANCES GLOBALES -->
-  <div class="page" id="page-finances">
-    <div class="card" style="background:var(--grad);border:none;margin-bottom:1rem;">
-      <div style="font-size:13px;color:rgba(255,255,255,.8);">Vue globale</div>
-      <div style="font-size:20px;font-weight:700;color:#fff;margin-top:2px;">🤝 Finances des Familles</div>
-    </div>
-    <div class="stat-grid" id="finances-stats">
-      <div class="stat-box"><div class="stat-num fg" id="fs-in-cdf">0</div><div class="stat-lbl">Total contributions CDF</div></div>
-      <div class="stat-box"><div class="stat-num fr" id="fs-out-cdf">0</div><div class="stat-lbl">Total dépenses CDF</div></div>
-      <div class="stat-box"><div class="stat-num fg" id="fs-in-usd">0</div><div class="stat-lbl">Total contributions USD</div></div>
-      <div class="stat-box"><div class="stat-num fr" id="fs-out-usd">0</div><div class="stat-lbl">Total dépenses USD</div></div>
-    </div>
-    <div class="chart-wrap">
-      <div class="chart-title">📊 Finances par Pasteur (CDF)</div>
-      <canvas id="chart-finances" height="200"></canvas>
-    </div>
-    <div class="card">
-      <span class="card-title cg">📋 Détail par Pasteur</span>
-      <div id="admin-finances-list"><div class="empty">Chargement...</div></div>
-    </div>
-  </div>
-  <!-- ══ PAGE CALENDRIER PARTAGÉ ══ -->
-  <div class="page" id="page-calendrier">
-    <div id="cal-add-section"></div>
-    <div class="card">
-      <span class="card-title cv">📅 Calendrier des Événements</span>
-      <div class="stabs" id="cal-stabs">
-        <div class="stab active" onclick="switchCal('avenir')">📅 À venir</div>
-        <div class="stab" onclick="switchCal('passe')">📋 Passés</div>
-        <div class="stab" onclick="switchCal('tous')">🗂️ Tous</div>
-      </div>
-      <div id="cal-list"><div class="empty">Chargement...</div></div>
-    </div>
-  </div>
-
-  <!-- ══ PAGE EXPORT ══ -->
-  <div class="page" id="page-export">
-    <div class="card">
-      <span class="card-title cb">📊 Export Excel</span>
-      <div class="cnote">Exportez vos données en fichier Excel (.xlsx) pour les archives ou l'analyse.</div>
-      <div class="btn-lbl">Choisir les données à exporter</div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
-          <input type="checkbox" id="ex-rapports" checked style="width:16px;height:16px;accent-color:var(--violet);">
-          <span style="font-size:13px;color:var(--text);">📋 Rapports hebdomadaires</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
-          <input type="checkbox" id="ex-reunions" checked style="width:16px;height:16px;accent-color:var(--violet);">
-          <span style="font-size:13px;color:var(--text);">📣 Comptes-rendus de réunions</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
-          <input type="checkbox" id="ex-membres" checked style="width:16px;height:16px;accent-color:var(--violet);">
-          <span style="font-size:13px;color:var(--text);">👥 Membres & Disciples</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
-          <input type="checkbox" id="ex-finances" checked style="width:16px;height:16px;accent-color:var(--violet);">
-          <span style="font-size:13px;color:var(--text);">🤝 Caisse solidarité</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
-          <input type="checkbox" id="ex-presences" style="width:16px;height:16px;accent-color:var(--violet);">
-          <span style="font-size:13px;color:var(--text);">✅ Feuilles de présence</span>
-        </label>
-      </div>
-      <button class="btn b-blue" onclick="exporterExcel()">📥 Télécharger le fichier Excel</button>
-      <div class="notice" style="margin-top:10px;">📌 Le fichier Excel s'ouvre dans Microsoft Excel, Google Sheets ou LibreOffice.</div>
-    </div>
-  </div>
-
+  <!-- PAGES — contenu généré dynamiquement par JS selon la langue -->
+  <div class="page active" id="page-home"></div>
+  <div class="page" id="page-rapport"></div>
+  <div class="page" id="page-reunion"></div>
+  <div class="page" id="page-presence"></div>
+  <div class="page" id="page-membres"></div>
+  <div class="page" id="page-caisse"></div>
+  <div class="page" id="page-archives"></div>
+  <div class="page" id="page-export"></div>
+  <div class="page" id="page-calendrier"></div>
+  <div class="page" id="page-dashboard"></div>
+  <div class="page" id="page-pasteurs"></div>
+  <div class="page" id="page-rapports-admin"></div>
+  <div class="page" id="page-reunions-admin"></div>
+  <div class="page" id="page-membres-admin"></div>
+  <div class="page" id="page-finances"></div>
+  <div class="page" id="page-calendrier-admin"></div>
 
     <!-- Bottom nav mobile -->
     <div class="bottom-nav-mobile" id="bottom-nav-mobile"></div>
@@ -1578,39 +1224,23 @@ window.showPage=function(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const p=document.getElementById('page-'+name);if(p)p.classList.add('active');
   updateSidebarActive(name);
-  const titlesMap={home:'IFCM Pastoral',rapport:'Rapport',reunion:'Réunion',presence:'Présence',
-    membres:'Membres',caisse:'Caisse',archives:'Archives',calendrier:'Calendrier',export:'Export'};
-  const tb=document.getElementById('tb-title');if(tb)tb.textContent=titlesMap[name]||'IFCM';
+  const km={home:'accueil',rapport:'rapport',reunion:'reunion',presence:'presence',
+    membres:'membres',caisse:'caisse',archives:'archives',calendrier:'calendrier',export:'exportXl'};
+  const tb=document.getElementById('tb-title');if(tb)tb.textContent=t(km[name]||'accueil');
+  buildPage(name);
   curPage=name;window.scrollTo(0,0);
-  if(name==='membres')switchMembreTab('disciples');
-  if(name==='caisse')renderCaisse();
-  if(name==='presence')renderPresence();
-  if(name==='archives'){renderArch('rapports');switchArch('rapports');marquerCommentairesLus();}
-  if(name==='calendrier'){calTab='avenir';renderCalendrier();}
 };
 
 window.showAdminPage=function(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pageId=name==='rapports'?'rapports-admin':name==='reunions'?'reunions-admin':name==='membres'?'membres-admin':name;
+  const pageId=name==='rapports'?'rapports-admin':name==='reunions'?'reunions-admin':name==='membres'?'membres-admin':name==='calendrier'?'calendrier-admin':name;
   const p=document.getElementById('page-'+pageId);if(p)p.classList.add('active');
   updateSidebarActive(name);
-  const pageKeyMap={dashboard:'dashboard',pasteurs:'pasteurs',rapports:'rapports',
+  const km={dashboard:'dashboard',pasteurs:'pasteurs',rapports:'rapports',
     reunions:'reunions',membres:'membres',finances:'finances',calendrier:'calendrier',export:'exportXl'};
-  const tb=document.getElementById('tb-title');if(tb)tb.textContent=t(pageKeyMap[name]||'dashboard');
-  updateVisiblePageTitles(name);
+  const tb=document.getElementById('tb-title');if(tb)tb.textContent=t(km[name]||'dashboard');
+  buildPage(pageId);
   curPage=pageId||name;window.scrollTo(0,0);
-  if(name==='rapports')loadAdminRapports();
-  if(name==='reunions')loadAdminReunions();
-  if(name==='membres')loadAdminMembres();
-  if(name==='pasteurs'){
-    loadAdminPasteurs();
-    const secAdmin=document.getElementById('section-creer-admin');
-    if(secAdmin) secAdmin.style.display=currentRole==='super_admin'?'block':'none';
-  }
-  if(name==='finances')loadAdminFinances();
-  if(name==='calendrier'){calTab='avenir';renderCalendrier();}
-  if(name==='dashboard')loadAdminCharts();
-  if(name==='export'){/* page statique */}
 };
 
 window.goHome=function(){if(currentRole==='admin'||currentRole==='super_admin')showAdminPage('dashboard');else showPage('home');};
@@ -1639,6 +1269,55 @@ const LANGS = {
     statut:'Statut',actif:'Actif',nouveau:'Nouveau',absent:'Absent prolongé',
     aVenir:'À venir',passes:'Passés',tous:'Tous',publierEvenement:"Publier l'Événement",
     telecharger:'Télécharger Excel (.xlsx)',
+    brancheKinshasa:'Branche de Kinshasa — IFCM',
+    rapportsSuivi:'Rapports & Suivi',financesArchives:'Finances & Archives',
+    rapportDesc:'Rapport pastoral semaine',reunionDesc:'Compte-rendu famille/dép.',
+    presenceDesc:'Feuille de présence culte',membresDesc:'Disciples & membres',
+    caisseDesc:'Contributions & dépenses',archivesDesc:'Historique complet cloud',
+    calendrierDesc:'Événements & cultes',exportDesc:'Exporter mes données',
+    exportDesc2:'Exportez vos données en fichier Excel (.xlsx)',
+    nouveauMessage:'Nouveau message de l\'Administrateur',
+    voirArchives:'Appuyez pour voir vos rapports commentés',voir:'Voir',
+    identitePasteur:'Identité du Pasteur',nomPasteur:'Nom du Pasteur',
+    famillePasteur:'Famille du Pasteur',semaineDu:'Semaine du',au:'Au',
+    exPasteur:'Ex : Pasteur Jean Kimbu',exFamille:'Ex : Famille Kimbu',
+    contacts:'Contacts',evolution:'Évolution',
+    presenceMembres:'Présence des Membres',
+    detailsCulte:'Détails du Culte',predicateur:'Prédicateur',
+    rechercher:'Rechercher',chargement:'Chargement...',
+    informations:'Informations',typeReunion:'Type de réunion',
+    reunionFamille:'Réunion de Famille',reunionDept:'Réunion de Département',
+    reunionPriere:'Réunion de Prière',reunionDiscipline:'Réunion de Discipline',
+    autre:'Autre',animateur:'Animateur',familleDept:'Famille / Département',
+    lieu:'Lieu',groupe:'Groupe',presents:'Présents',absents:'Absents',
+    contenu:'Contenu',theme:'Thème',resume:'Résumé',decisions:'Décisions',
+    priere:'Prière',
+    casUrgentsPlaceholder:'Cas urgents, situations à prier...',
+    observationsPlaceholder:'Observations, bénédictions...',
+    envoyer:'Envoyer',pdfAdmin:'Le PDF est disponible dans l\'espace Administrateur.',
+    soldeActuel:'Solde Actuel',nouvelleOperation:'Nouvelle Opération',
+    type2:'Type',contributions:'Contributions',depenses:'Dépenses',
+    contributeur:'Membre / Contributeur',beneficiaire:'Bénéficiaire',
+    calendrierEvenements:'Calendrier des Événements',
+    choisirDonnees:'Choisir les données à exporter',
+    presences:'Présences',
+    accesComplet:'Accès Complet',tempsReel:'Mise à jour en temps réel',
+    derniersRapports:'Derniers rapports reçus',dernieresReunions:'Dernières réunions',
+    creerPasteur:'Créer un compte Pasteur',creerPasteurNote:'Le pasteur reçoit ses identifiants.',
+    nomComplet:'Nom complet',motDePasseTemp:'Mot de passe temporaire',
+    cellule:'Cellule / Groupe pastoral',emailResp1:'Email responsable 1',
+    emailResp2:'Email responsable 2',whatsappResp:'WhatsApp responsable',
+    creerCompte:'Créer le compte Pasteur',
+    ajouterAdmin:'Ajouter un Administrateur',
+    ajouterAdminNote:'Réservé au Super Administrateur.',
+    exAdmin:'Ex : Évêque Samuel',motDePasse:'Mot de passe',
+    creerCompteAdmin:'Créer le compte Admin',
+    listePasteurs:'Liste des Pasteurs & Admins',
+    tousRapports:'Tous les Rapports',filtrerPasteur:'Filtrer par pasteur',
+    tousComptes:'Tous les Comptes-rendus',tousMembres:'Tous les Membres & Disciples',
+    contribCDF:'Contributions CDF',depensesCDF:'Dépenses CDF',
+    contribUSD:'Contributions USD',depensesUSD:'Dépenses USD',
+    financesParPasteur:'Finances par Pasteur (CDF)',detailParPasteur:'Détail par Pasteur',
     langues:{fr:'🇫🇷 Français',en:'🇬🇧 English',es:'🇪🇸 Español',pt:'🇵🇹 Português'},
   },
   en:{
@@ -1661,6 +1340,55 @@ const LANGS = {
     statut:'Status',actif:'Active',nouveau:'New',absent:'Extended absence',
     aVenir:'Upcoming',passes:'Past',tous:'All',publierEvenement:'Publish Event',
     telecharger:'Download Excel (.xlsx)',
+    brancheKinshasa:'Kinshasa Branch — IFCM',
+    rapportsSuivi:'Reports & Follow-up',financesArchives:'Finances & Archives',
+    rapportDesc:'Weekly pastoral report',reunionDesc:'Family/dept. minutes',
+    presenceDesc:'Service attendance sheet',membresDesc:'Disciples & members',
+    caisseDesc:'Contributions & expenses',archivesDesc:'Full cloud history',
+    calendrierDesc:'Events & services',exportDesc:'Export my data',
+    exportDesc2:'Export your data to Excel (.xlsx)',
+    nouveauMessage:'New message from Administrator',
+    voirArchives:'Tap to see your commented reports',voir:'View',
+    identitePasteur:'Pastor Identity',nomPasteur:'Pastor Name',
+    famillePasteur:'Pastoral Family',semaineDu:'Week of',au:'To',
+    exPasteur:'Ex: Pastor Jean Kimbu',exFamille:'Ex: Kimbu Family',
+    contacts:'Contacts',evolution:'Growth',
+    presenceMembres:'Member Attendance',
+    detailsCulte:'Service Details',predicateur:'Preacher',
+    rechercher:'Search',chargement:'Loading...',
+    informations:'Information',typeReunion:'Meeting type',
+    reunionFamille:'Family Meeting',reunionDept:'Department Meeting',
+    reunionPriere:'Prayer Meeting',reunionDiscipline:'Discipline Meeting',
+    autre:'Other',animateur:'Facilitator',familleDept:'Family / Department',
+    lieu:'Location',groupe:'Group',presents:'Present',absents:'Absent',
+    contenu:'Content',theme:'Theme',resume:'Summary',decisions:'Decisions',
+    priere:'Prayer',
+    casUrgentsPlaceholder:'Urgent cases, prayer requests...',
+    observationsPlaceholder:'Observations, blessings...',
+    envoyer:'Send',pdfAdmin:'PDF available in Admin space.',
+    soldeActuel:'Current Balance',nouvelleOperation:'New Transaction',
+    type2:'Type',contributions:'Contributions',depenses:'Expenses',
+    contributeur:'Member / Contributor',beneficiaire:'Beneficiary',
+    calendrierEvenements:'Events Calendar',
+    choisirDonnees:'Choose data to export',
+    presences:'Attendance',
+    accesComplet:'Full Access',tempsReel:'Real-time updates active',
+    derniersRapports:'Latest reports received',dernieresReunions:'Latest meetings',
+    creerPasteur:'Create Pastor Account',creerPasteurNote:'Pastor receives login credentials.',
+    nomComplet:'Full name',motDePasseTemp:'Temporary password',
+    cellule:'Cell / Pastoral group',emailResp1:'Supervisor email 1',
+    emailResp2:'Supervisor email 2',whatsappResp:'Supervisor WhatsApp',
+    creerCompte:'Create Pastor Account',
+    ajouterAdmin:'Add Administrator',
+    ajouterAdminNote:'Reserved for Super Admin.',
+    exAdmin:'Ex: Bishop Samuel',motDePasse:'Password',
+    creerCompteAdmin:'Create Admin Account',
+    listePasteurs:'Pastors & Admins List',
+    tousRapports:'All Reports',filtrerPasteur:'Filter by pastor',
+    tousComptes:'All Meeting Minutes',tousMembres:'All Members & Disciples',
+    contribCDF:'Contributions CDF',depensesCDF:'Expenses CDF',
+    contribUSD:'Contributions USD',depensesUSD:'Expenses USD',
+    financesParPasteur:'Finances by Pastor (CDF)',detailParPasteur:'Detail by Pastor',
     langues:{fr:'🇫🇷 French',en:'🇬🇧 English',es:'🇪🇸 Spanish',pt:'🇵🇹 Portuguese'},
   },
   es:{
@@ -1683,6 +1411,55 @@ const LANGS = {
     statut:'Estado',actif:'Activo',nouveau:'Nuevo',absent:'Ausencia prolongada',
     aVenir:'Próximos',passes:'Pasados',tous:'Todos',publierEvenement:'Publicar Evento',
     telecharger:'Descargar Excel (.xlsx)',
+    brancheKinshasa:'Sucursal de Kinshasa — IFCM',
+    rapportsSuivi:'Informes & Seguimiento',financesArchives:'Finanzas & Archivos',
+    rapportDesc:'Informe pastoral semanal',reunionDesc:'Acta familia/dpto.',
+    presenceDesc:'Hoja de asistencia',membresDesc:'Discípulos & miembros',
+    caisseDesc:'Contribuciones & gastos',archivesDesc:'Historial completo',
+    calendrierDesc:'Eventos & cultos',exportDesc:'Exportar mis datos',
+    exportDesc2:'Exporte sus datos en Excel (.xlsx)',
+    nouveauMessage:'Nuevo mensaje del Administrador',
+    voirArchives:'Toque para ver sus informes comentados',voir:'Ver',
+    identitePasteur:'Identidad del Pastor',nomPasteur:'Nombre del Pastor',
+    famillePasteur:'Familia Pastoral',semaineDu:'Semana del',au:'Al',
+    exPasteur:'Ej: Pastor Juan Kimbu',exFamille:'Ej: Familia Kimbu',
+    contacts:'Contactos',evolution:'Crecimiento',
+    presenceMembres:'Asistencia de Miembros',
+    detailsCulte:'Detalles del Culto',predicateur:'Predicador',
+    rechercher:'Buscar',chargement:'Cargando...',
+    informations:'Información',typeReunion:'Tipo de reunión',
+    reunionFamille:'Reunión de Familia',reunionDept:'Reunión de Departamento',
+    reunionPriere:'Reunión de Oración',reunionDiscipline:'Reunión de Disciplina',
+    autre:'Otro',animateur:'Facilitador',familleDept:'Familia / Departamento',
+    lieu:'Lugar',groupe:'Grupo',presents:'Presentes',absents:'Ausentes',
+    contenu:'Contenido',theme:'Tema',resume:'Resumen',decisions:'Decisiones',
+    priere:'Oración',
+    casUrgentsPlaceholder:'Casos urgentes, peticiones de oración...',
+    observationsPlaceholder:'Observaciones, bendiciones...',
+    envoyer:'Enviar',pdfAdmin:'PDF disponible en el espacio Admin.',
+    soldeActuel:'Saldo Actual',nouvelleOperation:'Nueva Operación',
+    type2:'Tipo',contributions:'Contribuciones',depenses:'Gastos',
+    contributeur:'Miembro / Contribuyente',beneficiaire:'Beneficiario',
+    calendrierEvenements:'Calendario de Eventos',
+    choisirDonnees:'Elegir datos a exportar',
+    presences:'Asistencias',
+    accesComplet:'Acceso Completo',tempsReel:'Actualizaciones en tiempo real',
+    derniersRapports:'Últimos informes recibidos',dernieresReunions:'Últimas reuniones',
+    creerPasteur:'Crear cuenta de Pastor',creerPasteurNote:'El pastor recibe sus credenciales.',
+    nomComplet:'Nombre completo',motDePasseTemp:'Contraseña temporal',
+    cellule:'Célula / Grupo pastoral',emailResp1:'Email supervisor 1',
+    emailResp2:'Email supervisor 2',whatsappResp:'WhatsApp supervisor',
+    creerCompte:'Crear cuenta de Pastor',
+    ajouterAdmin:'Agregar Administrador',
+    ajouterAdminNote:'Reservado para Super Admin.',
+    exAdmin:'Ej: Obispo Samuel',motDePasse:'Contraseña',
+    creerCompteAdmin:'Crear cuenta Admin',
+    listePasteurs:'Lista de Pastores y Admins',
+    tousRapports:'Todos los Informes',filtrerPasteur:'Filtrar por pastor',
+    tousComptes:'Todas las Actas',tousMembres:'Todos los Miembros y Discípulos',
+    contribCDF:'Contribuciones CDF',depensesCDF:'Gastos CDF',
+    contribUSD:'Contribuciones USD',depensesUSD:'Gastos USD',
+    financesParPasteur:'Finanzas por Pastor (CDF)',detailParPasteur:'Detalle por Pastor',
     langues:{fr:'🇫🇷 Francés',en:'🇬🇧 Inglés',es:'🇪🇸 Español',pt:'🇵🇹 Portugués'},
   },
   pt:{
@@ -1705,6 +1482,55 @@ const LANGS = {
     statut:'Status',actif:'Ativo',novo:'Novo',absent:'Ausência prolongada',
     aVenir:'Próximos',passes:'Passados',tous:'Todos',publierEvenement:'Publicar Evento',
     telecharger:'Baixar Excel (.xlsx)',
+    brancheKinshasa:'Filial de Kinshasa — IFCM',
+    rapportsSuivi:'Relatórios & Acompanhamento',financesArchives:'Finanças & Arquivos',
+    rapportDesc:'Relatório pastoral semanal',reunionDesc:'Ata família/dpto.',
+    presenceDesc:'Folha de presença',membresDesc:'Discípulos & membros',
+    caisseDesc:'Contribuições & despesas',archivesDesc:'Histórico completo',
+    calendrierDesc:'Eventos & cultos',exportDesc:'Exportar meus dados',
+    exportDesc2:'Exporte seus dados em Excel (.xlsx)',
+    nouveauMessage:'Nova mensagem do Administrador',
+    voirArchives:'Toque para ver seus relatórios comentados',voir:'Ver',
+    identitePasteur:'Identidade do Pastor',nomPasteur:'Nome do Pastor',
+    famillePasteur:'Família Pastoral',semaineDu:'Semana de',au:'A',
+    exPasteur:'Ex: Pastor João Kimbu',exFamille:'Ex: Família Kimbu',
+    contacts:'Contatos',evolution:'Crescimento',
+    presenceMembres:'Presença dos Membros',
+    detailsCulte:'Detalhes do Culto',predicateur:'Pregador',
+    rechercher:'Buscar',chargement:'Carregando...',
+    informations:'Informações',typeReunion:'Tipo de reunião',
+    reunionFamille:'Reunião de Família',reunionDept:'Reunião de Departamento',
+    reunionPriere:'Reunião de Oração',reunionDiscipline:'Reunião de Disciplina',
+    autre:'Outro',animateur:'Facilitador',familleDept:'Família / Departamento',
+    lieu:'Local',groupe:'Grupo',presents:'Presentes',absents:'Ausentes',
+    contenu:'Conteúdo',theme:'Tema',resume:'Resumo',decisions:'Decisões',
+    priere:'Oração',
+    casUrgentsPlaceholder:'Casos urgentes, pedidos de oração...',
+    observationsPlaceholder:'Observações, bênçãos...',
+    envoyer:'Enviar',pdfAdmin:'PDF disponível no espaço Admin.',
+    soldeActuel:'Saldo Atual',nouvelleOperation:'Nova Operação',
+    type2:'Tipo',contributions:'Contribuições',depenses:'Despesas',
+    contributeur:'Membro / Contribuinte',beneficiaire:'Beneficiário',
+    calendrierEvenements:'Calendário de Eventos',
+    choisirDonnees:'Escolher dados para exportar',
+    presences:'Presenças',
+    accesComplet:'Acesso Completo',tempsReel:'Atualizações em tempo real',
+    derniersRapports:'Últimos relatórios recebidos',dernieresReunions:'Últimas reuniões',
+    creerPasteur:'Criar conta de Pastor',creerPasteurNote:'O pastor recebe suas credenciais.',
+    nomComplet:'Nome completo',motDePasseTemp:'Senha temporária',
+    cellule:'Célula / Grupo pastoral',emailResp1:'Email supervisor 1',
+    emailResp2:'Email supervisor 2',whatsappResp:'WhatsApp supervisor',
+    creerCompte:'Criar conta de Pastor',
+    ajouterAdmin:'Adicionar Administrador',
+    ajouterAdminNote:'Reservado para Super Admin.',
+    exAdmin:'Ex: Bispo Samuel',motDePasse:'Senha',
+    creerCompteAdmin:'Criar conta Admin',
+    listePasteurs:'Lista de Pastores e Admins',
+    tousRapports:'Todos os Relatórios',filtrerPasteur:'Filtrar por pastor',
+    tousComptes:'Todas as Atas',tousMembres:'Todos os Membros e Discípulos',
+    contribCDF:'Contribuições CDF',depensesCDF:'Despesas CDF',
+    contribUSD:'Contribuições USD',depensesUSD:'Despesas USD',
+    financesParPasteur:'Finanças por Pastor (CDF)',detailParPasteur:'Detalhe por Pastor',
     langues:{fr:'🇫🇷 Francês',en:'🇬🇧 Inglês',es:'🇪🇸 Espanhol',pt:'🇵🇹 Português'},
   }
 };
@@ -1715,11 +1541,19 @@ window.setLang = function(lang){
   currentLang = lang;
   localStorage.setItem('ifcm-lang', lang);
   const isPastor = currentRole === 'pastor';
-  // Rebuild sidebar PC + drawer mobile
+  // Rebuild sidebar + drawer
   buildSidebar(isPastor);
   buildMobileDrawer(isPastor);
-  // Apply translations to all visible elements
-  applyTranslations();
+  // Rebuild current page content with new language
+  const curPageId = document.querySelector('.page.active')?.id?.replace('page-','');
+  if(curPageId) buildPage(curPageId);
+  // Update topbar title
+  const km={home:'accueil',rapport:'rapport',reunion:'reunion',presence:'presence',
+    membres:'membres',caisse:'caisse',archives:'archives',calendrier:'calendrier',export:'exportXl',
+    dashboard:'dashboard',pasteurs:'pasteurs','rapports-admin':'rapports',
+    'reunions-admin':'reunions','membres-admin':'membres',finances:'finances','calendrier-admin':'calendrier'};
+  const tb=document.getElementById('tb-title');
+  if(tb && curPageId) tb.textContent=t(km[curPageId]||'accueil');
   showToast('🌍 '+LANGS[lang].langues[lang]);
 };
 
@@ -1839,6 +1673,362 @@ window.supprimerPhoto = async function(){
     showToast('🗑️ Photo supprimée.');
   }catch(e){showToast('❌ '+e.message,'#c0392b');}
 };
+
+// ══ BUILD PAGE — génère le HTML de chaque page avec t() ══
+function buildPage(name){
+  const el = document.getElementById('page-'+name);
+  if(!el) return;
+
+  if(name==='home'){
+    el.innerHTML = `
+    <div class="hero" style="background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:1rem;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,.06),transparent 70%);pointer-events:none;"></div>
+      <div style="position:absolute;bottom:-10px;right:16px;font-size:60px;color:rgba(255,215,0,.04);line-height:1;pointer-events:none;">✝</div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <img id="hero-logo" src="${LOGO_SRC}" alt="IFCM" style="width:54px;height:54px;border-radius:50%;filter:drop-shadow(0 0 10px rgba(255,215,0,.3));flex-shrink:0;">
+        <div>
+          <h1 style="font-family:var(--font-display);font-size:clamp(18px,5vw,26px);letter-spacing:2px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:3px;">Impact for Christ Ministries</h1>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;">${t('brancheKinshasa')}</div>
+        </div>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold);background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.15);border-radius:20px;padding:5px 14px;" id="hero-user">👋 ${currentPastorData?.nom||''}</div>
+    </div>
+    <div id="notif-banner" style="display:none;background:linear-gradient(135deg,#B84D06,#E8650A);border-radius:var(--r);padding:14px 16px;margin-bottom:1rem;cursor:pointer;align-items:center;gap:12px;" onclick="showPage('archives')">
+      <div style="font-size:28px;animation:bellRing 1s infinite;">🔔</div>
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:700;color:#fff;" id="notif-title">${t('nouveauMessage')}</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.85);margin-top:2px;">${t('voirArchives')}</div>
+      </div>
+      <div style="font-size:12px;color:#fff;font-weight:700;">${t('voir')} →</div>
+    </div>
+    <div class="section-lbl">${t('rapportsSuivi')}</div>
+    <div class="home-grid">
+      <div class="hcard vc" onclick="showPage('rapport')"><span class="hcard-icon">📋</span><div class="hcard-name">${t('rapport')}</div><div class="hcard-desc">${t('rapportDesc')}</div></div>
+      <div class="hcard oc" onclick="showPage('reunion')"><span class="hcard-icon">📣</span><div class="hcard-name">${t('reunion')}</div><div class="hcard-desc">${t('reunionDesc')}</div></div>
+      <div class="hcard bc" onclick="showPage('presence')"><span class="hcard-icon">✅</span><div class="hcard-name">${t('presence')}</div><div class="hcard-desc">${t('presenceDesc')}</div></div>
+      <div class="hcard vc" onclick="showPage('membres')"><span class="hcard-icon">👥</span><div class="hcard-name">${t('membres')}</div><div class="hcard-desc">${t('membresDesc')}</div></div>
+    </div>
+    <div class="section-lbl">${t('financesArchives')}</div>
+    <div class="home-grid">
+      <div class="hcard gc wide" onclick="showPage('caisse')"><span class="hcard-icon">🤝</span><div><div class="hcard-name">${t('caisse')}</div><div class="hcard-desc">${t('caisseDesc')}</div></div></div>
+      <div class="hcard bc wide" id="hcard-archives" onclick="showPage('archives')">
+        <span class="hcard-icon" style="position:relative;display:inline-block;">🗂️<span id="archives-dot" style="display:none;position:absolute;top:-4px;right:-4px;width:12px;height:12px;background:#ff4444;border-radius:50%;border:2px solid var(--bg);animation:pulseDot 1.5s infinite;"></span></span>
+        <div><div class="hcard-name">${t('archives')} <span id="archives-badge" style="display:none;background:#ff4444;color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:2px 6px;margin-left:4px;vertical-align:middle;"></span></div>
+        <div class="hcard-desc">${t('archivesDesc')}</div></div>
+      </div>
+      <div class="hcard hv wide" onclick="showPage('calendrier')"><span class="hcard-icon">📅</span><div><div class="hcard-name">${t('calendrier')}</div><div class="hcard-desc">${t('calendrierDesc')}</div></div></div>
+      <div class="hcard ho wide" onclick="showPage('export')"><span class="hcard-icon">📊</span><div><div class="hcard-name">${t('exportXl')}</div><div class="hcard-desc">${t('exportDesc')}</div></div></div>
+    </div>`;
+  }
+
+  else if(name==='rapport'){
+    el.innerHTML = `
+    <div class="card">
+      <span class="card-title cv">👤 ${t('identitePasteur')}</span>
+      <label class="flabel">${t('nomPasteur')}</label>
+      <input type="text" id="r-pastor" placeholder="${t('exPasteur')}" maxlength="60" value="${currentPastorData?.nom||''}">
+      <label class="flabel">${t('famillePasteur')}</label>
+      <input type="text" id="r-famille" placeholder="${t('exFamille')}" maxlength="60">
+      <div class="row2" style="margin-top:8px;">
+        <div><label class="flabel">${t('semaineDu')}</label><input type="date" id="r-du"></div>
+        <div><label class="flabel">${t('au')}</label><input type="date" id="r-au"></div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="card-title co">📞 1. ${t('contacts')}</span>
+      <div class="row2">
+        <div class="ng"><div class="nl">${t('visites')}</div><input class="ni" type="number" id="r-visites" min="0" value="0"></div>
+        <div class="ng"><div class="nl">${t('appels')}</div><input class="ni" type="number" id="r-appels" min="0" value="0"></div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="card-title cb">👥 2. ${t('evolution')}</span>
+      <div class="row2">
+        <div class="ng"><div class="nl">${t('nouveaux')}</div><input class="ni" type="number" id="r-nouveaux" min="0" value="0"></div>
+        <div class="ng"><div class="nl">${t('absences')}</div><input class="ni" type="number" id="r-absences" min="0" value="0"></div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="card-title cv">🙏 3. ${t('casUrgents')}</span>
+      <div class="twrap"><textarea id="r-cas" maxlength="400" rows="4" placeholder="${t('casUrgentsPlaceholder')}" oninput="cc('r-cas','cc-r1',400)"></textarea><span class="ccount" id="cc-r1">0/400</span></div>
+    </div>
+    <div class="card">
+      <span class="card-title co">📝 4. ${t('observations')}</span>
+      <div class="twrap"><textarea id="r-obs" maxlength="400" rows="4" placeholder="${t('observationsPlaceholder')}" oninput="cc('r-obs','cc-r2',400)"></textarea><span class="ccount" id="cc-r2">0/400</span></div>
+    </div>
+    <div class="btn-lbl">${t('envoyer')}</div>
+    <button class="btn b-violet" onclick="emailRapport()">✉️ ${t('envoyerEmail')}</button>
+    <button class="btn b-green" onclick="waRapport()">💬 ${t('envoyerWA')}</button>
+    <div class="btn-lbl">Cloud</div>
+    <button class="btn b-blue" onclick="sauvegarderRapport()">☁️ ${t('sauvegarder')}</button>
+    <div class="notice">📌 ${t('pdfAdmin')}</div>`;
+    // Réinitialiser semaine
+    const today=new Date();const day=today.getDay(),diffLun=day===0?-6:1-day;
+    const lundi=new Date(today);lundi.setDate(today.getDate()+diffLun);
+    const dim=new Date(lundi);dim.setDate(lundi.getDate()+6);
+    const du=document.getElementById('r-du'),au=document.getElementById('r-au');
+    if(du&&!du.value)du.value=lundi.toISOString().split('T')[0];
+    if(au&&!au.value)au.value=dim.toISOString().split('T')[0];
+  }
+
+  else if(name==='reunion'){
+    el.innerHTML = `
+    <div class="card">
+      <span class="card-title cv">📋 ${t('informations')}</span>
+      <label class="flabel">${t('typeReunion')}</label>
+      <select id="reu-type">
+        <option value="Réunion de Famille">${t('reunionFamille')}</option>
+        <option value="Réunion de Département">${t('reunionDept')}</option>
+        <option value="Réunion de Prière">${t('reunionPriere')}</option>
+        <option value="Réunion de Discipline">${t('reunionDiscipline')}</option>
+        <option value="Autre Réunion">${t('autre')}</option>
+      </select>
+      <label class="flabel">${t('animateur')}</label><input type="text" id="reu-animateur" placeholder="${t('animateur')}..." value="${currentPastorData?.nom||''}">
+      <label class="flabel">${t('familleDept')}</label><input type="text" id="reu-groupe" placeholder="${t('groupe')}...">
+      <div class="row2" style="margin-top:8px;">
+        <div><label class="flabel">${t('date')}</label><input type="date" id="reu-date" value="${new Date().toISOString().split('T')[0]}"></div>
+        <div><label class="flabel">${t('lieu')}</label><input type="text" id="reu-lieu" placeholder="${t('lieu')}..."></div>
+      </div>
+      <div class="row2" style="margin-top:8px;">
+        <div class="ng"><div class="nl">${t('presents')}</div><input class="ni" type="number" id="reu-presents" min="0" value="0"></div>
+        <div class="ng"><div class="nl">${t('absents')}</div><input class="ni" type="number" id="reu-absents" min="0" value="0"></div>
+      </div>
+    </div>
+    <div class="card">
+      <span class="card-title cv">📝 ${t('contenu')}</span>
+      <label class="flabel">${t('theme')}</label><input type="text" id="reu-theme" placeholder="${t('theme')}...">
+      <label class="flabel">${t('resume')}</label><textarea id="reu-resume" rows="3" placeholder="${t('resume')}..."></textarea>
+      <label class="flabel">${t('decisions')}</label><textarea id="reu-decisions" rows="2" placeholder="${t('decisions')}..."></textarea>
+      <label class="flabel">${t('priere')}</label><textarea id="reu-priere" rows="2" placeholder="${t('priere')}..."></textarea>
+    </div>
+    <button class="btn b-violet" onclick="emailReunion()">✉️ ${t('envoyerEmail')}</button>
+    <button class="btn b-green" onclick="waReunion()">💬 ${t('envoyerWA')}</button>
+    <button class="btn b-blue" onclick="sauvegarderReunion()">☁️ ${t('sauvegarder')}</button>`;
+  }
+
+  else if(name==='presence'){
+    el.innerHTML = `
+    <div class="card">
+      <span class="card-title cv">📅 ${t('detailsCulte')}</span>
+      <label class="flabel">${t('date')}</label><input type="date" id="p-date" value="${new Date().toISOString().split('T')[0]}">
+      <label class="flabel">${t('theme')}</label><input type="text" id="p-theme" placeholder="${t('theme')}...">
+      <label class="flabel">${t('predicateur')}</label><input type="text" id="p-predicateur" placeholder="${t('predicateur')}...">
+    </div>
+    <div class="card">
+      <span class="card-title cv">✅ ${t('presenceMembres')}</span>
+      <div class="searchbar"><span>🔍</span><input type="text" id="p-search" placeholder="${t('rechercher')}..." oninput="filterPresence()"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-size:14px;color:var(--muted);">${t('membres')}</span>
+        <span style="font-size:15px;font-weight:700;color:var(--bleu2);" id="p-count">0 ${t('presents').toLowerCase()}</span>
+      </div>
+      <div id="p-list"></div>
+    </div>
+    <button class="btn b-blue" onclick="sauvegarderPresence()">☁️ ${t('sauvegarder')}</button>`;
+    renderPresence();
+  }
+
+  else if(name==='membres'){
+    el.innerHTML = `
+    <div class="stabs" id="m-stabs">
+      <div class="stab active" onclick="switchMembreTab('disciples')">👤 ${t('disciples')}</div>
+      <div class="stab" onclick="switchMembreTab('membres')">👥 ${t('membres')}</div>
+    </div>
+    <div id="membres-content"></div>`;
+    switchMembreTab('disciples');
+  }
+
+  else if(name==='caisse'){
+    el.innerHTML = `
+    <div class="ftotal">
+      <div class="ftotal-lbl">${t('soldeActuel')}</div>
+      <div id="f-solde-display" class="ftotal-amt">0</div>
+      <div class="fdevise">
+        <div class="fdevise-inner">
+          <button class="fbtn active" id="f-cdf-btn" onclick="setDevise('CDF')">CDF</button>
+          <button class="fbtn" id="f-usd-btn" onclick="setDevise('USD')">USD</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">➕ ${t('nouvelleOperation')}</div>
+      <div class="row2">
+        <div><label class="flabel">${t('type2')}</label>
+          <select id="f-type" onchange="updateCaisseLabel()">
+            <option value="entree">${t('contribution')}</option>
+            <option value="depense">${t('depense')}</option>
+          </select></div>
+        <div><label class="flabel">${t('montant')}</label><input type="number" id="f-montant" placeholder="0" min="0"></div>
+      </div>
+      <label class="flabel" id="f-membre-label">${t('contributeur')}</label>
+      <input type="text" id="f-membre" placeholder="${t('contributeur')}...">
+      <label class="flabel">${t('description')}</label><input type="text" id="f-desc" placeholder="${t('description')}...">
+      <label class="flabel">${t('date')}</label><input type="date" id="f-date" value="${new Date().toISOString().split('T')[0]}">
+      <button class="btn b-gold" onclick="ajouterTransaction()">+ ${t('enregistrer')}</button>
+    </div>
+    <div class="fmini-row">
+      <div class="fmini"><div class="fmini-lbl">${t('contributions')}</div><div class="fmini-val fg" id="f-total-in">0</div></div>
+      <div class="fmini"><div class="fmini-lbl">${t('depenses')}</div><div class="fmini-val fr" id="f-total-out">0</div></div>
+      <div class="fmini"><div class="fmini-lbl">Solde</div><div class="fmini-val fgo" id="f-total-sol">0</div></div>
+    </div>
+    <div id="f-list"></div>`;
+    renderCaisse();
+  }
+
+  else if(name==='archives'){
+    el.innerHTML = `
+    <div class="stabs" id="arch-stabs">
+      <div class="stab active" onclick="switchArch('rapports')">📋 ${t('rapports')}</div>
+      <div class="stab" onclick="switchArch('reunions')">📣 ${t('reunions')}</div>
+      <div class="stab" onclick="switchArch('presences')">✅ ${t('presences')}</div>
+      <div class="stab" onclick="switchArch('caisse')">🤝 ${t('caisse')}</div>
+    </div>
+    <div id="arch-rapports"></div>
+    <div id="arch-reunions" style="display:none;"></div>
+    <div id="arch-presences" style="display:none;"></div>
+    <div id="arch-caisse" style="display:none;"></div>`;
+    renderArch('rapports');
+    switchArch('rapports');
+    marquerCommentairesLus();
+  }
+
+  else if(name==='calendrier'){
+    el.innerHTML = `
+    <div id="cal-add-section"></div>
+    <div class="card">
+      <div class="card-title">📅 ${t('calendrierEvenements')}</div>
+      <div class="stabs" id="cal-stabs">
+        <div class="stab active" onclick="switchCal('avenir')">📅 ${t('aVenir')}</div>
+        <div class="stab" onclick="switchCal('passe')">📋 ${t('passes')}</div>
+        <div class="stab" onclick="switchCal('tous')">🗂️ ${t('tous')}</div>
+      </div>
+      <div id="cal-list"><div class="empty">${t('chargement')}</div></div>
+    </div>`;
+    calTab='avenir'; renderCalendrier();
+  }
+
+  else if(name==='export'){
+    el.innerHTML = `
+    <div class="card">
+      <div class="card-title">📊 ${t('exportXl')}</div>
+      <div class="cnote">${t('exportDesc2')}</div>
+      <div class="btn-lbl">${t('choisirDonnees')}</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+        ${[
+          ['ex-rapports','📋',t('rapports')],
+          ['ex-reunions','📣',t('reunions')],
+          ['ex-membres','👥',t('membres')],
+          ['ex-finances','🤝',t('caisse')],
+          ['ex-presences','✅',t('presences')]
+        ].map(([id,ic,lb])=>`
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:12px 14px;background:var(--card2);border-radius:var(--rs);border:1px solid var(--border);">
+          <input type="checkbox" id="${id}" checked style="width:18px;height:18px;accent-color:var(--gold);">
+          <span style="font-size:15px;">${ic} ${lb}</span>
+        </label>`).join('')}
+      </div>
+      <button class="btn b-or" onclick="exporterExcel()">📥 ${t('telecharger')}</button>
+    </div>`;
+  }
+
+  // ── ADMIN PAGES ──
+  else if(name==='dashboard'){
+    el.innerHTML = `
+    <div class="page-hdr" style="margin-bottom:1.5rem;">
+      <div style="font-family:var(--font-display);font-size:clamp(22px,5vw,32px);letter-spacing:1.5px;color:var(--text);">${t('titreDashboard')}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:5px;" id="admin-date">${new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div>
+    </div>
+    <div id="super-admin-banner" style="display:${currentRole==='super_admin'?'block':'none'};background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(232,101,10,.05));border:1px solid rgba(255,215,0,.2);border-radius:var(--r);padding:14px 16px;margin-bottom:1rem;">
+      <div style="font-family:var(--cond);font-size:14px;font-weight:800;letter-spacing:1px;color:var(--gold);">👑 Super Administrateur — ${t('accesComplet')}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;padding:8px 12px;background:rgba(37,162,68,.1);border-radius:10px;border:1px solid rgba(37,162,68,.2);">
+      <div style="width:8px;height:8px;border-radius:50%;background:#4ecc72;animation:pulseGlow 2s infinite;"></div>
+      <span style="font-size:13px;color:#4ecc72;font-weight:600;">${t('tempsReel')}</span>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box sb-bleu"><div class="stat-num" id="stat-pasteurs">0</div><div class="stat-lbl">${t('pasteurs')}</div></div>
+      <div class="stat-box sb-or"><div class="stat-num" id="stat-rapports">0</div><div class="stat-lbl">${t('rapports')}</div></div>
+      <div class="stat-box sb-or2"><div class="stat-num" id="stat-membres">0</div><div class="stat-lbl">${t('membres')}</div></div>
+      <div class="stat-box sb-vert"><div class="stat-num" id="stat-reunions">0</div><div class="stat-lbl">${t('reunions')}</div></div>
+    </div>
+    <div id="dashboard-charts"></div>
+    <div class="card"><div class="card-title">📋 ${t('derniersRapports')}</div><div id="admin-last-rapports"><div class="empty">${t('chargement')}</div></div></div>
+    <div class="card"><div class="card-title">📣 ${t('dernieresReunions')}</div><div id="admin-last-reunions"><div class="empty">${t('chargement')}</div></div></div>`;
+    loadAdminCharts();
+  }
+
+  else if(name==='pasteurs'){
+    el.innerHTML = `
+    <div class="card">
+      <div class="card-title">➕ ${t('creerPasteur')}</div>
+      <div class="cnote">${t('creerPasteurNote')}</div>
+      <label class="flabel">${t('nomComplet')}</label><input type="text" id="np-nom" placeholder="${t('exPasteur')}">
+      <label class="flabel">${t('email')}</label><input type="email" id="np-email" placeholder="pasteur@ifcm.org">
+      <label class="flabel">${t('motDePasseTemp')}</label><input type="text" id="np-password" value="IFCM2024">
+      <label class="flabel">${t('cellule')}</label><input type="text" id="np-cellule" placeholder="${t('cellule')}...">
+      <label class="flabel">${t('emailResp1')}</label><input type="email" id="np-email-resp" placeholder="admin1@ifcm.org">
+      <label class="flabel">${t('emailResp2')}</label><input type="email" id="np-email-resp2" placeholder="admin2@ifcm.org">
+      <label class="flabel">${t('whatsappResp')}</label><input type="text" id="np-wa-resp" placeholder="+243812345678">
+      <button class="btn b-violet" onclick="creerPasteur()">👨‍💼 ${t('creerCompte')}</button>
+    </div>
+    <div class="card" id="section-creer-admin" style="display:${currentRole==='super_admin'?'block':'none'};">
+      <div class="card-title">🔐 ${t('ajouterAdmin')}</div>
+      <div class="cnote">⚠️ ${t('ajouterAdminNote')}</div>
+      <label class="flabel">${t('nom')}</label><input type="text" id="na-nom" placeholder="${t('exAdmin')}">
+      <label class="flabel">${t('email')}</label><input type="email" id="na-email" placeholder="admin@ifcm.org">
+      <label class="flabel">${t('motDePasse')}</label><input type="text" id="na-password" value="IFCM_Admin2024">
+      <button class="btn b-rouge" onclick="creerAdmin()">🔐 ${t('creerCompteAdmin')}</button>
+    </div>
+    <div class="card"><div class="card-title">👥 ${t('listePasteurs')}</div><div id="admin-pasteurs-list"><div class="empty">${t('chargement')}</div></div></div>`;
+    loadAdminPasteurs();
+  }
+
+  else if(name==='rapports-admin'){
+    el.innerHTML = `
+    <div class="card">
+      <div class="card-title">📋 ${t('tousRapports')}</div>
+      <div class="searchbar"><span>🔍</span><input type="text" id="ar-search" placeholder="${t('filtrerPasteur')}..." oninput="filterAdminRapports()"></div>
+      <div id="admin-rapports-list"><div class="empty">${t('chargement')}</div></div>
+    </div>`;
+    loadAdminRapports();
+  }
+
+  else if(name==='reunions-admin'){
+    el.innerHTML = `<div class="card"><div class="card-title">📣 ${t('tousComptes')}</div><div id="admin-reunions-list"><div class="empty">${t('chargement')}</div></div></div>`;
+    loadAdminReunions();
+  }
+
+  else if(name==='membres-admin'){
+    el.innerHTML = `<div class="card"><div class="card-title">👥 ${t('tousMembres')}</div><div id="admin-membres-list"><div class="empty">${t('chargement')}</div></div></div>`;
+    loadAdminMembres();
+  }
+
+  else if(name==='finances'){
+    el.innerHTML = `
+    <div class="stat-grid" id="finances-stats">
+      <div class="stat-box sb-vert"><div class="stat-num fg" id="fs-in-cdf">0</div><div class="stat-lbl">${t('contribCDF')}</div></div>
+      <div class="stat-box sb-or"><div class="stat-num fr" id="fs-out-cdf">0</div><div class="stat-lbl">${t('depensesCDF')}</div></div>
+      <div class="stat-box sb-vert"><div class="stat-num fg" id="fs-in-usd">0</div><div class="stat-lbl">${t('contribUSD')}</div></div>
+      <div class="stat-box sb-or"><div class="stat-num fr" id="fs-out-usd">0</div><div class="stat-lbl">${t('depensesUSD')}</div></div>
+    </div>
+    <div class="chart-wrap"><div class="chart-title">📊 ${t('financesParPasteur')}</div><canvas id="chart-finances" height="200"></canvas></div>
+    <div class="card"><div class="card-title">📋 ${t('detailParPasteur')}</div><div id="admin-finances-list"><div class="empty">${t('chargement')}</div></div></div>`;
+    loadAdminFinances();
+  }
+
+  else if(name==='calendrier-admin'){
+    el.innerHTML = `
+    <div id="cal-add-section-admin"></div>
+    <div class="card">
+      <div class="card-title">📅 ${t('calendrierEvenements')}</div>
+      <div class="stabs" id="cal-stabs-admin">
+        <div class="stab active" onclick="switchCalAdmin('avenir')">📅 ${t('aVenir')}</div>
+        <div class="stab" onclick="switchCalAdmin('passe')">📋 ${t('passes')}</div>
+        <div class="stab" onclick="switchCalAdmin('tous')">🗂️ ${t('tous')}</div>
+      </div>
+      <div id="cal-list-admin"><div class="empty">${t('chargement')}</div></div>
+    </div>`;
+    renderCalendrierAdmin();
+  }
+}
 
 // ══ UTILS ══
 window.showToast=function(msg,col){
