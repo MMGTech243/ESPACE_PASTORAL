@@ -53,51 +53,142 @@ body::before{content:"";position:fixed;inset:0;background:var(--bg);z-index:-1;}
 /* MOBILE BASE */
 .app-body{display:block;}
 .pages-wrap{display:block;}
-.tabnav,.admin-tabnav{position:sticky;top:54px;z-index:99;}
 
-/* PC — centrage simple et élégant */
+/* ═══ SIDEBAR LAYOUT (comme FC Bernard) ═══ */
+.sidebar-layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.ifcm-sidebar{
+  display:none;flex-direction:column;width:280px;min-width:280px;
+  position:fixed;top:0;left:0;bottom:0;z-index:100;
+  background:linear-gradient(180deg,#0A1628 0%,#0F1F3D 100%);
+  border-right:1px solid var(--border);overflow-y:auto;
+}
+.sb-header{padding:22px 20px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;}
+.sb-logo-img{width:46px;height:46px;border-radius:50%;
+  filter:drop-shadow(0 0 8px rgba(255,215,0,.4));flex-shrink:0;}
+.sb-brand-name{font-family:var(--font-display);font-size:16px;letter-spacing:2px;
+  background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sb-brand-tag{font-family:var(--cond);font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.sb-user-box{margin:10px 14px;background:rgba(255,215,0,.05);
+  border:1px solid rgba(255,215,0,.1);border-radius:var(--rs);padding:12px 14px;}
+.sb-user-name{font-family:var(--cond);font-size:16px;font-weight:800;
+  letter-spacing:.5px;color:var(--text);}
+.sb-user-email{font-size:13px;color:var(--muted);margin-top:2px;}
+.sb-user-badge{display:inline-block;margin-top:6px;font-family:var(--cond);
+  font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:4px;}
+.sb-nav-items{flex:1;padding:10px 10px;}
+.sb-nav-item{
+  display:flex;align-items:center;gap:12px;padding:13px 16px;
+  border-radius:var(--rs);cursor:pointer;
+  font-family:var(--cond);font-size:16px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px;
+  transition:all .2s;position:relative;
+}
+.sb-nav-item::before{content:"";position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--grad-or);border-radius:0 3px 3px 0;
+  transform:scaleY(0);transition:transform .2s;}
+.sb-nav-item:hover{background:rgba(255,215,0,.05);color:var(--text);}
+.sb-nav-item.active{background:rgba(255,215,0,.08);color:var(--gold);}
+.sb-nav-item.active::before{transform:scaleY(1);}
+.sb-nav-item .sb-ni{font-size:20px;flex-shrink:0;}
+.sb-nav-item .sb-notif{width:8px;height:8px;border-radius:50%;
+  background:#ff4444;margin-left:auto;animation:pulseGlow 1.5s infinite;}
+.sb-footer{padding:16px 14px;border-top:1px solid var(--border);}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:11px 14px;
+  border-radius:var(--rs);cursor:pointer;font-family:var(--cond);
+  font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--muted);transition:all .2s;}
+.sb-logout:hover{background:rgba(220,50,50,.1);color:#ff8080;}
+
+/* MAIN AREA */
+.main-area{flex:1;min-height:100vh;}
+
+/* TOPBAR MOBILE */
+.topbar{background:linear-gradient(135deg,#0A1628,#162547);
+  padding:12px 16px;display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);}
+.topbar-title{font-family:var(--font-display);font-size:16px;letter-spacing:1px;color:var(--gold);}
+.topbar-sub{font-size:12px;color:var(--muted);}
+
+/* BOTTOM NAV MOBILE */
+.bottom-nav-mobile{
+  display:flex;position:fixed;bottom:0;left:0;right:0;
+  background:linear-gradient(135deg,#0A1628,#0F1F3D);
+  border-top:1px solid var(--border);z-index:100;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bn-mobile-item{flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:10px 4px;cursor:pointer;color:var(--muted);
+  font-family:var(--cond);font-size:10px;font-weight:700;
+  letter-spacing:.3px;text-transform:uppercase;transition:all .2s;gap:3px;}
+.bn-mobile-item.active{color:var(--gold);}
+.bn-mobile-item .bni{font-size:20px;}
+
+/* OLD tabnav hidden on PC */
+.tabnav,.admin-tabnav{display:none!important;}
+
+/* PAGES */
+.page{display:none;padding:20px 16px 100px;animation:fadeUpIn .25s ease;}
+.page.active{display:block;}
+
+/* PC LAYOUT */
 @media(min-width:768px){
-  body{font-size:18px;}
-  #app-page{max-width:860px;margin:0 auto;}
-  #login-page{max-width:860px;margin:0 auto;min-height:100vh;}
-  .topbar{border-radius:0;}
-  .tabnav-item,.admin-tabnav-item{font-family:var(--cond);font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:15px;padding:13px 20px;}
-  .page{padding:28px 32px 80px;}
-  .card-title{font-size:14px;padding:6px 14px;}
-  input,select,textarea{font-size:16px;padding:12px 14px;}
-  .btn{font-size:16px;padding:15px;}
-  .mname,.ai-name,.pastor-name,.rc-pastor{font-size:17px;}
-  .mmeta,.ai-date,.ai-stats,.pastor-email,.rc-date,.pastor-stats,.rc-stats{font-size:14px;}
-  .flabel{font-size:13px;}
+  body{font-size:17px;}
+  .ifcm-sidebar{display:flex!important;}
+  .main-area{margin-left:280px;}
+  .topbar{display:none!important;}
+  .bottom-nav-mobile{display:none!important;}
+  .page{padding:32px 40px 60px;}
+  /* Big fonts everywhere */
+  .sb-nav-item{font-size:15px;padding:12px 16px;}
+  input,select,textarea{font-size:17px;padding:14px 15px;}
+  .btn{font-size:17px;padding:16px;letter-spacing:1px;}
+  .flabel{font-size:14px;margin:14px 0 6px;}
   .home-grid{grid-template-columns:repeat(4,1fr);gap:16px;}
   .hcard.wide{grid-column:span 2;}
-  .hcard-name{font-size:15px;}
-  .hcard-desc{font-size:13px;}
+  .hcard-name{font-size:18px;}
+  .hcard-desc{font-size:14px;}
   .stat-grid{grid-template-columns:repeat(4,1fr);gap:14px;}
+  .stat-num{font-size:44px;}
+  .stat-lbl{font-size:14px;}
   .row2{grid-template-columns:1fr 1fr;}
   .chart-grid{grid-template-columns:1fr 1fr;}
-  .hero h1{font-size:24px;}
-  .hero-branch{font-size:15px;}
-  .hero-user{font-size:15px;padding:7px 20px;}
-  .stat-num{font-size:40px;}
-  .stat-lbl{font-size:13px;}
-  .login-logo h1{font-size:26px;}
-  .login-card{padding:32px;max-width:440px;margin:0 auto;}
-  .login-title{font-size:24px;}
-  .section-lbl{font-size:14px;}
-  .btn-lbl{font-size:13px;}
-  .notice,.cnote{font-size:14px;}
-  .topbar-title{font-size:17px;}
-  .topbar-sub{font-size:12px;}
-  .ai-num,.item-tag{font-size:12px;}
+  .ai-name,.mname,.pastor-name,.rc-pastor{font-size:19px!important;}
+  .ai-date,.ai-stats,.mmeta,.pastor-email,.pastor-stats,.rc-date,.rc-stats{font-size:15px!important;}
+  .ai-num{font-size:14px!important;}
+  .card-title{font-size:18px;}
+  .section-lbl{font-size:16px;}
+  .notice,.cnote{font-size:15px;}
+  .hcard-icon{font-size:36px;}
+  .modal{border-radius:var(--r);max-width:560px;max-height:90vh;}
   .overlay{align-items:center;justify-content:center;padding:20px;}
-  .modal{border-radius:var(--r);max-width:500px;max-height:90vh;}
-  .modal-title{font-size:18px;}
+  .modal-title{font-size:22px;}
+  .login-card{padding:36px;max-width:440px;margin:0 auto;}
+  .login-title{font-size:26px;}
+  .pastor-badge{font-size:13px;padding:4px 10px;}
+  .comment-text{font-size:15px;}
+  .comment-author{font-size:13px;}
+  .ftotal-amt{font-size:36px;}
+  .fmini-val{font-size:20px;}
+  .fmini-lbl{font-size:13px;}
+  .rc-pastor{font-size:18px!important;}
+  .ab{font-size:14px!important;padding:8px 16px!important;}
+  .stab{font-size:14px;padding:9px 18px;}
+  .ng .ni{font-size:28px;}
+  .ng .nl{font-size:12px;}
 }
 
-@media(min-width:1100px){
-  #app-page{max-width:1000px;}
-  #login-page{max-width:1000px;}
+@media(min-width:1200px){
+  .ifcm-sidebar{width:300px;}
+  .main-area{margin-left:300px;}
+  .page{padding:36px 48px 60px;}
+  .ai-name,.mname,.pastor-name{font-size:20px!important;}
+  .stat-num{font-size:48px;}
 }
 
 /* BODY BACKGROUND always full width */
@@ -404,43 +495,69 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 
 <!-- APP -->
 <div id="app-page" style="display:none;">
-  <div class="topbar">
-    <div style="display:flex;align-items:center;gap:10px;flex:1;">
-      <img id="tb-logo" src="" alt="" style="width:30px;height:30px;border-radius:50%;filter:drop-shadow(0 0 5px rgba(255,215,0,.3));">
-      <div class="topbar-info">
-        <div class="topbar-title" id="tb-title">IFCM Kinshasa</div>
-        <div class="topbar-sub" id="tb-user"></div>
+<div class="sidebar-layout">
+
+  <!-- ═══ SIDEBAR VERTICALE ═══ -->
+  <div class="ifcm-sidebar" id="ifcm-sidebar">
+    <!-- Header avec logo -->
+    <div class="sb-header">
+      <img class="sb-logo-img" id="sb-logo" src="" alt="IFCM">
+      <div>
+        <div class="sb-brand-name">IFCM</div>
+        <div class="sb-brand-tag">Espace Pastoral</div>
       </div>
     </div>
-    <button class="topbar-btn" id="tb-home" style="display:none;" onclick="goHome()">🏠</button>
-    <button class="topbar-btn" onclick="doLogout()">Déconnexion</button>
+    <!-- User info -->
+    <div class="sb-user-box" id="sb-user-box">
+      <div class="sb-user-name" id="sb-user-name">—</div>
+      <div class="sb-user-email" id="sb-user-email">—</div>
+      <div id="sb-user-badge"></div>
+    </div>
+    <!-- Navigation -->
+    <div class="sb-nav-items" id="sb-nav-items"></div>
+    <!-- Footer logout -->
+    <div class="sb-footer">
+      <div class="sb-logout" onclick="doLogout()">🚪 <span>Déconnexion</span></div>
+    </div>
   </div>
 
-  <!-- PASTEUR NAV -->
-  <div class="tabnav" id="pastor-nav" style="display:none;">
-    <div class="tabnav-item active" onclick="showPage('home')">🏠 Accueil</div>
-    <div class="tabnav-item" onclick="showPage('rapport')">📋 Rapport</div>
-    <div class="tabnav-item" onclick="showPage('reunion')">📣 Réunion</div>
-    <div class="tabnav-item" onclick="showPage('presence')">✅ Présence</div>
-    <div class="tabnav-item" onclick="showPage('membres')">👥 Membres</div>
-    <div class="tabnav-item" onclick="showPage('caisse')">🤝 Caisse</div>
-    <div class="tabnav-item" onclick="showPage('archives')" id="nav-archives" style="position:relative;">🗂️ Archives<span id="nav-archives-dot" style="display:none;position:absolute;top:6px;right:6px;width:10px;height:10px;background:#ff4444;border-radius:50%;"></span></div>
-    <div class="tabnav-item" onclick="showPage('calendrier')">📅 Calendrier</div>
-    <div class="tabnav-item" onclick="showPage('export')">📊 Export</div>
-  </div>
+  <!-- ═══ CONTENU PRINCIPAL ═══ -->
+  <div class="main-area">
+    <!-- Topbar mobile uniquement -->
+    <div class="topbar">
+      <img id="tb-logo" src="" alt="" style="width:32px;height:32px;border-radius:50%;filter:drop-shadow(0 0 5px rgba(255,215,0,.3));">
+      <div style="flex:1;">
+        <div class="topbar-title" id="tb-title">IFCM</div>
+        <div class="topbar-sub" id="tb-user"></div>
+      </div>
+      <button class="topbar-btn" id="tb-home" style="display:none;" onclick="goHome()">🏠</button>
+      <button class="topbar-btn" onclick="doLogout()">Sortir</button>
+    </div>
 
-  <!-- ADMIN NAV -->
-  <div class="admin-tabnav" id="admin-nav" style="display:none;">
-    <div class="admin-tabnav-item active" onclick="showAdminPage('dashboard')">📊 Tableau de bord</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('pasteurs')">👨‍💼 Pasteurs</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('rapports')">📋 Rapports</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('reunions')">📣 Réunions</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('membres')">👥 Membres</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('finances')">🤝 Finances Familles</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('calendrier')">📅 Calendrier</div>
-    <div class="admin-tabnav-item" onclick="showAdminPage('export')">📊 Export</div>
-  </div>
+    <!-- Ancien nav caché — gardé pour compatibilité JS -->
+    <div class="tabnav" id="pastor-nav" style="display:none!important;">
+      <div class="tabnav-item active" onclick="showPage('home')">🏠 Accueil</div>
+      <div class="tabnav-item" onclick="showPage('rapport')">📋 Rapport</div>
+      <div class="tabnav-item" onclick="showPage('reunion')">📣 Réunion</div>
+      <div class="tabnav-item" onclick="showPage('presence')">✅ Présence</div>
+      <div class="tabnav-item" onclick="showPage('membres')">👥 Membres</div>
+      <div class="tabnav-item" onclick="showPage('caisse')">🤝 Caisse</div>
+      <div class="tabnav-item" onclick="showPage('archives')" id="nav-archives" style="position:relative;">🗂️ Archives<span id="nav-archives-dot" style="display:none;position:absolute;top:6px;right:6px;width:10px;height:10px;background:#ff4444;border-radius:50%;"></span></div>
+      <div class="tabnav-item" onclick="showPage('calendrier')">📅 Calendrier</div>
+      <div class="tabnav-item" onclick="showPage('export')">📊 Export</div>
+    </div>
+    <div class="admin-tabnav" id="admin-nav" style="display:none!important;">
+      <div class="admin-tabnav-item active" onclick="showAdminPage('dashboard')">📊 Tableau de bord</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('pasteurs')">👨‍💼 Pasteurs</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('rapports')">📋 Rapports</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('reunions')">📣 Réunions</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('membres')">👥 Membres</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('finances')">🤝 Finances Familles</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('calendrier')">📅 Calendrier</div>
+      <div class="admin-tabnav-item" onclick="showAdminPage('export')">📊 Export</div>
+    </div>
 
+    <!-- PAGES -->
   <!-- HOME -->
   <div class="page active" id="page-home">
     <div class="hero" style="background:linear-gradient(135deg,var(--card) 0%,var(--card2) 100%);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:1rem;position:relative;overflow:hidden;">
@@ -813,6 +930,13 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     </div>
   </div>
 
+
+    <!-- Bottom nav mobile -->
+    <div class="bottom-nav-mobile" id="bottom-nav-mobile"></div>
+  </div><!-- end main-area -->
+
+</div><!-- end sidebar-layout -->
+</div><!-- end app-page -->
 </div><!-- end app-page -->
 
 <!-- PREVIEW -->
@@ -1084,6 +1208,72 @@ applyLogos();
   }
 })();
 
+// ══ BUILD SIDEBAR ══
+const pastorNavDef = [
+  {id:'home',icon:'✝',label:'Accueil'},
+  {id:'rapport',icon:'📋',label:'Rapport Hebdo'},
+  {id:'reunion',icon:'📣',label:'Réunion'},
+  {id:'presence',icon:'✅',label:'Présence'},
+  {id:'membres',icon:'👥',label:'Membres'},
+  {id:'caisse',icon:'🤝',label:'Caisse'},
+  {id:'archives',icon:'🗂️',label:'Archives',notif:true},
+  {id:'calendrier',icon:'📅',label:'Calendrier'},
+  {id:'export',icon:'📊',label:'Export Excel'},
+];
+const adminNavDef = [
+  {id:'dashboard',icon:'📊',label:'Tableau de bord'},
+  {id:'pasteurs',icon:'👨‍💼',label:'Pasteurs'},
+  {id:'rapports',icon:'📋',label:'Rapports'},
+  {id:'reunions',icon:'📣',label:'Réunions'},
+  {id:'membres',icon:'👥',label:'Membres'},
+  {id:'finances',icon:'🤝',label:'Finances'},
+  {id:'calendrier',icon:'📅',label:'Calendrier'},
+];
+
+function buildSidebar(isPastor) {
+  const items = isPastor ? pastorNavDef : adminNavDef;
+  const firstId = items[0].id;
+
+  // User box
+  const roleLabels = {super_admin:'👑 Super Admin',admin:'🔐 Admin',pastor:'✝ Pasteur'};
+  const badgeColors = {super_admin:'background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.2);',
+    admin:'background:rgba(232,101,10,.15);color:#FF8533;border:1px solid rgba(232,101,10,.2);',
+    pastor:'background:rgba(42,142,255,.15);color:#2A8EFF;border:1px solid rgba(42,142,255,.2);'};
+  const sbName = document.getElementById('sb-user-name');
+  const sbEmail = document.getElementById('sb-user-email');
+  const sbBadge = document.getElementById('sb-user-badge');
+  if(sbName) sbName.textContent = currentPastorData?.nom || currentUser?.email || '—';
+  if(sbEmail) sbEmail.textContent = currentUser?.email || '—';
+  if(sbBadge) sbBadge.innerHTML = `<span style="display:inline-block;margin-top:6px;font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;${badgeColors[currentRole]||''}">${roleLabels[currentRole]||currentRole}</span>`;
+
+  // Nav items
+  const nav = document.getElementById('sb-nav-items');
+  if(nav) nav.innerHTML = items.map(n=>`
+    <div class="sb-nav-item${n.id===firstId?' active':''}" onclick="${isPastor?'showPage':'showAdminPage'}('${n.id}')" id="sb-nav-${n.id}">
+      <span class="sb-ni">${n.icon}</span>
+      <span>${n.label}</span>
+      ${n.notif?`<span id="sb-notif-dot" style="display:none;" class="sb-notif"></span>`:''}
+    </div>`).join('');
+
+  // Bottom nav mobile (5 items)
+  const bn = document.getElementById('bottom-nav-mobile');
+  if(bn) bn.innerHTML = items.slice(0,5).map(n=>`
+    <div class="bn-mobile-item${n.id===firstId?' active':''}" onclick="${isPastor?'showPage':'showAdminPage'}('${n.id}')" id="bn-${n.id}">
+      <span class="bni">${n.icon}</span>
+      <span>${n.label.split(' ')[0].substring(0,7)}</span>
+    </div>`).join('');
+}
+
+function updateSidebarActive(name) {
+  document.querySelectorAll('.sb-nav-item').forEach(t=>{
+    const isActive = t.id === 'sb-nav-'+name;
+    t.classList.toggle('active', isActive);
+  });
+  document.querySelectorAll('.bn-mobile-item').forEach(t=>{
+    t.classList.toggle('active', t.id === 'bn-'+name);
+  });
+}
+
 // ══ AUTH ══
 onAuthStateChanged(auth, async user => {
   // Masquer spinner, afficher page bienvenue
@@ -1117,26 +1307,24 @@ onAuthStateChanged(auth, async user => {
 
 async function showApp(){
   document.getElementById('welcome-page').style.display='none';
-  document.getElementById('login-page').style.display = 'none';
-  document.getElementById('app-page').style.display = 'block';
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app-page').style.display='block';
   applyLogos();
-  const nom = currentPastorData.nom || currentUser.email;
-  const roleLabel = currentRole==='super_admin'?'👑 Super Admin':currentRole==='admin'?' · Admin':'';
-  document.getElementById('tb-user').textContent = nom + roleLabel;
-  document.getElementById('hero-user').textContent = '👋 '+nom;
-  document.getElementById('admin-date').textContent =
-    new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const nom=currentPastorData.nom||currentUser.email;
+  const roleLabel=currentRole==='super_admin'?'👑':currentRole==='admin'?' Admin':'';
+  document.getElementById('tb-user').textContent=nom.split(' ')[0]+roleLabel;
+  const heroU=document.getElementById('hero-user');
+  if(heroU)heroU.textContent='👋 '+nom;
+  const ad=document.getElementById('admin-date');
+  if(ad)ad.textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   if(currentRole==='admin'||currentRole==='super_admin'){
-    document.getElementById('admin-nav').style.display='flex';
-    document.getElementById('pastor-nav').style.display='none';
-    // Afficher la section créer admin seulement pour le super_admin
+    buildSidebar(false);
     const secAdmin=document.getElementById('section-creer-admin');
-    if(secAdmin) secAdmin.style.display=currentRole==='super_admin'?'block':'none';
-    showAdminPage('dashboard'); loadAdminData();
-  } else {
-    document.getElementById('pastor-nav').style.display='flex';
-    document.getElementById('admin-nav').style.display='none';
-    showPage('home'); loadPastorData();
+    if(secAdmin)secAdmin.style.display=currentRole==='super_admin'?'block':'none';
+    showAdminPage('dashboard');loadAdminData();
+  }else{
+    buildSidebar(true);
+    showPage('home');loadPastorData();
   }
   initCalendrier();
 }
@@ -1191,41 +1379,26 @@ const titles={home:'IFCM Kinshasa',rapport:'Rapport Hebdomadaire',reunion:'Rappo
 window.showPage=function(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const p=document.getElementById('page-'+name);if(p)p.classList.add('active');
-  document.querySelectorAll('.tabnav-item').forEach(t=>{
-    t.classList.toggle('active',
-      (name==='home'&&t.textContent.includes('Accueil'))||(name==='rapport'&&t.textContent.includes('Rapport'))||
-      (name==='reunion'&&t.textContent.includes('union'))||(name==='presence'&&t.textContent.includes('ésence'))||
-      (name==='membres'&&t.textContent.includes('embre'))||(name==='caisse'&&t.textContent.includes('Caisse'))||
-      (name==='archives'&&t.textContent.includes('rchive')));
-  });
-  document.getElementById('tb-title').textContent=titles[name]||'IFCM';
-  const hBtn=document.getElementById('tb-home');if(hBtn)hBtn.style.display=name==='home'?'none':'block';
+  updateSidebarActive(name);
+  const titlesMap={home:'IFCM Pastoral',rapport:'Rapport',reunion:'Réunion',presence:'Présence',
+    membres:'Membres',caisse:'Caisse',archives:'Archives',calendrier:'Calendrier',export:'Export'};
+  const tb=document.getElementById('tb-title');if(tb)tb.textContent=titlesMap[name]||'IFCM';
   curPage=name;window.scrollTo(0,0);
   if(name==='membres')switchMembreTab('disciples');
   if(name==='caisse')renderCaisse();
   if(name==='presence')renderPresence();
   if(name==='archives'){renderArch('rapports');switchArch('rapports');marquerCommentairesLus();}
   if(name==='calendrier'){calTab='avenir';renderCalendrier();}
-  if(name==='export'){/* page statique */}
 };
 
 window.showAdminPage=function(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const pageId=name==='rapports'?'rapports-admin':name==='reunions'?'reunions-admin':name==='membres'?'membres-admin':name;
   const p=document.getElementById('page-'+pageId);if(p)p.classList.add('active');
-  document.querySelectorAll('.admin-tabnav-item').forEach(t=>{
-    t.classList.toggle('active',
-      (name==='dashboard'&&t.textContent.includes('Tableau'))||
-      (name==='pasteurs'&&t.textContent.includes('Pasteur'))||
-      (name==='rapports'&&t.textContent.includes('Rapport'))||
-      (name==='reunions'&&t.textContent.includes('union'))||
-      (name==='membres'&&t.textContent.includes('embre'))||
-      (name==='finances'&&t.textContent.includes('Finance'))||
-      (name==='calendrier'&&t.textContent.includes('Calendrier'))||
-      (name==='export'&&t.textContent.includes('Export')));
-  });
-  const titleMap={...titles,'finances':'Finances des Familles','calendrier':'Calendrier','export':'Export Excel'};
-  document.getElementById('tb-title').textContent=titleMap[pageId]||titleMap[name]||'Admin';
+  updateSidebarActive(name);
+  const titleMap={dashboard:'Tableau de bord',pasteurs:'Pasteurs',rapports:'Rapports',
+    reunions:'Réunions',membres:'Membres',finances:'Finances',calendrier:'Calendrier'};
+  const tb=document.getElementById('tb-title');if(tb)tb.textContent=titleMap[name]||'Admin';
   curPage=pageId||name;window.scrollTo(0,0);
   if(name==='rapports')loadAdminRapports();
   if(name==='reunions')loadAdminReunions();
