@@ -1687,19 +1687,23 @@ window.setLang = function(lang){
   currentLang = lang;
   localStorage.setItem('ifcm-lang', lang);
   const isPastor = currentRole === 'pastor';
-  // Rebuild sidebar + drawer
+  // Rebuild sidebar + drawer avec nouvelle langue
   buildSidebar(isPastor);
   buildMobileDrawer(isPastor);
-  // Rebuild current page content with new language
-  const curPageId = document.querySelector('.page.active')?.id?.replace('page-','');
-  if(curPageId) buildPage(curPageId);
-  // Update topbar title
-  const km={home:'accueil',rapport:'rapport',reunion:'reunion',presence:'presence',
-    membres:'membres',caisse:'caisse',archives:'archives',calendrier:'calendrier',export:'exportXl',
-    dashboard:'dashboard',pasteurs:'pasteurs','rapports-admin':'rapports',
-    'reunions-admin':'reunions','membres-admin':'membres',finances:'finances','calendrier-admin':'calendrier'};
-  const tb=document.getElementById('tb-title');
-  if(tb && curPageId) tb.textContent=t(km[curPageId]||'accueil');
+  // Rebuild la page actuellement affichée
+  const activePage = document.querySelector('.page.active');
+  const curPageId = activePage?.id?.replace('page-','');
+  if(curPageId){
+    buildPage(curPageId);
+    // Mettre à jour le titre topbar
+    const km={home:'accueil',rapport:'rapport',reunion:'reunion',presence:'presence',
+      membres:'membres',caisse:'caisse',archives:'archives',calendrier:'calendrier',export:'exportXl',
+      dashboard:'dashboard',pasteurs:'pasteurs','rapports-admin':'rapports',
+      'reunions-admin':'reunions','membres-admin':'membres',finances:'finances',
+      'calendrier-admin':'calendrier'};
+    const tb=document.getElementById('tb-title');
+    if(tb) tb.textContent=t(km[curPageId]||'accueil');
+  }
   showToast('🌍 '+LANGS[lang].langues[lang]);
 };
 
@@ -1821,7 +1825,28 @@ window.supprimerPhoto = async function(){
 };
 
 // ══ BUILD PAGE — génère le HTML de chaque page avec t() ══
+// Sauvegarde les valeurs des champs avant rebuild
+function saveFormValues(pageId){
+  const vals={};
+  const el=document.getElementById('page-'+pageId);
+  if(!el)return vals;
+  el.querySelectorAll('input,select,textarea').forEach(inp=>{
+    if(inp.id)vals[inp.id]=inp.type==='checkbox'?inp.checked:inp.value;
+  });
+  return vals;
+}
+function restoreFormValues(vals){
+  Object.entries(vals).forEach(([id,val])=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    if(el.type==='checkbox')el.checked=val;
+    else if(el.value===''||el.value===el.defaultValue)el.value=val;
+  });
+}
+
 function buildPage(name){
+  // Sauvegarder les valeurs existantes
+  const savedVals=saveFormValues(name);
   const el = document.getElementById('page-'+name);
   if(!el) return;
 
@@ -2173,6 +2198,11 @@ function buildPage(name){
       <div id="cal-list-admin"><div class="empty">${t('chargement')}</div></div>
     </div>`;
     renderCalendrierAdmin();
+  }
+
+  // Restaurer les valeurs saisies après rebuild
+  if(Object.keys(savedVals).length>0){
+    setTimeout(()=>restoreFormValues(savedVals),0);
   }
 }
 
@@ -2929,25 +2959,19 @@ window.sauvegarderEditUser=async function(){
 
 // ══ SUPPRIMER UTILISATEUR ══
 window.supprimerUtilisateur=async function(uid,nom){
-  // Vérifier que la cible n'est pas super_admin
   try{
     const pd=await getDoc(doc(db,'users',uid));
     if(pd.exists()&&pd.data().role==='super_admin'){
-      showToast('❌ Impossible de supprimer le Super Administrateur.','#c0392b');
-      return;
+      showToast('❌ Impossible de supprimer le Super Administrateur.','#c0392b');return;
     }
   }catch(e){}
-  // Vérifier que c'est pas son propre compte
   if(uid===currentUser.uid){showToast('❌ Vous ne pouvez pas supprimer votre propre compte.','#c0392b');return;}
-  if(!confirm(`Supprimer définitivement le compte de ${nom} ?\n\n⚠️ Cette action est irréversible.`))return;
+  if(!confirm(`⚠️ Supprimer DÉFINITIVEMENT le compte de ${nom} ?\n\nCette action est IRRÉVERSIBLE — le compte sera supprimé de la base de données.`))return;
   try{
-    await updateDoc(doc(db,'users',uid),{
-      actif:false,supprime:true,
-      supprimeLe:new Date().toLocaleString('fr-FR'),
-      supprimePar:currentUser.uid
-    });
-    loadAdminPasteurs();
-    showToast('🗑️ Compte désactivé.','#c0392b');
+    // Suppression réelle du document Firestore
+    await deleteDoc(doc(db,'users',uid));
+    buildPage('pasteurs');
+    showToast('🗑️ Compte supprimé définitivement.','#c0392b');
   }catch(e){showToast('❌ Erreur : '+e.message,'#c0392b');}
 };
 
