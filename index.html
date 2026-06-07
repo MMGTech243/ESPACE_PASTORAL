@@ -954,6 +954,28 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 </div>
 
 <!-- MODALS -->
+<!-- MODAL PHOTO PROFIL -->
+<div class="overlay" id="modal-photo" onclick="if(event.target.id==='modal-photo')fermerModalPhoto()">
+  <div class="modal">
+    <div class="modal-h"><div class="modal-title">📷 Photo de profil</div>
+      <button class="modal-close" onclick="fermerModalPhoto()">✕</button></div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div id="pp-no-photo" style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#E8650A,#FFD700);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:36px;color:#000;margin:0 auto 10px;border:3px solid rgba(255,215,0,.3);">?</div>
+      <img id="pp-current" src="" alt="" style="display:none;width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,215,0,.3);margin:0 auto 10px;">
+    </div>
+    <label class="flabel">Choisir une nouvelle photo</label>
+    <input type="file" id="pp-file" accept="image/*" style="font-size:14px;padding:10px;" onchange="previewPhoto(this)">
+    <div id="pp-preview" style="display:none;text-align:center;margin-top:12px;">
+      <img id="pp-preview-img" src="" alt="" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,215,0,.4);">
+      <div style="font-size:12px;color:var(--muted);margin-top:6px;">Aperçu</div>
+    </div>
+    <div style="background:rgba(255,215,0,.06);border-left:3px solid var(--gold);border-radius:var(--rs);padding:10px 13px;font-size:13px;color:rgba(255,215,0,.8);margin-top:10px;">
+      ℹ️ Format JPG, PNG ou WebP · Max 800 KB
+    </div>
+    <button class="btn b-violet" onclick="sauvegarderPhoto()" style="margin-top:12px;">💾 Enregistrer la photo</button>
+    <button class="btn b-outline" onclick="supprimerPhoto()" style="margin-top:6px;font-size:13px;">🗑️ Supprimer la photo</button>
+  </div>
+</div>
 <div class="overlay" id="modal" onclick="if(event.target.id==='modal')closeModal()">
   <div class="modal">
     <div class="modal-h"><div class="modal-title" id="modal-title"></div><button class="modal-close" onclick="closeModal()">✕</button></div>
@@ -1210,48 +1232,73 @@ applyLogos();
 
 // ══ BUILD SIDEBAR ══
 const pastorNavDef = [
-  {id:'home',icon:'✝',label:'Accueil'},
-  {id:'rapport',icon:'📋',label:'Rapport Hebdo'},
-  {id:'reunion',icon:'📣',label:'Réunion'},
-  {id:'presence',icon:'✅',label:'Présence'},
-  {id:'membres',icon:'👥',label:'Membres'},
-  {id:'caisse',icon:'🤝',label:'Caisse'},
-  {id:'archives',icon:'🗂️',label:'Archives',notif:true},
-  {id:'calendrier',icon:'📅',label:'Calendrier'},
-  {id:'export',icon:'📊',label:'Export Excel'},
+  {id:'home',icon:'✝',lkey:'accueil'},
+  {id:'rapport',icon:'📋',lkey:'rapport'},
+  {id:'reunion',icon:'📣',lkey:'reunion'},
+  {id:'presence',icon:'✅',lkey:'presence'},
+  {id:'membres',icon:'👥',lkey:'membres'},
+  {id:'caisse',icon:'🤝',lkey:'caisse'},
+  {id:'archives',icon:'🗂️',lkey:'archives',notif:true},
+  {id:'calendrier',icon:'📅',lkey:'calendrier'},
+  {id:'export',icon:'📊',lkey:'exportXl'},
 ];
 const adminNavDef = [
-  {id:'dashboard',icon:'📊',label:'Tableau de bord'},
-  {id:'pasteurs',icon:'👨‍💼',label:'Pasteurs'},
-  {id:'rapports',icon:'📋',label:'Rapports'},
-  {id:'reunions',icon:'📣',label:'Réunions'},
-  {id:'membres',icon:'👥',label:'Membres'},
-  {id:'finances',icon:'🤝',label:'Finances'},
-  {id:'calendrier',icon:'📅',label:'Calendrier'},
+  {id:'dashboard',icon:'📊',lkey:'dashboard'},
+  {id:'pasteurs',icon:'👨‍💼',lkey:'pasteurs'},
+  {id:'rapports',icon:'📋',lkey:'rapports'},
+  {id:'reunions',icon:'📣',lkey:'reunions'},
+  {id:'membres',icon:'👥',lkey:'membres'},
+  {id:'finances',icon:'🤝',lkey:'finances'},
+  {id:'calendrier',icon:'📅',lkey:'calendrier'},
+  {id:'export',icon:'📊',lkey:'exportXl'},
 ];
 
 function buildSidebar(isPastor) {
   const items = isPastor ? pastorNavDef : adminNavDef;
   const firstId = items[0].id;
-
-  // User box
   const roleLabels = {super_admin:'👑 Super Admin',admin:'🔐 Admin',pastor:'✝ Pasteur'};
-  const badgeColors = {super_admin:'background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.2);',
+  const badgeColors = {
+    super_admin:'background:rgba(255,215,0,.15);color:#FFD700;border:1px solid rgba(255,215,0,.2);',
     admin:'background:rgba(232,101,10,.15);color:#FF8533;border:1px solid rgba(232,101,10,.2);',
-    pastor:'background:rgba(42,142,255,.15);color:#2A8EFF;border:1px solid rgba(42,142,255,.2);'};
-  const sbName = document.getElementById('sb-user-name');
-  const sbEmail = document.getElementById('sb-user-email');
-  const sbBadge = document.getElementById('sb-user-badge');
-  if(sbName) sbName.textContent = currentPastorData?.nom || currentUser?.email || '—';
-  if(sbEmail) sbEmail.textContent = currentUser?.email || '—';
-  if(sbBadge) sbBadge.innerHTML = `<span style="display:inline-block;margin-top:6px;font-family:var(--cond);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;${badgeColors[currentRole]||''}">${roleLabels[currentRole]||currentRole}</span>`;
+    pastor:'background:rgba(42,142,255,.15);color:#2A8EFF;border:1px solid rgba(42,142,255,.2);'
+  };
+
+  // Avatar + User box
+  const nom = currentPastorData?.nom || currentUser?.email || '—';
+  const photo = currentPastorData?.photoURL || '';
+  const initials = nom.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  const avatarHtml = photo
+    ? `<img src="${photo}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,215,0,.3);flex-shrink:0;">`
+    : `<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#E8650A,#FFD700);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:18px;color:#000;border:2px solid rgba(255,215,0,.3);flex-shrink:0;cursor:pointer;" onclick="ouvrirModalPhoto()">${initials}</div>`;
+
+  const sbUser = document.getElementById('sb-user-box');
+  if(sbUser) sbUser.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="ouvrirModalPhoto()">
+      ${avatarHtml}
+      <div style="flex:1;min-width:0;">
+        <div class="sb-user-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(nom)}</div>
+        <div class="sb-user-email" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(currentUser?.email||'')}</div>
+        <span style="display:inline-block;margin-top:5px;font-family:var(--cond);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;${badgeColors[currentRole]||''}">${roleLabels[currentRole]||currentRole}</span>
+      </div>
+      <div style="font-size:18px;color:var(--muted);" title="${t('photo')}">📷</div>
+    </div>
+    <!-- Sélecteur langue -->
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+      <div style="font-family:var(--cond);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">🌍 ${t('langue')}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+        ${['fr','en','es','pt'].map(l=>`
+          <button onclick="setLang('${l}')" style="font-size:13px;padding:4px 10px;border-radius:6px;border:1px solid ${currentLang===l?'rgba(255,215,0,.5)':' var(--border)'};background:${currentLang===l?'rgba(255,215,0,.1)':'transparent'};color:${currentLang===l?'var(--gold)':'var(--muted)'};cursor:pointer;font-family:var(--cond);font-weight:700;transition:all .2s;">
+            ${LANGS[l].langues[l].split(' ')[0]}
+          </button>`).join('')}
+      </div>
+    </div>`;
 
   // Nav items
   const nav = document.getElementById('sb-nav-items');
   if(nav) nav.innerHTML = items.map(n=>`
     <div class="sb-nav-item${n.id===firstId?' active':''}" onclick="${isPastor?'showPage':'showAdminPage'}('${n.id}')" id="sb-nav-${n.id}">
       <span class="sb-ni">${n.icon}</span>
-      <span>${n.label}</span>
+      <span>${t(n.lkey)}</span>
       ${n.notif?`<span id="sb-notif-dot" style="display:none;" class="sb-notif"></span>`:''}
     </div>`).join('');
 
@@ -1260,7 +1307,7 @@ function buildSidebar(isPastor) {
   if(bn) bn.innerHTML = items.slice(0,5).map(n=>`
     <div class="bn-mobile-item${n.id===firstId?' active':''}" onclick="${isPastor?'showPage':'showAdminPage'}('${n.id}')" id="bn-${n.id}">
       <span class="bni">${n.icon}</span>
-      <span>${n.label.split(' ')[0].substring(0,7)}</span>
+      <span>${t(n.lkey).split(' ')[0].substring(0,7)}</span>
     </div>`).join('');
 }
 
@@ -1411,9 +1458,143 @@ window.showAdminPage=function(name){
   if(name==='finances')loadAdminFinances();
   if(name==='calendrier'){calTab='avenir';renderCalendrier();}
   if(name==='dashboard')loadAdminCharts();
+  if(name==='export'){/* page statique */}
 };
 
 window.goHome=function(){if(currentRole==='admin'||currentRole==='super_admin')showAdminPage('dashboard');else showPage('home');};
+
+// ══ MULTI-LANGUE ══
+const LANGS = {
+  fr: {
+    accueil:'Accueil',rapport:'Rapport Hebdo',reunion:'Réunion',presence:'Présence',
+    membres:'Membres',caisse:'Caisse',archives:'Archives',calendrier:'Calendrier',
+    exportXl:'Export Excel',dashboard:'Tableau de bord',pasteurs:'Pasteurs',
+    rapports:'Rapports',reunions:'Réunions',finances:'Finances',
+    connexion:'Connexion',deconnexion:'Déconnexion',
+    enregistrer:'Enregistrer',annuler:'Annuler',supprimer:'Supprimer',
+    modifier:'Modifier',ajouter:'Ajouter',
+    nom:'Nom',email:'Email',telephone:'Téléphone',date:'Date',
+    photo:'Photo de profil',langue:'Langue',
+    langues:{fr:'🇫🇷 Français',en:'🇬🇧 English',es:'🇪🇸 Español',pt:'🇵🇹 Português'},
+  },
+  en: {
+    accueil:'Home',rapport:'Weekly Report',reunion:'Meeting',presence:'Attendance',
+    membres:'Members',caisse:'Fund',archives:'Archives',calendrier:'Calendar',
+    exportXl:'Excel Export',dashboard:'Dashboard',pasteurs:'Pastors',
+    rapports:'Reports',reunions:'Meetings',finances:'Finance',
+    connexion:'Login',deconnexion:'Logout',
+    enregistrer:'Save',annuler:'Cancel',supprimer:'Delete',
+    modifier:'Edit',ajouter:'Add',
+    nom:'Name',email:'Email',telephone:'Phone',date:'Date',
+    photo:'Profile photo',langue:'Language',
+    langues:{fr:'🇫🇷 French',en:'🇬🇧 English',es:'🇪🇸 Spanish',pt:'🇵🇹 Portuguese'},
+  },
+  es: {
+    accueil:'Inicio',rapport:'Informe Semanal',reunion:'Reunión',presence:'Asistencia',
+    membres:'Miembros',caisse:'Caja',archives:'Archivos',calendrier:'Calendario',
+    exportXl:'Exportar Excel',dashboard:'Panel',pasteurs:'Pastores',
+    rapports:'Informes',reunions:'Reuniones',finances:'Finanzas',
+    connexion:'Iniciar sesión',deconnexion:'Cerrar sesión',
+    enregistrer:'Guardar',annuler:'Cancelar',supprimer:'Eliminar',
+    modifier:'Editar',ajouter:'Agregar',
+    nom:'Nombre',email:'Correo',telephone:'Teléfono',date:'Fecha',
+    photo:'Foto de perfil',langue:'Idioma',
+    langues:{fr:'🇫🇷 Francés',en:'🇬🇧 Inglés',es:'🇪🇸 Español',pt:'🇵🇹 Portugués'},
+  },
+  pt: {
+    accueil:'Início',rapport:'Relatório Semanal',reunion:'Reunião',presence:'Presença',
+    membres:'Membros',caisse:'Fundo',archives:'Arquivos',calendrier:'Calendário',
+    exportXl:'Exportar Excel',dashboard:'Painel',pasteurs:'Pastores',
+    rapports:'Relatórios',reunions:'Reuniões',finances:'Finanças',
+    connexion:'Entrar',deconnexion:'Sair',
+    enregistrer:'Salvar',annuler:'Cancelar',supprimer:'Excluir',
+    modifier:'Editar',ajouter:'Adicionar',
+    nom:'Nome',email:'Email',telephone:'Telefone',date:'Data',
+    photo:'Foto de perfil',langue:'Idioma',
+    langues:{fr:'🇫🇷 Francês',en:'🇬🇧 Inglês',es:'🇪🇸 Espanhol',pt:'🇵🇹 Português'},
+  }
+};
+let currentLang = localStorage.getItem('ifcm-lang') || 'fr';
+function t(key){return LANGS[currentLang]?.[key] || LANGS.fr[key] || key;}
+
+window.setLang = function(lang){
+  currentLang = lang;
+  localStorage.setItem('ifcm-lang', lang);
+  // Rebuild sidebar nav with new language
+  if(currentRole==='admin'||currentRole==='super_admin') buildSidebar(false);
+  else buildSidebar(true);
+  showToast('🌍 '+LANGS[lang].langues[lang]);
+};
+
+// ══ PHOTO PROFIL ══
+window.ouvrirModalPhoto = function(){
+  document.getElementById('modal-photo').classList.add('open');
+  const photo = currentPastorData?.photoURL || '';
+  const cur = document.getElementById('pp-current');
+  const noph = document.getElementById('pp-no-photo');
+  const nom = currentPastorData?.nom || '?';
+  const initials = nom.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  if(noph) noph.textContent = initials;
+  if(photo && cur){cur.src=photo;cur.style.display='block';if(noph)noph.style.display='none';}
+  else{if(cur)cur.style.display='none';if(noph)noph.style.display='flex';}
+  // Reset preview
+  const ppf = document.getElementById('pp-file');if(ppf)ppf.value='';
+  const pprev = document.getElementById('pp-preview');if(pprev)pprev.style.display='none';
+};
+window.fermerModalPhoto = function(){document.getElementById('modal-photo').classList.remove('open');};
+
+window.sauvegarderPhoto = async function(){
+  const file = document.getElementById('pp-file')?.files[0];
+  if(!file){showToast('⚠️ Choisir une image','#c0392b');return;}
+  if(file.size > 800*1024){showToast('⚠️ Image trop grande (max 800 KB)','#c0392b');return;}
+  const reader = new FileReader();
+  reader.onload = async function(e){
+    const base64 = e.target.result;
+    try{
+      await updateDoc(doc(db,'users',currentUser.uid),{photoURL:base64});
+      currentPastorData.photoURL = base64;
+      buildSidebar(currentRole==='pastor');
+      fermerModalPhoto();
+      showToast('✅ Photo de profil mise à jour !');
+    }catch(e){showToast('❌ '+e.message,'#c0392b');}
+  };
+  reader.readAsDataURL(file);
+};
+
+function renderAvatar(containerId, size=40){
+  const nom = currentPastorData?.nom || '?';
+  const photo = currentPastorData?.photoURL || '';
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  if(photo){
+    el.innerHTML = `<img src="${photo}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,215,0,.3);">`;
+  } else {
+    const initials = nom.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+    el.innerHTML = `<div style="width:${size}px;height:${size}px;border-radius:50%;background:linear-gradient(135deg,#E8650A,#FFD700);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:${Math.floor(size/2.5)}px;color:#000;border:2px solid rgba(255,215,0,.3);">${initials}</div>`;
+  }
+}
+
+window.previewPhoto = function(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const prev = document.getElementById('pp-preview');
+    const img = document.getElementById('pp-preview-img');
+    if(prev && img){prev.style.display='block';img.src=e.target.result;}
+  };
+  reader.readAsDataURL(file);
+};
+window.supprimerPhoto = async function(){
+  if(!confirm('Supprimer la photo de profil ?')) return;
+  try{
+    await updateDoc(doc(db,'users',currentUser.uid),{photoURL:''});
+    currentPastorData.photoURL = '';
+    fermerModalPhoto();
+    buildSidebar(currentRole==='pastor');
+    showToast('🗑️ Photo supprimée.');
+  }catch(e){showToast('❌ '+e.message,'#c0392b');}
+};
 
 // ══ UTILS ══
 window.showToast=function(msg,col){
