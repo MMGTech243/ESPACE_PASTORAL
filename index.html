@@ -574,13 +574,9 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
         <div class="sb-brand-tag">Espace Pastoral</div>
       </div>
     </div>
-    <!-- User info -->
-    <div class="sb-user-box" id="sb-user-box">
-      <div class="sb-user-name" id="sb-user-name">—</div>
-      <div class="sb-user-email" id="sb-user-email">—</div>
-      <div id="sb-user-badge"></div>
-    </div>
-    <!-- Navigation -->
+    <!-- User info — rempli dynamiquement par buildSidebar() -->
+    <div class="sb-user-box" id="sb-user-box"></div>
+    <!-- Navigation — remplie dynamiquement -->
     <div class="sb-nav-items" id="sb-nav-items"></div>
     <!-- Footer logout -->
     <div class="sb-footer">
@@ -1621,52 +1617,94 @@ window.goHome=function(){if(currentRole==='admin'||currentRole==='super_admin')s
 
 // ══ MULTI-LANGUE ══
 const LANGS = {
-  fr: {
+  fr:{
     accueil:'Accueil',rapport:'Rapport Hebdo',reunion:'Réunion',presence:'Présence',
     membres:'Membres',caisse:'Caisse',archives:'Archives',calendrier:'Calendrier',
     exportXl:'Export Excel',dashboard:'Tableau de bord',pasteurs:'Pasteurs',
     rapports:'Rapports',reunions:'Réunions',finances:'Finances',
-    connexion:'Connexion',deconnexion:'Déconnexion',
+    connexion:'Se connecter',deconnexion:'Déconnexion',
     enregistrer:'Enregistrer',annuler:'Annuler',supprimer:'Supprimer',
     modifier:'Modifier',ajouter:'Ajouter',
-    nom:'Nom',email:'Email',telephone:'Téléphone',date:'Date',
-    photo:'Photo de profil',langue:'Langue',
+    sauvegarder:'Sauvegarder sur le Cloud',envoyerEmail:'Envoyer par Email',envoyerWA:'Envoyer sur WhatsApp',
+    nom:'Nom',email:'Email',telephone:'Téléphone',date:'Date',photo:'Photo de profil',langue:'Langue',
+    titreRapport:'Rapport Hebdomadaire',titreReunion:'Compte-rendu de Réunion',
+    titrePresence:'Feuille de Présence',titreMembres:'Membres & Disciples',
+    titreCaisse:'Caisse Solidarité',titreArchives:'Archives Cloud',
+    titreCalendrier:'Calendrier',titreExport:'Export Excel',titreDashboard:'Tableau de Bord',
+    contribution:'Contribution',depense:'Dépense',contributeur:'Membre / Contributeur',beneficiaire:'Bénéficiaire',
+    montant:'Montant',description:'Description',pasteur:'Pasteur',famille:'Famille Pastorale',
+    visites:'Visites domicile',appels:'Appels téléphoniques',nouveaux:'Nouveaux membres',absences:'Absences',
+    casUrgents:'Cas urgents & prières',observations:'Observations générales',
+    disciples:'Disciples',ajoutDisciple:'Ajouter Disciple',ajoutMembre:'Ajouter Membre',
+    statut:'Statut',actif:'Actif',nouveau:'Nouveau',absent:'Absent prolongé',
+    aVenir:'À venir',passes:'Passés',tous:'Tous',publierEvenement:"Publier l'Événement",
+    telecharger:'Télécharger Excel (.xlsx)',
     langues:{fr:'🇫🇷 Français',en:'🇬🇧 English',es:'🇪🇸 Español',pt:'🇵🇹 Português'},
   },
-  en: {
+  en:{
     accueil:'Home',rapport:'Weekly Report',reunion:'Meeting',presence:'Attendance',
     membres:'Members',caisse:'Fund',archives:'Archives',calendrier:'Calendar',
     exportXl:'Excel Export',dashboard:'Dashboard',pasteurs:'Pastors',
     rapports:'Reports',reunions:'Meetings',finances:'Finance',
-    connexion:'Login',deconnexion:'Logout',
-    enregistrer:'Save',annuler:'Cancel',supprimer:'Delete',
-    modifier:'Edit',ajouter:'Add',
-    nom:'Name',email:'Email',telephone:'Phone',date:'Date',
-    photo:'Profile photo',langue:'Language',
+    connexion:'Login',deconnexion:'Logout',enregistrer:'Save',annuler:'Cancel',
+    supprimer:'Delete',modifier:'Edit',ajouter:'Add',
+    sauvegarder:'Save to Cloud',envoyerEmail:'Send by Email',envoyerWA:'Send on WhatsApp',
+    nom:'Name',email:'Email',telephone:'Phone',date:'Date',photo:'Profile photo',langue:'Language',
+    titreRapport:'Weekly Report',titreReunion:'Meeting Report',titrePresence:'Attendance Sheet',
+    titreMembres:'Members & Disciples',titreCaisse:'Solidarity Fund',titreArchives:'Cloud Archives',
+    titreCalendrier:'Calendar',titreExport:'Excel Export',titreDashboard:'Dashboard',
+    contribution:'Contribution',depense:'Expense',contributeur:'Member / Contributor',beneficiaire:'Beneficiary',
+    montant:'Amount',description:'Description',pasteur:'Pastor',famille:'Pastoral Family',
+    visites:'Home visits',appels:'Phone calls',nouveaux:'New members',absences:'Absences',
+    casUrgents:'Urgent cases & prayers',observations:'General observations',
+    disciples:'Disciples',ajoutDisciple:'Add Disciple',ajoutMembre:'Add Member',
+    statut:'Status',actif:'Active',nouveau:'New',absent:'Extended absence',
+    aVenir:'Upcoming',passes:'Past',tous:'All',publierEvenement:'Publish Event',
+    telecharger:'Download Excel (.xlsx)',
     langues:{fr:'🇫🇷 French',en:'🇬🇧 English',es:'🇪🇸 Spanish',pt:'🇵🇹 Portuguese'},
   },
-  es: {
+  es:{
     accueil:'Inicio',rapport:'Informe Semanal',reunion:'Reunión',presence:'Asistencia',
-    membres:'Miembros',caisse:'Caja',archives:'Archivos',calendrier:'Calendario',
+    membres:'Miembros',caisse:'Fondo',archives:'Archivos',calendrier:'Calendario',
     exportXl:'Exportar Excel',dashboard:'Panel',pasteurs:'Pastores',
     rapports:'Informes',reunions:'Reuniones',finances:'Finanzas',
-    connexion:'Iniciar sesión',deconnexion:'Cerrar sesión',
-    enregistrer:'Guardar',annuler:'Cancelar',supprimer:'Eliminar',
-    modifier:'Editar',ajouter:'Agregar',
-    nom:'Nombre',email:'Correo',telephone:'Teléfono',date:'Fecha',
-    photo:'Foto de perfil',langue:'Idioma',
+    connexion:'Iniciar sesión',deconnexion:'Cerrar sesión',enregistrer:'Guardar',
+    annuler:'Cancelar',supprimer:'Eliminar',modifier:'Editar',ajouter:'Agregar',
+    sauvegarder:'Guardar en la Nube',envoyerEmail:'Enviar por Email',envoyerWA:'Enviar por WhatsApp',
+    nom:'Nombre',email:'Correo',telephone:'Teléfono',date:'Fecha',photo:'Foto de perfil',langue:'Idioma',
+    titreRapport:'Informe Semanal',titreReunion:'Acta de Reunión',titrePresence:'Lista de Asistencia',
+    titreMembres:'Miembros y Discípulos',titreCaisse:'Fondo Solidario',titreArchives:'Archivos en la Nube',
+    titreCalendrier:'Calendario',titreExport:'Exportar Excel',titreDashboard:'Panel de Control',
+    contribution:'Contribución',depense:'Gasto',contributeur:'Miembro / Contribuyente',beneficiaire:'Beneficiario',
+    montant:'Monto',description:'Descripción',pasteur:'Pastor',famille:'Familia Pastoral',
+    visites:'Visitas domiciliares',appels:'Llamadas telefónicas',nouveaux:'Nuevos miembros',absences:'Ausencias',
+    casUrgents:'Casos urgentes',observations:'Observaciones generales',
+    disciples:'Discípulos',ajoutDisciple:'Agregar Discípulo',ajoutMembre:'Agregar Miembro',
+    statut:'Estado',actif:'Activo',nouveau:'Nuevo',absent:'Ausencia prolongada',
+    aVenir:'Próximos',passes:'Pasados',tous:'Todos',publierEvenement:'Publicar Evento',
+    telecharger:'Descargar Excel (.xlsx)',
     langues:{fr:'🇫🇷 Francés',en:'🇬🇧 Inglés',es:'🇪🇸 Español',pt:'🇵🇹 Portugués'},
   },
-  pt: {
+  pt:{
     accueil:'Início',rapport:'Relatório Semanal',reunion:'Reunião',presence:'Presença',
     membres:'Membros',caisse:'Fundo',archives:'Arquivos',calendrier:'Calendário',
     exportXl:'Exportar Excel',dashboard:'Painel',pasteurs:'Pastores',
     rapports:'Relatórios',reunions:'Reuniões',finances:'Finanças',
-    connexion:'Entrar',deconnexion:'Sair',
-    enregistrer:'Salvar',annuler:'Cancelar',supprimer:'Excluir',
-    modifier:'Editar',ajouter:'Adicionar',
-    nom:'Nome',email:'Email',telephone:'Telefone',date:'Data',
-    photo:'Foto de perfil',langue:'Idioma',
+    connexion:'Entrar',deconnexion:'Sair',enregistrer:'Salvar',
+    annuler:'Cancelar',supprimer:'Excluir',modifier:'Editar',ajouter:'Adicionar',
+    sauvegarder:'Salvar na Nuvem',envoyerEmail:'Enviar por Email',envoyerWA:'Enviar por WhatsApp',
+    nom:'Nome',email:'Email',telephone:'Telefone',date:'Data',photo:'Foto de perfil',langue:'Idioma',
+    titreRapport:'Relatório Semanal',titreReunion:'Ata de Reunião',titrePresence:'Folha de Presença',
+    titreMembres:'Membros e Discípulos',titreCaisse:'Fundo Solidário',titreArchives:'Arquivos na Nuvem',
+    titreCalendrier:'Calendário',titreExport:'Exportar Excel',titreDashboard:'Painel',
+    contribution:'Contribuição',depense:'Despesa',contributeur:'Membro / Contribuinte',beneficiaire:'Beneficiário',
+    montant:'Valor',description:'Descrição',pasteur:'Pastor',famille:'Família Pastoral',
+    visites:'Visitas domiciliares',appels:'Ligações telefónicas',nouveaux:'Novos membros',absences:'Ausências',
+    casUrgents:'Casos urgentes',observations:'Observações gerais',
+    disciples:'Discípulos',ajoutDisciple:'Adicionar Discípulo',ajoutMembre:'Adicionar Membro',
+    statut:'Status',actif:'Ativo',novo:'Novo',absent:'Ausência prolongada',
+    aVenir:'Próximos',passes:'Passados',tous:'Todos',publierEvenement:'Publicar Evento',
+    telecharger:'Baixar Excel (.xlsx)',
     langues:{fr:'🇫🇷 Francês',en:'🇬🇧 Inglês',es:'🇪🇸 Espanhol',pt:'🇵🇹 Português'},
   }
 };
@@ -1676,11 +1714,39 @@ function t(key){return LANGS[currentLang]?.[key] || LANGS.fr[key] || key;}
 window.setLang = function(lang){
   currentLang = lang;
   localStorage.setItem('ifcm-lang', lang);
-  // Rebuild sidebar nav with new language
-  if(currentRole==='admin'||currentRole==='super_admin') buildSidebar(false);
-  else buildSidebar(true);
+  const isPastor = currentRole === 'pastor';
+  // Rebuild sidebar PC + drawer mobile
+  buildSidebar(isPastor);
+  buildMobileDrawer(isPastor);
+  // Apply translations to all visible elements
+  applyTranslations();
   showToast('🌍 '+LANGS[lang].langues[lang]);
 };
+
+function applyTranslations(){
+  // Tous les éléments avec data-t="cle"
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const key = el.getAttribute('data-t');
+    if(key) el.textContent = t(key);
+  });
+  // Titres de pages visibles
+  document.querySelectorAll('.page.active [data-t-title]').forEach(el=>{
+    const key = el.getAttribute('data-t-title');
+    if(key) el.textContent = t(key);
+  });
+  // Labels des formulaires visibles
+  const labelMap = {
+    'label-nom':t('nom'),'label-email':t('email'),
+    'label-telephone':t('telephone'),'label-date':t('date'),
+    'label-statut':t('statut'),'label-description':t('description'),
+    'label-montant':t('montant'),
+  };
+  Object.entries(labelMap).forEach(([id,val])=>{
+    const el=document.getElementById(id);if(el)el.textContent=val;
+  });
+}
+
+function updatePageLabels(){applyTranslations();}
 
 // ══ PHOTO PROFIL ══
 window.ouvrirModalPhoto = function(){
