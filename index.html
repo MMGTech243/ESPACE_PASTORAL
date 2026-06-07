@@ -378,6 +378,73 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 @media(max-width:767px){
   .overlay{align-items:flex-end;padding:0;}
   .modal{border-radius:var(--r) var(--r) 0 0;max-width:100%;}
+
+  /* Page prend tout l'écran mobile */
+  .page{padding:14px 14px 90px!important;}
+
+  /* Stats grid 2 colonnes sur mobile */
+  .stat-grid{grid-template-columns:1fr 1fr!important;}
+
+  /* Home grid 2 colonnes */
+  .home-grid{grid-template-columns:1fr 1fr!important;}
+
+  /* Row2 colonne unique sur petit écran */
+  .row2{grid-template-columns:1fr!important;}
+
+  /* Sidebar cachée sur mobile — remplacée par menu hamburger */
+  .ifcm-sidebar{display:none!important;}
+
+  /* Menu hamburger */
+  .hamburger-btn{
+    display:flex!important;
+    position:fixed;bottom:72px;right:16px;z-index:200;
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,#E8650A,#FFD700);
+    border:none;cursor:pointer;font-size:22px;
+    align-items:center;justify-content:center;
+    box-shadow:0 4px 20px rgba(232,101,10,.4);
+  }
+
+  /* Drawer menu mobile */
+  .mobile-drawer{
+    display:none;position:fixed;inset:0;z-index:300;
+  }
+  .mobile-drawer.open{display:block;}
+  .drawer-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);}
+  .drawer-panel{
+    position:absolute;right:0;top:0;bottom:0;width:280px;
+    background:linear-gradient(180deg,#0A1628,#0F1F3D);
+    border-left:1px solid var(--border);
+    overflow-y:auto;animation:slideFromRight .25s ease;
+  }
+  @keyframes slideFromRight{from{transform:translateX(100%);}to{transform:translateX(0);}}
+  .drawer-header{
+    padding:20px 16px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .drawer-close{background:var(--card2);border:1px solid var(--border);
+    border-radius:8px;padding:6px 14px;color:var(--muted);cursor:pointer;
+    font-size:14px;font-weight:700;font-family:var(--cond);}
+  .drawer-user{padding:14px 16px;border-bottom:1px solid var(--border);}
+  .drawer-nav{padding:10px 10px;}
+  .drawer-nav-item{
+    display:flex;align-items:center;gap:12px;padding:13px 14px;
+    border-radius:var(--rs);cursor:pointer;
+    font-family:var(--cond);font-size:16px;font-weight:700;
+    letter-spacing:.5px;text-transform:uppercase;
+    color:var(--muted);margin-bottom:3px;transition:all .2s;
+  }
+  .drawer-nav-item.active{background:rgba(255,215,0,.08);color:var(--gold);}
+  .drawer-lang{padding:12px 16px;border-top:1px solid var(--border);}
+
+  /* Bottom nav mobile — compact et accessible */
+  .bottom-nav-mobile{
+    display:flex!important;
+    position:fixed;bottom:0;left:0;right:0;
+    background:linear-gradient(135deg,#0A1628,#0F1F3D);
+    border-top:1px solid var(--border);z-index:100;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
 }
 .modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
 .modal-title{font-size:15px;font-weight:700;color:var(--text);}
@@ -532,6 +599,36 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       </div>
       <button class="topbar-btn" id="tb-home" style="display:none;" onclick="goHome()">🏠</button>
       <button class="topbar-btn" onclick="doLogout()">Sortir</button>
+    </div>
+
+    <!-- BOUTON HAMBURGER MOBILE -->
+    <button class="hamburger-btn" id="hamburger-btn" onclick="openMobileDrawer()" style="display:none;">☰</button>
+
+    <!-- DRAWER MOBILE -->
+    <div class="mobile-drawer" id="mobile-drawer">
+      <div class="drawer-overlay" onclick="closeMobileDrawer()"></div>
+      <div class="drawer-panel">
+        <div class="drawer-header">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <img id="drawer-logo" src="" alt="" style="width:36px;height:36px;border-radius:50%;filter:drop-shadow(0 0 5px rgba(255,215,0,.3));">
+            <div style="font-family:var(--font-display);font-size:14px;letter-spacing:2px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">IFCM</div>
+          </div>
+          <button class="drawer-close" onclick="closeMobileDrawer()">✕</button>
+        </div>
+        <!-- User + photo -->
+        <div class="drawer-user" id="drawer-user" onclick="ouvrirModalPhoto();closeMobileDrawer();" style="cursor:pointer;"></div>
+        <!-- Nav items -->
+        <div class="drawer-nav" id="drawer-nav"></div>
+        <!-- Langue -->
+        <div class="drawer-lang">
+          <div style="font-family:var(--cond);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">🌍 Langue</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;" id="drawer-lang-btns"></div>
+        </div>
+        <!-- Logout -->
+        <div style="padding:14px 16px;border-top:1px solid var(--border);">
+          <button onclick="doLogout();closeMobileDrawer();" style="width:100%;padding:12px;background:rgba(220,50,50,.1);border:1px solid rgba(220,50,50,.2);border-radius:var(--rs);color:#ff8080;font-family:var(--cond);font-size:15px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;">🚪 Déconnexion</button>
+        </div>
+      </div>
     </div>
 
     <!-- Ancien nav caché — gardé pour compatibilité JS -->
@@ -1230,7 +1327,60 @@ applyLogos();
   }
 })();
 
-// ══ BUILD SIDEBAR ══
+// ══ MOBILE DRAWER ══
+window.openMobileDrawer = function(){
+  document.getElementById('mobile-drawer')?.classList.add('open');
+};
+window.closeMobileDrawer = function(){
+  document.getElementById('mobile-drawer')?.classList.remove('open');
+};
+
+function buildMobileDrawer(isPastor){
+  const items = isPastor ? pastorNavDef : adminNavDef;
+  const curId = isPastor ? 'home' : 'dashboard';
+
+  // Logo
+  const dl = document.getElementById('drawer-logo');
+  if(dl && LOGO_SRC) dl.src = LOGO_SRC;
+
+  // User avec avatar
+  const nom = currentPastorData?.nom || currentUser?.email || '—';
+  const photo = currentPastorData?.photoURL || '';
+  const initials = nom.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+  const avatarHtml = photo
+    ? `<img src="${photo}" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,215,0,.3);">`
+    : `<div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#E8650A,#FFD700);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:18px;color:#000;border:2px solid rgba(255,215,0,.3);">${initials}</div>`;
+  const du = document.getElementById('drawer-user');
+  if(du) du.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px;">
+      ${avatarHtml}
+      <div>
+        <div style="font-family:var(--cond);font-size:16px;font-weight:800;color:var(--text);">${esc(nom)}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">${esc(currentUser?.email||'')}</div>
+        <div style="font-size:11px;color:var(--gold);margin-top:4px;">📷 Changer la photo</div>
+      </div>
+    </div>`;
+
+  // Nav items — TOUS les items pas seulement 5
+  const dn = document.getElementById('drawer-nav');
+  if(dn) dn.innerHTML = items.map(n=>`
+    <div class="drawer-nav-item" onclick="${isPastor?'showPage':'showAdminPage'}('${n.id}');closeMobileDrawer();" id="drawer-nav-${n.id}">
+      <span style="font-size:20px;">${n.icon}</span>
+      <span>${t(n.lkey)}</span>
+    </div>`).join('');
+
+  // Langue buttons
+  const dlb = document.getElementById('drawer-lang-btns');
+  if(dlb) dlb.innerHTML = ['fr','en','es','pt'].map(l=>`
+    <button onclick="setLang('${l}');buildMobileDrawer(${isPastor});" style="font-size:13px;padding:5px 12px;border-radius:6px;border:1px solid ${currentLang===l?'rgba(255,215,0,.5)':'var(--border)'};background:${currentLang===l?'rgba(255,215,0,.1)':'transparent'};color:${currentLang===l?'var(--gold)':'var(--muted)'};cursor:pointer;font-family:var(--cond);font-weight:700;">
+      ${LANGS[l].langues[l].split(' ')[0]}
+    </button>`).join('');
+}
+
+// Détecter mobile vs PC
+function isMobile(){return window.innerWidth < 768;}
+
+// ══ BUILD SIDEBAR (PC) ou DRAWER (mobile) ══
 const pastorNavDef = [
   {id:'home',icon:'✝',lkey:'accueil'},
   {id:'rapport',icon:'📋',lkey:'rapport'},
@@ -1302,23 +1452,29 @@ function buildSidebar(isPastor) {
       ${n.notif?`<span id="sb-notif-dot" style="display:none;" class="sb-notif"></span>`:''}
     </div>`).join('');
 
-  // Bottom nav mobile (5 items)
+  // Bottom nav mobile (5 items principaux)
   const bn = document.getElementById('bottom-nav-mobile');
   if(bn) bn.innerHTML = items.slice(0,5).map(n=>`
     <div class="bn-mobile-item${n.id===firstId?' active':''}" onclick="${isPastor?'showPage':'showAdminPage'}('${n.id}')" id="bn-${n.id}">
       <span class="bni">${n.icon}</span>
       <span>${t(n.lkey).split(' ')[0].substring(0,7)}</span>
     </div>`).join('');
+
+  // Construire aussi le drawer mobile
+  buildMobileDrawer(isPastor);
+
+  // Afficher hamburger sur mobile
+  const hb = document.getElementById('hamburger-btn');
+  if(hb) hb.style.display = '';// visible, CSS media query gère l'affichage
 }
 
 function updateSidebarActive(name) {
-  document.querySelectorAll('.sb-nav-item').forEach(t=>{
-    const isActive = t.id === 'sb-nav-'+name;
-    t.classList.toggle('active', isActive);
-  });
-  document.querySelectorAll('.bn-mobile-item').forEach(t=>{
-    t.classList.toggle('active', t.id === 'bn-'+name);
-  });
+  document.querySelectorAll('.sb-nav-item').forEach(t=>
+    t.classList.toggle('active', t.id === 'sb-nav-'+name));
+  document.querySelectorAll('.bn-mobile-item').forEach(t=>
+    t.classList.toggle('active', t.id === 'bn-'+name));
+  document.querySelectorAll('.drawer-nav-item').forEach(t=>
+    t.classList.toggle('active', t.id === 'drawer-nav-'+name));
 }
 
 // ══ AUTH ══
