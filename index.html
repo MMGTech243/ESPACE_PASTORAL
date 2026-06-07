@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0A1628">
 <title>IFCM — Espace Pastoral</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
@@ -25,11 +25,13 @@
   --grad:linear-gradient(135deg,#0A1628,#1A3A6E 40%,#0A1628 100%);
   --grad-or:linear-gradient(135deg,#E8650A,#FF8533,#FFD700);
   --r:16px;--rs:10px;--sidebar:260px;
-  --font-display:'Cinzel',serif;--font:'Nunito',sans-serif;
+  --font-display:'Black Ops One',sans-serif;
+  --font:'Barlow',sans-serif;
+  --cond:'Barlow Condensed',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:var(--font),-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
+  background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;}
 body::before{content:"";position:fixed;inset:0;background:var(--bg);z-index:-1;}
 
 /* Animations globales */
@@ -55,11 +57,11 @@ body::before{content:"";position:fixed;inset:0;background:var(--bg);z-index:-1;}
 
 /* PC — centrage simple et élégant */
 @media(min-width:768px){
-  body{font-size:17px;}
+  body{font-size:18px;}
   #app-page{max-width:860px;margin:0 auto;}
   #login-page{max-width:860px;margin:0 auto;min-height:100vh;}
   .topbar{border-radius:0;}
-  .tabnav-item,.admin-tabnav-item{font-size:15px;padding:13px 20px;}
+  .tabnav-item,.admin-tabnav-item{font-family:var(--cond);font-weight:700;letter-spacing:.5px;text-transform:uppercase;font-size:15px;padding:13px 20px;}
   .page{padding:28px 32px 80px;}
   .card-title{font-size:14px;padding:6px 14px;}
   input,select,textarea{font-size:16px;padding:12px 14px;}
@@ -113,7 +115,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 .login-logo h1{font-size:20px;font-weight:700;color:var(--text);}
 .login-logo p{font-size:12px;color:var(--muted);margin-top:4px;}
 .login-card{background:rgba(15,31,61,.95);border:1px solid var(--border);border-radius:var(--r);padding:24px;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.4),0 0 30px rgba(255,215,0,.04);backdrop-filter:blur(10px);}
-.login-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--text);margin-bottom:4px;}
+.login-title{font-family:var(--font-display);font-size:24px;letter-spacing:2px;color:var(--text);margin-bottom:4px;}
 .login-sub{font-size:12px;color:var(--muted);margin-bottom:20px;}
 .login-error{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.3);border-radius:var(--rs);padding:10px 12px;font-size:12px;color:#ff6666;margin-bottom:12px;display:none;}
 .login-error.show{display:block;}
@@ -122,7 +124,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;bottom:0;background:
 #app-page{display:none;}
 .topbar{background:linear-gradient(135deg,#0A1628,#162547);padding:14px 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);}
 .topbar-info{flex:1;}
-.topbar-title{font-size:15px;font-weight:700;color:#fff;}
+.topbar-title{font-family:var(--font-display);font-size:16px;letter-spacing:1px;color:#fff;}
 .topbar-sub{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px;}
 .topbar-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;}
 .tabnav,.admin-tabnav{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--border);-webkit-overflow-scrolling:touch;}
@@ -168,10 +170,10 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 
 /* HOME */
 .hero{background:var(--grad);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:1rem;}
-.hero h1{font-size:18px;font-weight:700;color:#fff;line-height:1.3;}
+.hero h1{font-family:var(--font-display);font-size:18px;color:#fff;line-height:1.3;letter-spacing:1px;}
 .hero-branch{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;}
 .hero-user{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 16px;color:#fff;}
-.section-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:1rem 0 .6rem;}
+.section-lbl{font-family:var(--cond);font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:1rem 0 .6rem;}
 .home-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1rem;}
 .hcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 14px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s;}
 .hcard:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(107,63,160,.2);}
@@ -181,7 +183,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 .hcard.bc::before{background:var(--blue);}.hcard.gc::before{background:var(--gold);}
 .hcard-icon{font-size:30px;margin-bottom:10px;display:block;}
 .hcard-name{font-size:14px;font-weight:700;color:var(--text);}
-.hcard-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
+.hcard-desc{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4;}
 .hcard.wide{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:16px 18px;}
 .hcard.wide .hcard-icon{font-size:26px;margin-bottom:0;}
 
@@ -273,7 +275,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
 /* STABS SEARCHBAR */
 .stabs{display:flex;gap:6px;margin-bottom:1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .stabs::-webkit-scrollbar{display:none;}
-.stab{flex-shrink:0;padding:7px 14px;font-size:12px;font-weight:700;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--card);white-space:nowrap;}
+.stab{font-family:var(--cond);flex-shrink:0;padding:7px 16px;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border-radius:6px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--card);white-space:nowrap;}
 .stab.active{background:var(--violet);color:#fff;border-color:var(--violet);}
 .searchbar{display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 13px;margin-bottom:12px;}
 .searchbar input{flex:1;border:none;background:transparent;font-size:14px;color:var(--text);outline:none;font-family:inherit;}
@@ -357,16 +359,16 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     </div>
 
     <!-- Textes -->
-    <div style="font-family:var(--font-display);font-size:clamp(16px,5vw,24px);letter-spacing:3px;background:linear-gradient(135deg,#FFD700,#FFA500,#FF8533);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeUpIn .7s .5s both,textShimmer 3s 2s ease-in-out infinite;margin-bottom:6px;">IMPACT FOR CHRIST MINISTRIES</div>
-    <div style="font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);animation:fadeUpIn .7s .7s both;margin-bottom:4px;">Branche de Kinshasa — IFCM</div>
-    <div style="font-family:var(--font-display);font-size:11px;letter-spacing:2px;color:rgba(255,215,0,.55);font-style:italic;animation:fadeUpIn .7s .85s both;margin-bottom:24px;">"Doing The Works Of Jesus Christ" · Jean 14:12</div>
+    <div style="font-family:var(--font-display);font-size:clamp(22px,7vw,38px);letter-spacing:3px;background:linear-gradient(135deg,#FFD700,#FFA500,#FF8533);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:fadeUpIn .7s .5s both,textShimmer 3s 2s ease-in-out infinite;margin-bottom:6px;line-height:1.1;">IMPACT FOR CHRIST MINISTRIES</div>
+    <div style="font-family:var(--cond);font-size:16px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);animation:fadeUpIn .7s .7s both;margin-bottom:4px;font-weight:600;">Branche de Kinshasa — IFCM</div>
+    <div style="font-family:var(--cond);font-size:14px;letter-spacing:2px;color:rgba(255,215,0,.6);animation:fadeUpIn .7s .85s both;margin-bottom:24px;font-weight:600;">"Doing The Works Of Jesus Christ" · Jean 14:12</div>
     <div style="display:flex;align-items:center;gap:10px;max-width:200px;margin:0 auto 28px;animation:fadeUpIn .7s .95s both;">
       <div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.4));"></div>
       <span style="font-size:16px;color:var(--gold);">✝</span>
       <div style="flex:1;height:1px;background:linear-gradient(90deg,rgba(255,215,0,.4),transparent);"></div>
     </div>
     <!-- Bouton -->
-    <button onclick="afficherLogin()" style="display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(232,101,10,.2),rgba(255,215,0,.12));border:1px solid rgba(255,215,0,.4);color:var(--gold);font-family:var(--font-display);font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:16px 42px;border-radius:50px;cursor:pointer;animation:scalePopIn .7s 1.3s both;transition:all .3s;box-shadow:0 0 20px rgba(255,215,0,.08);" onmouseover="this.style.boxShadow='0 0 40px rgba(255,215,0,.3),0 0 80px rgba(232,101,10,.12)';this.style.borderColor='#FFD700';" onmouseout="this.style.boxShadow='0 0 20px rgba(255,215,0,.08)';this.style.borderColor='rgba(255,215,0,.4)';">
+    <button onclick="afficherLogin()" style="display:inline-flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(232,101,10,.2),rgba(255,215,0,.12));border:1px solid rgba(255,215,0,.4);color:var(--gold);font-family:var(--cond);font-size:17px;letter-spacing:3px;text-transform:uppercase;font-weight:800;padding:16px 42px;border-radius:50px;cursor:pointer;animation:scalePopIn .7s 1.3s both;transition:all .3s;box-shadow:0 0 20px rgba(255,215,0,.08);" onmouseover="this.style.boxShadow='0 0 40px rgba(255,215,0,.3),0 0 80px rgba(232,101,10,.12)';this.style.borderColor='#FFD700';" onmouseout="this.style.boxShadow='0 0 20px rgba(255,215,0,.08)';this.style.borderColor='rgba(255,215,0,.4)';">
       <span>✝</span><span>Espace Pastoral</span><span>→</span>
     </button>
     <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:20px;letter-spacing:.5px;animation:fadeUpIn .7s 1.6s both;">Réservé au personnel pastoral IFCM</div>
@@ -379,7 +381,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
   <div style="position:absolute;top:16px;left:16px;cursor:pointer;color:var(--muted);font-size:13px;display:flex;align-items:center;gap:6px;transition:color .2s;" onclick="retourBienvenue()" onmouseover="this.style.color='#FFD700'" onmouseout="this.style.color='';">← Retour</div>
   <div style="text-align:center;margin-bottom:24px;animation:fadeUpIn .6s both;">
     <img id="login-logo-img" src="" alt="IFCM" style="width:90px;height:90px;border-radius:50%;animation:divineGlow 3s infinite;filter:drop-shadow(0 0 14px rgba(255,215,0,.4));margin-bottom:12px;">
-    <div style="font-family:var(--font-display);font-size:18px;letter-spacing:2px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">IMPACT FOR CHRIST MINISTRIES</div>
+    <div style="font-family:var(--font-display);font-size:clamp(16px,4vw,22px);letter-spacing:2px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">IMPACT FOR CHRIST MINISTRIES</div>
     <div style="font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Espace Pastoral · Branche de Kinshasa</div>
   </div>
   <div class="login-card">
@@ -446,7 +448,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
         <img id="hero-logo" src="" alt="IFCM" style="width:54px;height:54px;border-radius:50%;filter:drop-shadow(0 0 10px rgba(255,215,0,.3));animation:divineGlow 4s infinite;flex-shrink:0;">
         <div>
-          <h1 style="font-family:var(--font-display);font-size:clamp(14px,4vw,20px);letter-spacing:1px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:3px;">Impact for Christ Ministries</h1>
+          <h1 style="font-family:var(--font-display);font-size:clamp(18px,5vw,26px);letter-spacing:2px;background:var(--grad-or);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:3px;">Impact for Christ Ministries</h1>
           <div style="font-size:11px;color:var(--muted);letter-spacing:.5px;">Branche de Kinshasa — IFCM</div>
         </div>
       </div>
