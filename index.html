@@ -598,7 +598,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     </div>
 
     <!-- BOUTON HAMBURGER MOBILE -->
-    <button class="hamburger-btn" id="hamburger-btn" onclick="openMobileDrawer()" style="display:none;">☰</button>
+    <button class="hamburger-btn" id="hamburger-btn" onclick="openMobileDrawer()">☰</button>
 
     <!-- DRAWER MOBILE -->
     <div class="mobile-drawer" id="mobile-drawer">
@@ -741,7 +741,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <button class="btn b-violet" onclick="emailRapport()">✉️ Email</button>
     <button class="btn b-green" onclick="waRapport()">💬 WhatsApp</button>
     <div class="btn-lbl">Cloud</div>
-    <button class="btn b-blue" onclick="sauvegarderRapport()">☁️ Sauvegarder sur le Cloud</button>
+    <button class="btn b-blue" onclick="sauvegarderRapport()">☁️ <span data-t="sauvegarder">Sauvegarder sur le Cloud</span></button>
     <div class="notice">📌 Le PDF est disponible dans l'espace Administrateur.</div>
   </div>
 
@@ -791,7 +791,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
     <button class="btn b-violet" onclick="emailReunion()">✉️ Email</button>
     <button class="btn b-green" onclick="waReunion()">💬 WhatsApp</button>
     <div class="btn-lbl">Cloud</div>
-    <button class="btn b-blue" onclick="sauvegarderReunion()">☁️ Sauvegarder sur le Cloud</button>
+    <button class="btn b-blue" onclick="sauvegarderReunion()">☁️ <span data-t="sauvegarder">Sauvegarder sur le Cloud</span></button>
     <div class="notice">📌 Le PDF est disponible dans l'espace Administrateur.</div>
   </div>
 
@@ -812,7 +812,7 @@ textarea{resize:vertical;min-height:90px;line-height:1.6;}
       </div>
       <div id="p-list"></div>
     </div>
-    <button class="btn b-blue" onclick="sauvegarderPresence()">☁️ Sauvegarder sur le Cloud</button>
+    <button class="btn b-blue" onclick="sauvegarderPresence()">☁️ <span data-t="sauvegarder">Sauvegarder sur le Cloud</span></button>
     <div class="notice">📌 La feuille PDF est disponible dans l'espace Administrateur.</div>
   </div>
 
@@ -1460,8 +1460,7 @@ function buildSidebar(isPastor) {
   buildMobileDrawer(isPastor);
 
   // Afficher hamburger sur mobile
-  const hb = document.getElementById('hamburger-btn');
-  if(hb) hb.style.display = '';// visible, CSS media query gère l'affichage
+  // hamburger géré par CSS media query uniquement
 }
 
 function updateSidebarActive(name) {
@@ -1595,9 +1594,10 @@ window.showAdminPage=function(name){
   const pageId=name==='rapports'?'rapports-admin':name==='reunions'?'reunions-admin':name==='membres'?'membres-admin':name;
   const p=document.getElementById('page-'+pageId);if(p)p.classList.add('active');
   updateSidebarActive(name);
-  const titleMap={dashboard:'Tableau de bord',pasteurs:'Pasteurs',rapports:'Rapports',
-    reunions:'Réunions',membres:'Membres',finances:'Finances',calendrier:'Calendrier'};
-  const tb=document.getElementById('tb-title');if(tb)tb.textContent=titleMap[name]||'Admin';
+  const pageKeyMap={dashboard:'dashboard',pasteurs:'pasteurs',rapports:'rapports',
+    reunions:'reunions',membres:'membres',finances:'finances',calendrier:'calendrier',export:'exportXl'};
+  const tb=document.getElementById('tb-title');if(tb)tb.textContent=t(pageKeyMap[name]||'dashboard');
+  updateVisiblePageTitles(name);
   curPage=pageId||name;window.scrollTo(0,0);
   if(name==='rapports')loadAdminRapports();
   if(name==='reunions')loadAdminReunions();
@@ -1723,27 +1723,49 @@ window.setLang = function(lang){
   showToast('🌍 '+LANGS[lang].langues[lang]);
 };
 
+function updateVisiblePageTitles(name){
+  // Mettre à jour les titres H1/H2 visibles dans la page active
+  const pageEl = document.getElementById('page-'+(
+    name==='rapports'?'rapports-admin':name==='reunions'?'reunions-admin':
+    name==='membres'?'membres-admin':name));
+  if(!pageEl) return;
+  // Titres principaux
+  const titleMap={
+    home:t('accueil'),rapport:t('titreRapport'),reunion:t('titreReunion'),
+    presence:t('titrePresence'),membres:t('titreMembres'),caisse:t('titreCaisse'),
+    archives:t('titreArchives'),calendrier:t('titreCalendrier'),export:t('titreExport'),
+    dashboard:t('titreDashboard'),pasteurs:t('pasteurs'),rapports:t('rapports'),
+    reunions:t('reunions'),finances:t('finances')
+  };
+  // Mettre à jour le h1 ou premier élément titre de la page
+  const hdr = pageEl.querySelector('h1, .hero h1, [data-page-title]');
+  if(hdr && titleMap[name]) hdr.textContent = titleMap[name];
+  // Tous les data-t dans la page
+  pageEl.querySelectorAll('[data-t]').forEach(el=>{
+    const key = el.getAttribute('data-t');
+    if(key && t(key)) el.textContent = t(key);
+  });
+}
+
 function applyTranslations(){
-  // Tous les éléments avec data-t="cle"
   document.querySelectorAll('[data-t]').forEach(el=>{
     const key = el.getAttribute('data-t');
-    if(key) el.textContent = t(key);
+    if(key && t(key)) el.textContent = t(key);
   });
-  // Titres de pages visibles
-  document.querySelectorAll('.page.active [data-t-title]').forEach(el=>{
-    const key = el.getAttribute('data-t-title');
-    if(key) el.textContent = t(key);
-  });
-  // Labels des formulaires visibles
-  const labelMap = {
-    'label-nom':t('nom'),'label-email':t('email'),
-    'label-telephone':t('telephone'),'label-date':t('date'),
-    'label-statut':t('statut'),'label-description':t('description'),
-    'label-montant':t('montant'),
-  };
-  Object.entries(labelMap).forEach(([id,val])=>{
-    const el=document.getElementById(id);if(el)el.textContent=val;
-  });
+  // Topbar titre
+  const activePage = document.querySelector('.page.active');
+  if(activePage){
+    const pid = activePage.id?.replace('page-','');
+    const pageKeyMap = {
+      home:'accueil',rapport:'rapport',reunion:'reunion',presence:'presence',
+      membres:'membres',caisse:'caisse',archives:'archives',calendrier:'calendrier',
+      export:'exportXl',dashboard:'dashboard',pasteurs:'pasteurs',
+      'rapports-admin':'rapports','reunions-admin':'reunions',
+      'membres-admin':'membres',finances:'finances'
+    };
+    const tb = document.getElementById('tb-title');
+    if(tb && pageKeyMap[pid]) tb.textContent = t(pageKeyMap[pid]);
+  }
 }
 
 function updatePageLabels(){applyTranslations();}
@@ -2471,29 +2493,39 @@ async function loadAdminPasteurs(){
   const snap=await getDocs(collection(db,'users'));
   const el=document.getElementById('admin-pasteurs-list');
   if(!snap.size){el.innerHTML='<div class="empty">Aucun utilisateur.</div>';return;}
-  const sorted=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.role||'').localeCompare(b.role||''));
-  el.innerHTML=sorted.map(p=>`
-    <div class="pastor-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div>
-          <div class="pastor-name">${esc(p.nom)||'—'}
-            <span class="pastor-badge" style="background:${p.role==='super_admin'?'rgba(201,168,76,.2)':p.role==='admin'?'rgba(232,101,10,.2)':'rgba(107,63,160,.2)'};color:${p.role==='super_admin'?'var(--gold)':p.role==='admin'?'var(--orange)':'var(--violet)'};">${p.role==='super_admin'?'👑 Super Admin':p.role==='admin'?'🔐 Admin':'👨‍💼 Pasteur'}</span>
+  const sorted=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>{
+    const order={super_admin:0,admin:1,pastor:2};
+    return (order[a.role]||9)-(order[b.role]||9);
+  });
+  el.innerHTML=sorted.map(p=>{
+    const isMe = p.id===currentUser.uid;
+    const roleLabel = p.role==='super_admin'?'👑 Super Admin':p.role==='admin'?'🔐 Admin':'👨‍💼 Pasteur';
+    const roleColor = p.role==='super_admin'?'var(--gold)':p.role==='admin'?'var(--or2)':'var(--blue)';
+    const roleBackground = p.role==='super_admin'?'rgba(255,215,0,.12)':p.role==='admin'?'rgba(232,101,10,.12)':'rgba(42,142,255,.12)';
+    return `<div class="pastor-card" style="${isMe?'border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.03);':''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+            <div class="pastor-name">${esc(p.nom||'—')}</div>
+            <span style="font-family:var(--cond);font-size:12px;font-weight:700;padding:3px 10px;border-radius:6px;background:${roleBackground};color:${roleColor};">${roleLabel}</span>
+            ${isMe?'<span style="font-family:var(--cond);font-size:11px;color:var(--gold);background:rgba(255,215,0,.1);padding:2px 8px;border-radius:6px;border:1px solid rgba(255,215,0,.2);">← Vous</span>':''}
           </div>
-          <div class="pastor-email">${esc(p.email)||'—'}</div>
-          <div class="pastor-stats">${p.cellule?'Cellule : '+esc(p.cellule)+' · ':''} Créé le ${p.dateCreation||'—'}</div>
+          <div class="pastor-email">${esc(p.email||'—')}</div>
+          ${p.cellule?`<div class="pastor-stats">📍 Cellule : ${esc(p.cellule)}</div>`:''}
           ${p.emailResponsable?`<div class="pastor-stats">📧 ${esc(p.emailResponsable)}${p.emailResponsable2?' / '+esc(p.emailResponsable2):''}</div>`:''}
           ${p.whatsappResponsable?`<div class="pastor-stats">💬 ${esc(p.whatsappResponsable)}</div>`:''}
         </div>
-        <span class="pastor-badge ${p.actif?'pb-actif':'pb-inactif'}">${p.actif?'Actif':'Inactif'}</span>
+        <span style="font-family:var(--cond);font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;flex-shrink:0;background:${p.actif?'rgba(37,162,68,.15)':'rgba(220,50,50,.1)'};color:${p.actif?'#5eea96':'#ff8080'};">${p.actif?'Actif':'Inactif'}</span>
       </div>
       <div class="pastor-actions">
-        ${currentRole==='super_admin'||p.role!=='super_admin'?`<button class="ab bv" onclick="ouvrirEditUtilisateur('${p.id}')">✏️ Modifier</button>`:''}
+        ${!isMe||currentRole==='super_admin'?`<button class="ab bv" onclick="ouvrirEditUtilisateur('${p.id}')">✏️ Modifier</button>`:''}
         ${p.role==='pastor'?`
         <button class="ab bo" onclick="togglePasteurActif('${p.id}',${!p.actif})">${p.actif?'🔒 Désactiver':'🔓 Activer'}</button>
         <button class="ab bv" onclick="voirRapportsPasteur('${p.id}','${esc(p.nom||'')}')">📋 Rapports</button>`:''}
-        ${p.id!==currentUser.uid && p.role!=='super_admin' ? `<button class="ab br" onclick="supprimerUtilisateur('${p.id}','${esc(p.nom||'')}')">🗑️ Supprimer</button>`:''}
+        ${!isMe && p.role!=='super_admin'?`<button class="ab br" onclick="supprimerUtilisateur('${p.id}','${esc(p.nom||'')}')">🗑️ Supprimer</button>`:''}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 window.togglePasteurActif=async function(uid,actif){
